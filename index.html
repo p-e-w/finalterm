@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>Final Term</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Sans+Mono" rel="stylesheet">
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" rel="stylesheet">
+
+  <style>
+  body {
+    font-family: 'Droid Sans', sans-serif;
+  }
+
+  tt {
+    font-family: 'Droid Sans Mono', monospace;
+  }
+
+  h1 .muted {
+    font-size: smaller;
+    margin-left: 12px;
+  }
+
+  h3 .muted {
+    font-size: smaller;
+    margin-left: 8px;
+  }
+
+  .disclaimer {
+    padding-top: 20px;
+  }
+
+  .github {
+    text-align: center;
+    padding-top: 10px;
+  }
+
+  .header {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .header h2 {
+    padding-bottom: 50px;
+  }
+
+  .topfeature {
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+
+  .intermission {
+    text-align: center;
+    padding-top: 80px;
+  }
+
+  .feature {
+    padding-top: 100px;
+  }
+
+  footer {
+    padding-top: 120px;
+    padding-bottom: 50px;
+  }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="row disclaimer">
+      <div class="span12">
+        <div class="alert alert-block">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          Final Term is currently in early development and thus neither stable nor feature complete. <strong>It is not ready to be used as the primary terminal emulator of a production system, much less a mission-critical one.</strong> In particular, many xterm control sequences are still unsupported, and performance is slow.<br>Code contributions, bug reports and suggestions are welcome <a href="https://github.com/p-e-w/finalterm">on GitHub</a>.
+        </div>
+      </div>
+    </div>
+
+    <div class="row github">
+      <div class="span4">
+        <a href="https://github.com/p-e-w/finalterm" class="btn btn-primary"><i class="icon-github icon-large"></i> Get it now on GitHub</a>
+      </div>
+      <div class="span4">
+        <iframe src="http://ghbtns.com/github-btn.html?user=p-e-w&repo=finalterm&type=watch&count=true&size=large"
+        allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+      </div>
+      <div class="span4">
+        <iframe src="http://ghbtns.com/github-btn.html?user=p-e-w&repo=finalterm&type=fork&count=true&size=large"
+        allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+      </div>
+    </div>
+
+    <div class="row header">
+      <div class="span12">
+        <h1>Final Term <span class="muted">Terminal Emulator</span></h1>
+        <h2>Don't just use your system &mdash; <em>command it!</em></h2>
+        <iframe width="640" height="480" src="http://www.youtube.com/embed/bvROuipepmg?rel=0&vq=large&autoplay=1" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="span12"><h3>Final Term is a new breed of terminal emulator.</h3>
+        <p>It goes beyond mere emulation and understands what is happening inside the shell it is hosting. This allows it to offer features no other terminal can:</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="span4 topfeature">
+        <a href="text-menu.png" class="fancybox"><img src="text-menu.png"></a>
+        <h3>Semantic text menus</h3>
+        <p>Final Term knows which pieces of terminal output represent filenames, PIDs, web URLs or IP addresses and provides context-aware commands for each of them.</p>
+        <p><strong>New semantic menus can be added effortlessly with a powerful yet simple text file-based plug-in system &mdash; no programming required.</strong></p>
+      </div>
+      <div class="span4 topfeature">
+        <a href="autocompletion.png" class="fancybox"><img src="autocompletion.png"></a>
+        <h3>Smart command completion</h3>
+
+        <p>Final Term knows when it is displaying a command prompt to you, and it knows all the commands that you ever entered.</p>
+        <p>The moment you start typing, suggestions from your terminal history automatically pop up &mdash; lightning fast and sorted by an algorithm that ensures what you want to type is almost always right at the top.</p>
+      </div>
+      <div class="span4 topfeature">
+        <a href="progress-bar.png" class="fancybox"><img src="progress-bar.png"></a>
+        <h3>GUI terminal controls</h3>
+
+        <p>Final Term lets you collapse command output much like a programmer's editor lets you fold code.</p>
+        <p>Final Term recognizes "ASCII art scrollbars" in the output of supported programs like <tt>wget</tt> and displays matching GUI scrollbars, allowing you to monitor progress while the output is scrolled away.</p>
+      </div>
+    </div>
+
+    <div class="row intermission">
+      <div class="span12">
+        <p style="font-size: large;">But wait, there's more (in fact, there is much, much more)...</p>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span8">
+        <h3>Omnipotent keybindings. <span class="muted">Yes, they're <em>that</em> awesome.</span></h3>
+        <p>Binding <strong>any key</strong> (or combination of keys) to <strong>arbitrarily many functions</strong> is as simple as editing a text file. Have a look:</p>
+        <p><tt>&lt;Ctrl&gt;L = RUN_SHELL_COMMAND "ls -lh"</tt></p>
+        <p>This will cause Ctrl+L to execute the command <tt>ls -lh</tt> in the shell. If you can decipher that, you have already mastered Final Term keybindings.</p>
+        <p><strong>In addition to application-level keybindings, Final Term also allows you to define arbitrarily many <em>global</em> (i.e. system-wide) shortcuts.</strong> These use the same syntax as local ones, but make Final Term do your bidding regardless of which application has the focus.</p>
+      </div>
+      <div class="span4">
+        <a href="key-bindings.png" class="fancybox"><img src="key-bindings.png"></a>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span4">
+        <a href="colors.png" class="fancybox"><img src="colors.png"></a>
+      </div>
+      <div class="span8">
+        <h3>All the colors you'll ever need. <span class="muted">Or want. Or knew existed.</span></h3>
+        <p>Final Term supports <a href="http://en.wikipedia.org/wiki/ANSI_escape_code#Colors">8 terminal colors</a>.</p>
+        <p>Final Term supports <a href="http://en.wikipedia.org/wiki/ANSI_escape_code#Colors">16 terminal colors</a>.</p>
+        <p>Final Term supports <a href="http://excess.org/article/2007/10/xterm-256-colour-chart-20/">256 terminal colors</a> out of the box.</p>
+        <p>And Final Term is one of the very few terminal emulators that support <a href="https://github.com/robertknight/konsole/blob/master/user-doc/README.moreColors">24-bit RGB terminal colors.</a></p>
+        <p>All of these colors can be customized using color schemes, of which Final Term already ships 10 beautiful ones by default <strong>&mdash; each of them in a light and a dark version.</strong> More can easily be generated using the supplied <a href="https://github.com/chriskempson/base16-builder">Base16 Builder</a> template.</p>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span8">
+        <h3>Reflow like a pro. <span class="muted">On Linux.</span></h3>
+        <p>This feature, as famously seen in the Mac OS terminal, has been <a href="http://askubuntu.com/questions/54995/dynamic-line-wrapping-in-the-gnome-terminal">among</a> the <a href="https://bugs.launchpad.net/ubuntu/+source/gnome-terminal/+bug/298385">most</a> requested <a href="http://brainstorm.ubuntu.com/idea/18550/">ones</a> from <a href="http://unix.stackexchange.com/questions/24793/looking-for-x-terminal-with-correct-window-resize-handling">Linux</a> terminal programs for several years now.</p>
+        <p>Well, the wait is over. Final Term does it, no need for hacks (<tt>screen</tt>), no questions asked.</p>
+      </div>
+      <div class="span4">
+        <a href="reflow.png" class="fancybox"><img src="reflow.png"></a>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span4">
+        <a href="skins.png" class="fancybox"><img src="skins.png"></a>
+      </div>
+      <div class="span8">
+        <h3>Looks from 2013. <span class="muted">Terminal from 1978.</span></h3>
+        <p>Final Term's beautiful, hardware-accelerated user interface redefines what you can expect from a terminal emulator's GUI. Everything is slick, smooth and animated.</p>
+        <p>Whether you are working on your day job or in the deepest night, Final Term will dress accordingly: With a single switch, the interface flips from light to dark and back.</p>
+        <p>If that alone does not fulfill your customization needs, do not worry <strong>&mdash; the entire UI can be skinned using themes.</strong></p>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span8">
+        <h3>Drop down. <span class="muted">Show up.</span></h3>
+        <p>Inspired by the wonderful <a href="http://guake.org/">Guake</a> (and, ultimately, <a href="http://en.wikipedia.org/wiki/Quake_(video_game)">Quake</a>), Final Term drops down from the top of your screen at the press of a key and slides up when the same key is pressed again.</p>
+        <p>Another key simply brings the terminal window to the foreground when it is hidden, and hides it again.</p>
+        <p>Exactly which keys do that? Your choice, of course...</p>
+      </div>
+      <div class="span4">
+        <a href="dropdown.png" class="fancybox"><img src="dropdown.png"></a>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span4">
+        <img src="source.png">
+      </div>
+      <div class="span8">
+        <h3>Built to last. <span class="muted">Built to perform.</span></h3>
+        <p>Final Term stands on the shoulders of giants by building on proven, powerful open source technologies such as <a href="http://www.gtk.org/">GTK+ 3</a>, <a href="http://blogs.gnome.org/clutter/">Clutter</a> and <a href="https://github.com/clutter-project/mx">Mx</a>.</p>
+        <p>Final Term is written in 100% <a href="https://live.gnome.org/Vala">Vala</a>, the language of Desktop Linux's future, and runs at <strong>native speed</strong> without the need for any runtime.</p>
+        <p>Final Term's source code is precision engineered with a thoroughly object oriented approach and a clean model&mdash;view&mdash;controller separation, maximizing maintainability and extensibility.</p>
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="span8">
+        <h3>Free. <span class="muted">Forever.</span></h3>
+        <p>The future of software is open source.</p>
+        <p>Final Term is free and open source software, released under the terms of the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License version 3</a>.</p>
+        <p>Development happens in the open and input of any kind is very much appreciated.</p>
+      </div>
+      <div class="span4">
+        <img src="gplv3.png">
+      </div>
+    </div>
+
+    <footer>
+      <div class="row">
+        <div class="span6">
+          <p>© 2013 <a href="http://worldwidemann.com">Philipp Emanuel Weidmann</a></p>
+        </div>
+        <div class="span6" style="text-align: right;">
+          <p class="muted">&mdash; WAIDRIN is coming &mdash;</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.pack.js"></script>
+
+  <script>
+  $(document).ready(function() {
+    $('.fancybox').fancybox();
+  });
+  </script>
+
+</body>
+
+</html>
