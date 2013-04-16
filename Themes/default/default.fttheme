@@ -1,0 +1,47 @@
+# Final Term default theme
+
+[About]
+
+name   = Default
+author = Philipp Emanuel Weidmann
+
+
+[Theme]
+
+# Font used for terminal output
+monospaced-font = Monospace 12
+
+# Font used for menu button labels
+proportional-font = Sans Bold 10
+
+# Stylesheet file for Mx styles
+stylesheet = style.css
+
+# Width of gutter, in pixels
+gutter-size = 25
+
+# Background color of gutter
+gutter-color = #77777788
+
+# Border color of gutter
+gutter-border-color = #777777aa
+
+# Position of collapse button within gutter (from top left of line), in pixels
+collapse-button-x = 4
+collapse-button-y = 1
+
+# Size of collapse button, in pixels
+collapse-button-width  = 15
+collapse-button-height = 15
+
+# Color of arrow symbol in menu button
+menu-button-arrow-color = #666666
+
+# Width of margins around terminal output, in pixels
+margin-left  = 5
+margin-right = 5
+
+# Behavior of cursor animation
+cursor-minimum-opacity    = 50
+cursor-maximum-opacity    = 255
+cursor-animation-duration = 800

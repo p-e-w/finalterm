@@ -1,0 +1,42 @@
+# Final Term default key bindings
+#
+# Entries take the form
+#   KEY = COMMAND; COMMAND; ...
+# The commands on the right hand side are executed sequentially.
+#
+# Key specifications must be parsable by Gtk.accelerator_parse
+# (https://developer.gnome.org/gtk3/stable/gtk3-Keyboard-Accelerators.html#gtk-accelerator-parse).
+#
+# The default behavior is for printable keys to be forwarded to the shell
+# (i.e. PRINTABLE_KEY = SEND_TO_SHELL "[string value of PRINTABLE_KEY]")
+# and for non-printable keys to be ignored (i.e. NON_PRINTABLE_KEY = ).
+
+# These are global key bindings which work irrespective
+# of whether the application window is focused or even visible.
+# Global shortcuts should be used very sparingly.
+
+[Global]
+
+F10 = TOGGLE_VISIBLE
+F12 = TOGGLE_DROPDOWN
+
+
+# These are application-level key bindings which work
+# only when the application window has the keyboard focus.
+
+[Application]
+
+#F5 = PRINT_METRICS
+
+F11 = TOGGLE_FULLSCREEN
+
+Return = SEND_TO_SHELL "\n"
+Tab    = SEND_TO_SHELL "\t"
+
+BackSpace = SEND_TO_SHELL "\\177"
+Delete    = SEND_TO_SHELL "\\033[3~"
+
+Up    = SEND_TO_SHELL "\\033[A"
+Down  = SEND_TO_SHELL "\\033[B"
+Left  = SEND_TO_SHELL "\\033[D"
+Right = SEND_TO_SHELL "\\033[C"

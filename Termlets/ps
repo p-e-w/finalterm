@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ps $@ |
+
+while IFS= read -r line; do
+	# Position of string "PID" in line
+	pid_index=$(awk -v a="$line" -v b='PID' 'BEGIN{print index(a,b)}')
+
+	if [[ "$pid_index" -gt 0 ]]; then
+		# Header line
+		pid_end=$(($pid_index + 3))
+		modified_line="$line"
+	else
+		# Content line
+		left_part=${line:0:pid_end-1}
+		pid_part=${left_part##* }
+		# Remove pid_part from left_part
+		left_part=${left_part:0:${#left_part}-${#pid_part}}
+		right_part=${line:pid_end-1}
+		modified_line="$left_part$(text_menu_start '3')$pid_part$(text_menu_end '3')$right_part"
+	fi
+
+	echo -e "$modified_line"
+done

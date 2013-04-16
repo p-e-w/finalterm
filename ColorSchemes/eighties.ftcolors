@@ -1,0 +1,57 @@
+# Eighties Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Eighties
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #d3d0c8
+
+foreground = #d3d0c8
+background = #2d2d2d
+
+0  = #2d2d2d
+1  = #f2777a
+2  = #99cc99
+3  = #ffcc66
+4  = #6699cc
+5  = #cc99cc
+6  = #66cccc
+7  = #d3d0c8
+8  = #747369
+9  = #f99157
+10 = #393939
+11 = #515151
+12 = #a09f93
+13 = #e8e6df
+14 = #d27b53
+15 = #f2f0ec
+
+
+[Light]
+
+cursor = #515151
+
+foreground = #515151
+background = #f2f0ec
+
+0  = #393939
+1  = #f2777a
+2  = #99cc99
+3  = #ffcc66
+4  = #6699cc
+5  = #d27b53
+6  = #66cccc
+7  = #e8e6df
+8  = #2d2d2d
+9  = #f99157
+10 = #515151
+11 = #747369
+12 = #a09f93
+13 = #cc99cc
+14 = #d3d0c8
+15 = #f2f0ec

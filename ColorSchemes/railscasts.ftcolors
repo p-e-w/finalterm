@@ -1,0 +1,57 @@
+# Railscasts Color Scheme by Ryan Bates (http://railscasts.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Railscasts
+author = Ryan Bates (http://railscasts.com)
+
+
+[Dark]
+
+cursor = #e6e1dc
+
+foreground = #e6e1dc
+background = #2b2b2b
+
+0  = #2b2b2b
+1  = #da4939
+2  = #a5c261
+3  = #ffc66d
+4  = #6d9cbe
+5  = #b6b3eb
+6  = #519f50
+7  = #e6e1dc
+8  = #5a647e
+9  = #cc7833
+10 = #272935
+11 = #3a4055
+12 = #d4cfc9
+13 = #f4f1ed
+14 = #bc9458
+15 = #f9f7f3
+
+
+[Light]
+
+cursor = #3a4055
+
+foreground = #3a4055
+background = #f9f7f3
+
+0  = #272935
+1  = #da4939
+2  = #a5c261
+3  = #ffc66d
+4  = #6d9cbe
+5  = #bc9458
+6  = #519f50
+7  = #f4f1ed
+8  = #2b2b2b
+9  = #cc7833
+10 = #3a4055
+11 = #5a647e
+12 = #d4cfc9
+13 = #b6b3eb
+14 = #e6e1dc
+15 = #f9f7f3

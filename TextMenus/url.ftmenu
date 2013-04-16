@@ -1,0 +1,15 @@
+[Parameters]
+
+marker-type = pattern
+
+# Web URL regular expression taken from http://regexlib.com/REDetails.aspx?regexp_id=1051 (modified)
+pattern = \b((http\://|https\://|ftp\://)|(www.))+([a-zA-Z0-9\.-]+\.[a-zA-Z]{2,4})(/[a-zA-Z0-9%&:/-_\?\.'~]*)?\b
+
+label = URL
+color = 6
+
+
+[Menu]
+
+Copy URL to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
+Open URL in browser   = OPEN_URL "$$$1$$$"

@@ -1,0 +1,19 @@
+[Parameters]
+
+marker-type = pattern
+
+# IPv4 address regular expression taken from http://www.regular-expressions.info/examples.html
+pattern = \b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b
+
+label = IP
+color = 5
+
+
+[Menu]
+
+Copy IP address to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
+
+$$$SEPARATOR$$$ =
+
+Ping (<tt><b>ping</b></tt>)             = RUN_SHELL_COMMAND "ping $$$1$$$"
+Traceroute (<tt><b>traceroute</b></tt>) = RUN_SHELL_COMMAND "traceroute $$$1$$$"

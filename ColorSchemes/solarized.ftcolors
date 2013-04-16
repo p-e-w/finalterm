@@ -1,0 +1,57 @@
+# Solarized Color Scheme by Ethan Schoonover (http://ethanschoonover.com/solarized)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Solarized
+author = Ethan Schoonover (http://ethanschoonover.com/solarized)
+
+
+[Dark]
+
+cursor = #93a1a1
+
+foreground = #93a1a1
+background = #002b36
+
+0  = #002b36
+1  = #dc322f
+2  = #859900
+3  = #b58900
+4  = #268bd2
+5  = #6c71c4
+6  = #2aa198
+7  = #93a1a1
+8  = #657b83
+9  = #cb4b16
+10 = #073642
+11 = #586e75
+12 = #839496
+13 = #eee8d5
+14 = #d33682
+15 = #fdf6e3
+
+
+[Light]
+
+cursor = #586e75
+
+foreground = #586e75
+background = #fdf6e3
+
+0  = #073642
+1  = #dc322f
+2  = #859900
+3  = #b58900
+4  = #268bd2
+5  = #d33682
+6  = #2aa198
+7  = #eee8d5
+8  = #002b36
+9  = #cb4b16
+10 = #586e75
+11 = #657b83
+12 = #839496
+13 = #6c71c4
+14 = #93a1a1
+15 = #fdf6e3

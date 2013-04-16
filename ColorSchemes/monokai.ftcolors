@@ -1,0 +1,57 @@
+# Monokai Color Scheme by Wimer Hazenberg (http://www.monokai.nl)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Monokai
+author = Wimer Hazenberg (http://www.monokai.nl)
+
+
+[Dark]
+
+cursor = #f8f8f2
+
+foreground = #f8f8f2
+background = #272822
+
+0  = #272822
+1  = #f92672
+2  = #a6e22e
+3  = #f4bf75
+4  = #66d9ef
+5  = #ae81ff
+6  = #a1efe4
+7  = #f8f8f2
+8  = #75715e
+9  = #fd971f
+10 = #383830
+11 = #49483e
+12 = #a59f85
+13 = #f5f4f1
+14 = #cc6633
+15 = #f9f8f5
+
+
+[Light]
+
+cursor = #49483e
+
+foreground = #49483e
+background = #f9f8f5
+
+0  = #383830
+1  = #f92672
+2  = #a6e22e
+3  = #f4bf75
+4  = #66d9ef
+5  = #cc6633
+6  = #a1efe4
+7  = #f5f4f1
+8  = #272822
+9  = #fd971f
+10 = #49483e
+11 = #75715e
+12 = #a59f85
+13 = #ae81ff
+14 = #f8f8f2
+15 = #f9f8f5

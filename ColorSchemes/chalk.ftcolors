@@ -1,0 +1,57 @@
+# Chalk Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Chalk
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #d0d0d0
+
+foreground = #d0d0d0
+background = #151515
+
+0  = #151515
+1  = #fb9fb1
+2  = #acc267
+3  = #ddb26f
+4  = #6fc2ef
+5  = #e1a3ee
+6  = #12cfc0
+7  = #d0d0d0
+8  = #505050
+9  = #eda987
+10 = #202020
+11 = #303030
+12 = #b0b0b0
+13 = #e0e0e0
+14 = #deaf8f
+15 = #f5f5f5
+
+
+[Light]
+
+cursor = #303030
+
+foreground = #303030
+background = #f5f5f5
+
+0  = #202020
+1  = #fb9fb1
+2  = #acc267
+3  = #ddb26f
+4  = #6fc2ef
+5  = #deaf8f
+6  = #12cfc0
+7  = #e0e0e0
+8  = #151515
+9  = #eda987
+10 = #303030
+11 = #505050
+12 = #b0b0b0
+13 = #e1a3ee
+14 = #d0d0d0
+15 = #f5f5f5

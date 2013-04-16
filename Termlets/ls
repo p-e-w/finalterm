@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# TODO: Does "--color=always" work when output is piped?
+ls_output=$(ls --color=always $@)
+
+# TODO: Search for files in directory passed to ls rather than the current directory
+# TODO: Handle case where filename contains other filename
+for filename in *; do
+	if [[ -d $filename ]]; then
+		file_substitution="$(text_menu_start '2')$filename$(text_menu_end '2')"
+	else
+		file_substitution="$(text_menu_start '1')$filename$(text_menu_end '1')"
+	fi
+	ls_output=${ls_output//$filename/$file_substitution}
+done
+
+echo -e "$ls_output"

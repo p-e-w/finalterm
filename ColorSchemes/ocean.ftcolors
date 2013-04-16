@@ -1,0 +1,57 @@
+# Ocean Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Ocean
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #c0c5ce
+
+foreground = #c0c5ce
+background = #2b303b
+
+0  = #2b303b
+1  = #bf616a
+2  = #a3be8c
+3  = #ebcb8b
+4  = #8fa1b3
+5  = #b48ead
+6  = #96b5b4
+7  = #c0c5ce
+8  = #65737e
+9  = #d08770
+10 = #343d46
+11 = #4f5b66
+12 = #a7adba
+13 = #dfe1e8
+14 = #ab7967
+15 = #eff1f5
+
+
+[Light]
+
+cursor = #4f5b66
+
+foreground = #4f5b66
+background = #eff1f5
+
+0  = #343d46
+1  = #bf616a
+2  = #a3be8c
+3  = #ebcb8b
+4  = #8fa1b3
+5  = #ab7967
+6  = #96b5b4
+7  = #dfe1e8
+8  = #2b303b
+9  = #d08770
+10 = #4f5b66
+11 = #65737e
+12 = #a7adba
+13 = #b48ead
+14 = #c0c5ce
+15 = #eff1f5

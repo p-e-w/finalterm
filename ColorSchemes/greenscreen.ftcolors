@@ -1,0 +1,57 @@
+# Green Screen Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Green Screen
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #00bb00
+
+foreground = #00bb00
+background = #001100
+
+0  = #001100
+1  = #007700
+2  = #00bb00
+3  = #007700
+4  = #009900
+5  = #00bb00
+6  = #005500
+7  = #00bb00
+8  = #007700
+9  = #009900
+10 = #003300
+11 = #005500
+12 = #009900
+13 = #00dd00
+14 = #005500
+15 = #00ff00
+
+
+[Light]
+
+cursor = #005500
+
+foreground = #005500
+background = #00ff00
+
+0  = #003300
+1  = #007700
+2  = #00bb00
+3  = #007700
+4  = #009900
+5  = #005500
+6  = #005500
+7  = #00dd00
+8  = #001100
+9  = #009900
+10 = #005500
+11 = #007700
+12 = #009900
+13 = #00bb00
+14 = #00bb00
+15 = #00ff00

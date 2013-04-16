@@ -1,0 +1,57 @@
+# Default Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Default
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #d0d0d0
+
+foreground = #d0d0d0
+background = #151515
+
+0  = #151515
+1  = #ac4142
+2  = #90a959
+3  = #f4bf75
+4  = #6a9fb5
+5  = #aa759f
+6  = #75b5aa
+7  = #d0d0d0
+8  = #505050
+9  = #d28445
+10 = #202020
+11 = #303030
+12 = #b0b0b0
+13 = #e0e0e0
+14 = #8f5536
+15 = #f5f5f5
+
+
+[Light]
+
+cursor = #303030
+
+foreground = #303030
+background = #f5f5f5
+
+0  = #202020
+1  = #ac4142
+2  = #90a959
+3  = #f4bf75
+4  = #6a9fb5
+5  = #8f5536
+6  = #75b5aa
+7  = #e0e0e0
+8  = #151515
+9  = #d28445
+10 = #303030
+11 = #505050
+12 = #b0b0b0
+13 = #aa759f
+14 = #d0d0d0
+15 = #f5f5f5

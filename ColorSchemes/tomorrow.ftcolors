@@ -1,0 +1,57 @@
+# Tomorrow Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Tomorrow
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #c5c8c6
+
+foreground = #c5c8c6
+background = #1d1f21
+
+0  = #1d1f21
+1  = #cc6666
+2  = #b5bd68
+3  = #f0c674
+4  = #81a2be
+5  = #b294bb
+6  = #8abeb7
+7  = #c5c8c6
+8  = #969896
+9  = #de935f
+10 = #282a2e
+11 = #373b41
+12 = #b4b7b4
+13 = #e0e0e0
+14 = #a3685a
+15 = #ffffff
+
+
+[Light]
+
+cursor = #373b41
+
+foreground = #373b41
+background = #ffffff
+
+0  = #282a2e
+1  = #cc6666
+2  = #b5bd68
+3  = #f0c674
+4  = #81a2be
+5  = #a3685a
+6  = #8abeb7
+7  = #e0e0e0
+8  = #1d1f21
+9  = #de935f
+10 = #373b41
+11 = #969896
+12 = #b4b7b4
+13 = #b294bb
+14 = #c5c8c6
+15 = #ffffff

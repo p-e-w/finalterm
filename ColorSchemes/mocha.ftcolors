@@ -1,0 +1,57 @@
+# Mocha Color Scheme by Chris Kempson (http://chriskempson.com)
+# Made with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+[About]
+
+name   = Mocha
+author = Chris Kempson (http://chriskempson.com)
+
+
+[Dark]
+
+cursor = #d0c8c6
+
+foreground = #d0c8c6
+background = #3B3228
+
+0  = #3B3228
+1  = #cb6077
+2  = #beb55b
+3  = #f4bc87
+4  = #8ab3b5
+5  = #a89bb9
+6  = #7bbda4
+7  = #d0c8c6
+8  = #7e705a
+9  = #d28b71
+10 = #534636
+11 = #645240
+12 = #b8afad
+13 = #e9e1dd
+14 = #bb9584
+15 = #f5eeeb
+
+
+[Light]
+
+cursor = #645240
+
+foreground = #645240
+background = #f5eeeb
+
+0  = #534636
+1  = #cb6077
+2  = #beb55b
+3  = #f4bc87
+4  = #8ab3b5
+5  = #bb9584
+6  = #7bbda4
+7  = #e9e1dd
+8  = #3B3228
+9  = #d28b71
+10 = #645240
+11 = #7e705a
+12 = #b8afad
+13 = #a89bb9
+14 = #d0c8c6
+15 = #f5eeeb

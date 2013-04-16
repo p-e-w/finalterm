@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Include default startup file so that user's settings are respected
+source ~/.bashrc
+
+
+
+# Final Term's customizations start here
+
+
+# NOTE: xterm properly ignores sequences of this type as unknown,
+#       while some other terminals (such as GNOME Terminal) print them
+function final_term_control_sequence() {
+	control_sequence="\e[?"
+	for argument in "$@"; do
+		control_sequence="$control_sequence$argument;"
+	done
+	# TODO: Remove last semicolon
+	control_sequence="${control_sequence}Y"
+
+	# TODO: Should "-ne" be added here?
+	echo "$control_sequence"
+}
+export -f final_term_control_sequence
+
+function send_control_sequence() {
+	echo -ne "$1"
+}
+export -f send_control_sequence
+
+
+# Logic for prompt and command detection
+
+# Returns the command currently associated with the trap on the signal $1
+function get_current_trap_command() {
+	trap -p "$1" | grep -Po "(?<=').*(?=')"
+}
+
+# Sequence marking the start of the command prompt
+FTCS_PROMPT_START=$(final_term_control_sequence '1')
+
+# Sequence marking the start of the command
+# read from the command prompt
+FTCS_COMMAND_START=$(final_term_control_sequence '2')
+
+# Sequence marking the end of the command
+# read from the command prompt
+FTCS_COMMAND_END=$(final_term_control_sequence '3')
+
+# Note that it is safe to prepend a new command to the current one
+# but not to append it, because bash does not allow a semicolon
+# at the beginning of a command
+# TODO: Substitute variable name with value in command (expansion?)
+PROMPT_COMMAND='send_control_sequence "$FTCS_PROMPT_START"; '$PROMPT_COMMAND
+
+PS1=$PS1$FTCS_COMMAND_START
+
+trap "send_control_sequence \"$FTCS_COMMAND_END\"; $(get_current_trap_command 'DEBUG')" DEBUG
+
+
+# Termlet-related logic
+
+function text_menu_start() {
+	echo $(final_term_control_sequence '4' "$1")
+}
+export -f text_menu_start
+
+function text_menu_end() {
+	echo $(final_term_control_sequence '5' "$1")
+}
+export -f text_menu_end
+
+function send_progress() {
+	send_control_sequence $(final_term_control_sequence '6' "$1")
+}
+export -f send_progress
+
+# Set up termlet aliases
+cd Termlets
+for filename in *; do
+	alias $filename="'$(pwd)/$filename'"
+done
+
+cd ..
+#cd ~

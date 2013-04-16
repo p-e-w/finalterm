@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# TODO: Multiple file downloads?
+
+# Note that wget writes its output to STDERR instead of STDOUT
+wget --progress=bar:force $@ 2>&1 |
+
+while IFS= read -r line; do
+	echo "$line"
+
+	if [[ $line == "" ]]; then
+		# Progress bar reached
+		# => Switch to CR as line separator to receive
+		#    individual progress bar updates
+		while IFS= read -r -d $'\r' line; do
+			# Extract current progress percentage
+			if [[ $line =~ ^\ ?([0-9]{1,3})% ]]; then
+				send_progress "${BASH_REMATCH[1]}"
+			fi
+
+			echo -ne "\r$line"
+		done
+
+		# Process completed
+		send_progress "-1"
+
+		# Print remaining output
+		echo -ne "\r$line"
+	fi
+done

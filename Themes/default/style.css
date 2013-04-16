@@ -1,0 +1,103 @@
+MxButton.menu-button > MxLabel {
+  color: #000000;
+}
+
+MxButton.menu-button {
+  padding: 3 3 3 3;
+  border-image: url("button.png") 1;
+}
+MxButton.menu-button:hover {
+  padding: 3 3 3 3;
+  border-image: url("button.png") 1;
+}
+MxButton.menu-button:active {
+  padding: 4 2 2 4;
+  border-image: url("button-active.png") 1;
+}
+MxButton.menu-button:checked {
+  padding: 4 2 2 4;
+  border-image: url("button-active.png") 1;
+}
+MxButton.menu-button:checked:hover {
+  padding: 4 2 2 4;
+  border-image: url("button-active.png") 1;
+}
+MxButton.menu-button:checked:active {
+  padding: 4 2 2 4;
+  border-image: url("button-active.png") 1;
+}
+
+MxButton.collapse-button {
+  padding: 0;
+  font-size: 12;
+  color: #ffffff99;
+  border-image: none;
+}
+MxButton.collapse-button:hover {
+  padding: 0;
+  font-size: 12;
+  color: #ffffffcc;
+  border-image: none;
+}
+MxButton.collapse-button:active {
+  padding: 0;
+  font-size: 12;
+  color: #ffffffff;
+  border-image: none;
+}
+
+MxScrollView {
+  background-color: transparent;
+  -mx-scrollbar-width: 10;
+  -mx-scrollbar-height: 10;
+  /* For the rationale behind this, see TerminalView.vala */
+  padding: 15 0 0 0;
+}
+
+MxScrollView MxBoxLayout {
+  /* For the rationale behind this, see TerminalView.vala */
+  padding: 0 0 15 0;
+}
+
+MxScrollBar {
+  /* Hack to hide the stepper buttons, which is not possible in Mx */
+  /* For the rationale behind this, see TerminalView.vala */
+  padding: -10 2 20 2;
+}
+
+MxScrollBar *.htrough,
+MxScrollBar *.vtrough {
+  background-color: #666666cc;
+  border-image: none;
+}
+
+MxScrollBar MxButton.hhandle,
+MxScrollBar MxButton.vhandle {
+  background-color: #ffffff66;
+  border-image: none;
+}
+MxScrollBar MxButton.hhandle:hover,
+MxScrollBar MxButton.vhandle:hover {
+  background-color: #ffffff99;
+  border-image: none;
+}
+MxScrollBar MxButton.hhandle:active,
+MxScrollBar MxButton.vhandle:active {
+  background-color: #ffffffcc;
+  border-image: none;
+}
+
+MxLabel.status-label {
+  padding: 2 10 4 5;
+  color: #777777;
+}
+
+MxProgressBar {
+  background-color: #77777766;
+  border-image: none;
+}
+
+MxProgressBar MxProgressBarFill {
+  background-color: #92b932cc;
+  border-image: none;
+}
