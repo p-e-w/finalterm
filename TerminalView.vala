@@ -533,8 +533,9 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 		cursor.width  = theme.character_width;
 		cursor.height = theme.character_height;
 
-		blinking_animation.set_from_value(theme.cursor_maximum_opacity);
-		blinking_animation.set_to_value(theme.cursor_minimum_opacity);
+		var interval = new Clutter.Interval.with_values(typeof(int),
+				theme.cursor_maximum_opacity, theme.cursor_minimum_opacity);
+		blinking_animation.set_interval(interval);
 		blinking_animation.duration = theme.cursor_animation_duration;
 		cursor.remove_transition("blinking-animation");
 		cursor.add_transition("blinking-animation", blinking_animation);

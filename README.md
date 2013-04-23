@@ -62,11 +62,11 @@ sudo make install
 
 ```
 git clone https://github.com/p-e-w/finalterm.git
-cd finalterm
+cd finalterm/
 make
 ```
 
-### If keybinder cannot be found
+#### If keybinder cannot be found
 
 Unfortunately, the keybinder install script fails to install the Vala bindings properly. To fix this, in the keybinder root directory, execute:
 
@@ -74,29 +74,59 @@ Unfortunately, the keybinder install script fails to install the Vala bindings p
 sudo cp examples/keybinder.vapi /usr/share/vala/vapi/
 ```
 
-### If keybinder still cannot be found
+#### If keybinder still cannot be found
 
-On Fedora there are sometimes further problems locating the keybinder library. To work around those, in the keybinder root directory, execute:
+On Fedora there are sometimes further problems locating the keybinder library. To work around those, execute:
 
 ```
 sudo cp /usr/local/include/keybinder-3.0/keybinder.h /usr/include/
 sudo cp /usr/local/lib/libkeybinder-3.0.* /usr/lib/
 ```
 
-### Make termlets executable
+## Instructions for Ubuntu
 
-In the Final Term root directory, execute:
+The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Ubuntu 12.10 ("Quantal Quetzal") system:
 
-```
-chmod +x Termlets/*
-```
+### Add Vala repository
 
-### Run Final Term
-
-In the Final Term root directory, execute:
+This is necessary because Ubuntu does not provide an up-to-date version of Vala in its default repositories.
 
 ```
-./finalterm
+sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7DAAC99C
+sudo add-apt-repository ppa:vala-team
+```
+
+### Install prerequisites
+
+```
+sudo apt-get install git valac-0.18 libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev
+```
+
+### Install Vala bindings for keybinder-3.0
+
+Unfortunately, the package "keybinder-3.0-dev" does not contain Vala bindings, so those have to be installed manually:
+
+```
+git clone https://github.com/engla/keybinder.git
+cd keybinder/
+git checkout keybinder-3.0
+sudo cp examples/keybinder.vapi /usr/share/vala/vapi/
+```
+
+### Install Final Term
+
+```
+git clone https://github.com/p-e-w/finalterm.git
+cd finalterm/
+make
+```
+
+#### If keybinder.h cannot be found
+
+As on Fedora, for unknown reasons the Vala compiler can have problems locating keybinder.h. To fix this, execute:
+
+```
+sudo cp /usr/include/keybinder-3.0/keybinder.h /usr/include/
 ```
 
 # Acknowledgments
