@@ -141,6 +141,24 @@ sudo cp /usr/include/keybinder-3.0/keybinder.h /usr/include/
 sudo ldconfig
 ```
 
+#### If there is a "Gtk-ERROR **: GTK+ 2.x symbols detected" when starting Final Term
+
+This probably means that you are on Ubuntu 13.04 ("Raring Ringtail"), as reported in https://github.com/p-e-w/finalterm/issues/17.
+
+The solution (for now, until I find something better) is to replace the line
+
+```
+--pkg keybinder
+```
+
+with
+
+```
+--pkg keybinder-3.0
+```
+
+in `Makefile`, and recompile. Unfortunately, doing this breaks compilation on some other platforms so I cannot make it the default yet.
+
 # Acknowledgments
 
 Final Term owes much of its existence to the awesomeness of [Vala](https://live.gnome.org/Vala) and [its documentation](http://valadoc.org), [Clutter](http://blogs.gnome.org/clutter/) and [Mx](https://github.com/clutter-project/mx), as well as to those projects authors' generous decision to release their amazing work as open source software.
