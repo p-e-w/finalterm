@@ -75,11 +75,10 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 
-		main_window.configure_event.connect(on_configure_event);
-
 		// TODO: Send configure event to ensure correct wrapping + rendering?
 
 		clutter_embed = new GtkClutter.Embed();
+		clutter_embed.configure_event.connect(on_configure_event);
 		clutter_embed.show();
 		main_window.add(clutter_embed);
 
