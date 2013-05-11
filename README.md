@@ -83,6 +83,12 @@ sudo cp /usr/local/include/keybinder-3.0/keybinder.h /usr/include/
 sudo cp /usr/local/lib/libkeybinder-3.0.* /usr/lib/
 ```
 
+#### If there is an "error while loading shared libraries" when starting Final Term
+
+```
+sudo ldconfig
+```
+
 ## Instructions for Ubuntu
 
 The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Ubuntu 12.10 ("Quantal Quetzal") system:
@@ -127,6 +133,12 @@ As on Fedora, for unknown reasons the Vala compiler can have problems locating k
 
 ```
 sudo cp /usr/include/keybinder-3.0/keybinder.h /usr/include/
+```
+
+#### If there is an "error while loading shared libraries" when starting Final Term
+
+```
+sudo ldconfig
 ```
 
 # Acknowledgments
