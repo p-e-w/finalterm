@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Name=Final Term
+Type=Application
+Icon=finalterm
+Exec=finalterm
+TryExec=finalterm
+Description=
+GenericName=Terminal
+
