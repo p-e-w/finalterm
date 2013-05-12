@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# TODO: Does "--color=always" work when output is piped?
 ls_output=$(ls --color=always $@)
 
 # TODO: Search for files in directory passed to ls rather than the current directory

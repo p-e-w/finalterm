@@ -51,11 +51,12 @@ FTCS_COMMAND_END=$(final_term_control_sequence '3')
 # but not to append it, because bash does not allow a semicolon
 # at the beginning of a command
 # TODO: Substitute variable name with value in command (expansion?)
-PROMPT_COMMAND='send_control_sequence "$FTCS_PROMPT_START"; '$PROMPT_COMMAND
+PROMPT_COMMAND='if [ -t 1 ]; then send_control_sequence "$FTCS_PROMPT_START"; fi; '$PROMPT_COMMAND
 
+# TODO: Do not append control sequence if output is piped
 PS1=$PS1$FTCS_COMMAND_START
 
-trap "send_control_sequence \"$FTCS_COMMAND_END\"; $(get_current_trap_command 'DEBUG')" DEBUG
+trap "if [ -t 1 ]; then send_control_sequence \"$FTCS_COMMAND_END\"; fi; $(get_current_trap_command 'DEBUG')" DEBUG
 
 
 # Termlet-related logic
@@ -78,7 +79,7 @@ export -f send_progress
 # Set up termlet aliases
 cd Termlets
 for filename in *; do
-	alias $filename="'$(pwd)/$filename'"
+	alias $filename="if [ -t 1 ]; then '$(pwd)/$filename'; else '$filename'; fi"
 done
 
 cd ..
