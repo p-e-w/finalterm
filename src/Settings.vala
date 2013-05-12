@@ -36,23 +36,22 @@ public class Settings : Object {
 	public int render_interval { get; set; }
 	public int resize_interval { get; set; }
 
-	public Settings.load_from_file(string filename) {
-		var settings_file = new KeyFile();
-		settings_file.load_from_file(filename, KeyFileFlags.NONE);
+	public Settings.load_from_schema(string schema) {
+		var settings = new GLib.Settings(schema);
 
-		color_scheme_name = settings_file.get_string("Settings", "color-scheme");
-		dark = settings_file.get_boolean("Settings", "dark");
-		theme_name = settings_file.get_string("Settings", "theme");
-		opacity = settings_file.get_double("Settings", "opacity");
+		color_scheme_name = settings.get_string("color-scheme");
+		dark = settings.get_boolean("dark");
+		theme_name = settings.get_string("theme");
+		opacity = settings.get_double("opacity");
 
-		terminal_lines = settings_file.get_integer("Settings", "terminal-lines");
-		terminal_columns = settings_file.get_integer("Settings", "terminal-columns");
+		terminal_lines = settings.get_int("terminal-lines");
+		terminal_columns = settings.get_int("terminal-columns");
 
-		shell_path = settings_file.get_string("Settings", "shell-path");
-		emulated_terminal = settings_file.get_string("Settings", "emulated-terminal");
+		shell_path = settings.get_string("shell-path");
+		emulated_terminal = settings.get_string("emulated-terminal");
 
-		render_interval = settings_file.get_integer("Settings", "render-interval");
-		resize_interval = settings_file.get_integer("Settings", "resize-interval");
+		render_interval = settings.get_int("render-interval");
+		resize_interval = settings.get_int("resize-interval");
 	}
 
 }

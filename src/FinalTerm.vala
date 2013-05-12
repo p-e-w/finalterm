@@ -421,12 +421,11 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		Environment.set_application_name("Final Term");
 
 		// TODO: Icon resolution is wrong when switching applications (Alt + Tab)
-		Gtk.IconTheme.get_default().append_search_path(Path.build_filename(Environment.get_current_dir(), "Icons"));
 		Gtk.Window.set_default_icon_name("final-term");
 
 		text_menus_by_code    = new Gee.HashMap<int, TextMenu>();
 		text_menus_by_pattern = new Gee.HashMap<Regex, TextMenu>();
-		foreach (var filename in Utilities.get_files_in_directory("TextMenus", ".ftmenu")) {
+		foreach (var filename in Utilities.get_files_in_directory(Config.PKGDATADIR + "/TextMenus", ".ftmenu")) {
 			var text_menu = new TextMenu.load_from_file(filename);
 			switch (text_menu.marker_type) {
 			case TextMenu.MarkerType.CODE:
@@ -439,24 +438,31 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		}
 
 		color_schemes = new Gee.HashMap<string, ColorScheme>();
-		foreach (var filename in Utilities.get_files_in_directory("ColorSchemes", ".ftcolors")) {
+		foreach (var filename in Utilities.get_files_in_directory(Config.PKGDATADIR + "/ColorSchemes", ".ftcolors")) {
 			var color_scheme = new ColorScheme.load_from_file(filename);
 			color_schemes.set(color_scheme.name, color_scheme);
 		}
 
 		themes = new Gee.HashMap<string, Theme>();
-		foreach (var filename in Utilities.get_files_in_directory("Themes", ".fttheme", true)) {
+		foreach (var filename in Utilities.get_files_in_directory(Config.PKGDATADIR + "/Themes", ".fttheme", true)) {
 			var theme = new Theme.load_from_file(filename);
 			themes.set(theme.name, theme);
 		}
 
-		foreach (var filename in Utilities.get_files_in_directory("KeyBindings", ".ftkeys")) {
+		foreach (var filename in Utilities.get_files_in_directory(Config.PKGDATADIR + "/KeyBindings", ".ftkeys")) {
 			KeyBindings.load_from_file(filename);
+		}
+
+		var localdatadir = File.new_for_path (Environment.get_user_data_dir() + "/finalterm");
+		if (!localdatadir.query_exists()) {
+			try {
+				localdatadir.make_directory();
+			} catch (Error e) { error ("Cannot access local data dir: %s", e.message); }
 		}
 
 		application = new FinalTerm();
 
-		application.settings = new Settings.load_from_file("Settings/application.ftsettings");
+		application.settings = new Settings.load_from_schema("org.gnome.finalterm");
 
 		application.color_scheme = color_schemes.get(application.settings.color_scheme_name);
 		application.dark = application.settings.dark;
@@ -468,11 +474,11 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		Command.execute_function = application.execute_command;
 
 		autocompletion = new Autocompletion();
-		autocompletion.load_entries_from_file("Settings/commands.ftcompletion");
+		autocompletion.load_entries_from_file(localdatadir.get_path() + "/commands.ftcompletion");
 
 		var result = application.run(args);
 
-		autocompletion.save_entries_to_file("Settings/commands.ftcompletion");
+		autocompletion.save_entries_to_file(localdatadir.get_path() + "/commands.ftcompletion");
 
 		return result;
 	}
