@@ -32,9 +32,12 @@ public class Terminal : Object, Themable {
 	public TerminalOutput terminal_output { get; set; default = new TerminalOutput(); }
 	public TerminalView terminal_view { get; set; }
 
-	private Posix.pid_t fork_pid;
 	private int command_file;
 	private IOChannel command_channel;
+
+	// Store class instances indexed by the shell process' PID
+	// – an ugly necessity because of Vala's closure limitations
+	private static Gee.Map<int, Terminal> terminals_by_pid = new Gee.HashMap<int, Terminal>();
 
 	public Terminal() {
 		lines = FinalTerm.settings.terminal_lines;
@@ -161,18 +164,37 @@ public class Terminal : Object, Themable {
 		char[] slave_name = null;
 		Linux.winsize terminal_size = { (ushort)lines, (ushort)columns, 0, 0 };
 
-		fork_pid = Linux.forkpty(out pty_master, slave_name, null, terminal_size);
+		var fork_pid = Linux.forkpty(out pty_master, slave_name, null, terminal_size);
 
 		switch (fork_pid) {
 		case -1: // Error
 			critical("Fork failed");
 			break;
+
 		case 0: // This is the child process
 			run_shell();
 			break;
+
 		default: // This is the parent process
 			command_file = pty_master;
 			initialize_read();
+
+			// Store instance reference to be retrieved from inside the closure
+			terminals_by_pid.set((int)fork_pid, this);
+
+			Posix.@signal(Posix.SIGCHLD, (@signal) => {
+				// Some child process terminated
+				Posix.pid_t child_pid;
+
+				// Do not let the shell process turn defunct
+				// Note that multiple child processes might have terminated simultaneously
+				// as noted in http://stackoverflow.com/questions/2595503/determine-pid-of-terminated-process
+				while ((child_pid = Posix.waitpid(-1, null, Posix.WNOHANG)) != -1) {
+					var this_terminal = terminals_by_pid.get((int)child_pid);
+					this_terminal.shell_terminated();
+				}
+			});
+
 			break;
 		}
 	}
@@ -220,5 +242,7 @@ public class Terminal : Object, Themable {
 
 	// TODO: Rename to "title_changed"?
 	public signal void title_updated(string new_title);
+
+	public signal void shell_terminated();
 
 }

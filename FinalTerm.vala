@@ -69,6 +69,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		terminal = new Terminal();
 		terminal.title_updated.connect(on_terminal_title_updated);
+		terminal.shell_terminated.connect(on_terminal_shell_terminated);
 
 		main_window = new Gtk.ApplicationWindow(this);
 		main_window.title = "Final Term";
@@ -246,11 +247,15 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	}
 
 	private void quit_action() {
-		main_window.destroy();
+		quit();
 	}
 
 	private void on_terminal_title_updated(string new_title) {
 		main_window.title = new_title;
+	}
+
+	private void on_terminal_shell_terminated() {
+		quit();
 	}
 
 	// Called when size or position of window changes
