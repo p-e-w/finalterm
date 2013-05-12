@@ -32,7 +32,7 @@ VALA_OPTIONS = \
 	--pkg posix \
 	--pkg linux \
 	--pkg gee-0.8 \
-	--pkg keybinder
+	--pkg keybinder-3.0
 
 default:
 	$(VALA_COMPILER) $(VALA_OPTIONS) -o $(OUTPUT_FILE) $(SOURCE_FILES)
