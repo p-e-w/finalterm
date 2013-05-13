@@ -2,6 +2,8 @@
 
 Final Term is a new breed of terminal emulator.
 
+![Screenshot](http://finalterm.org/text-menu.png)
+
 It goes beyond mere emulation and understands what is happening inside the shell it is hosting. This allows it to offer features no other terminal can, including:
 
 * Semantic text menus
@@ -25,14 +27,12 @@ To install Final Term, execute these shell commands:
 
 ```
 git clone https://github.com/p-e-w/finalterm.git
-cd finalterm
+cd finalterm/
+mkdir build
+cd build/
+cmake ..
 make
-```
-
-Then, run Final Term using
-
-```
-./finalterm
+sudo make install
 ```
 
 ## Instructions for Fedora
@@ -42,7 +42,7 @@ The following concrete steps have been tested and work to get Final Term install
 ### Install prerequisites
 
 ```
-sudo yum install git vala libgee-devel gnome-common gtk-doc gtk3-devel libmx-devel clutter-gtk-devel
+sudo yum install git cmake vala libgee-devel gnome-common gtk-doc gtk3-devel libmx-devel clutter-gtk-devel
 ```
 
 ### Install keybinder-3.0
@@ -56,6 +56,7 @@ git checkout keybinder-3.0
 ./autogen.sh
 make
 sudo make install
+sudo ldconfig
 ```
 
 ### Install Final Term
@@ -63,30 +64,22 @@ sudo make install
 ```
 git clone https://github.com/p-e-w/finalterm.git
 cd finalterm/
+mkdir build
+cd build/
+cmake ..
 make
+sudo make install
 ```
 
-#### If keybinder cannot be found
+### "package 'keybinder-3.0' not found"
 
-Unfortunately, the keybinder install script fails to install the Vala bindings properly. To fix this, in the keybinder root directory, execute:
+The keybinder library is installed in `/usr/local/lib/` rather than `/usr/lib/`. On many systems, pkg-config will not by default search for packages there and this error is the annoying result.
 
-```
-sudo cp examples/keybinder.vapi /usr/share/vala/vapi/
-```
-
-#### If keybinder still cannot be found
-
-On Fedora there are sometimes further problems locating the keybinder library. To work around those, execute:
+To fix it, add `/usr/local/lib/pkgconfig/` to your pkg-config search path:
 
 ```
-sudo cp /usr/local/include/keybinder-3.0/keybinder.h /usr/include/
-sudo cp /usr/local/lib/libkeybinder-3.0.* /usr/lib/
-```
-
-#### If there is an "error while loading shared libraries" when starting Final Term
-
-```
-sudo ldconfig
+PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
+export PKG_CONFIG_PATH
 ```
 
 ## Instructions for Ubuntu
@@ -98,25 +91,13 @@ The following concrete steps have been tested and work to get Final Term install
 This is necessary because Ubuntu does not provide an up-to-date version of Vala in its default repositories.
 
 ```
-sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7DAAC99C
 sudo add-apt-repository ppa:vala-team
 ```
 
 ### Install prerequisites
 
 ```
-sudo apt-get install git valac-0.18 libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev
-```
-
-### Install Vala bindings for keybinder-3.0
-
-Unfortunately, the package "keybinder-3.0-dev" does not contain Vala bindings, so those have to be installed manually:
-
-```
-git clone https://github.com/engla/keybinder.git
-cd keybinder/
-git checkout keybinder-3.0
-sudo cp examples/keybinder.vapi /usr/share/vala/vapi/
+sudo apt-get install git cmake valac-0.18 libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev
 ```
 
 ### Install Final Term
@@ -124,40 +105,16 @@ sudo cp examples/keybinder.vapi /usr/share/vala/vapi/
 ```
 git clone https://github.com/p-e-w/finalterm.git
 cd finalterm/
+mkdir build
+cd build/
+cmake ..
 make
+sudo make install
 ```
 
-#### If keybinder.h cannot be found
+## Instructions for Arch Linux
 
-As on Fedora, for unknown reasons the Vala compiler can have problems locating keybinder.h. To fix this, execute:
-
-```
-sudo cp /usr/include/keybinder-3.0/keybinder.h /usr/include/
-```
-
-#### If there is an "error while loading shared libraries" when starting Final Term
-
-```
-sudo ldconfig
-```
-
-#### If there is a "Gtk-ERROR **: GTK+ 2.x symbols detected" when starting Final Term
-
-This probably means that you are on Ubuntu 13.04 ("Raring Ringtail"), as reported in https://github.com/p-e-w/finalterm/issues/17.
-
-The solution (for now, until I find something better) is to replace the line
-
-```
---pkg keybinder
-```
-
-with
-
-```
---pkg keybinder-3.0
-```
-
-in `Makefile`, and recompile. Unfortunately, doing this breaks compilation on some other platforms so I cannot make it the default yet.
+You're in luck, my friend: [https://aur.archlinux.org/packages/finalterm-git/](https://aur.archlinux.org/packages/finalterm-git/)
 
 # Acknowledgments
 
