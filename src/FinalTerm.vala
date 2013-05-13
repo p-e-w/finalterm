@@ -132,7 +132,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		// TODO: Apparently, Vala is incapable of compiling variables of type GLib.ActionEntry
 		//       correctly (various GCC errors). This prevents a dynamic array of ActionEntries
 		//       from being used here and necessitates this hack in order to dynamically set
-		//       the entries' states based on application settings.
+		//       the entries' states based on FinalTerm settings.
 		((SimpleAction)lookup_action("dark-look")).set_state(settings.dark);
 		((SimpleAction)lookup_action("color-scheme")).set_state(settings.color_scheme_name);
 		((SimpleAction)lookup_action("theme")).set_state(settings.theme_name);
@@ -403,7 +403,9 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 			if (command.parameters.is_empty)
 				return;
 			var url = command.parameters.get(0);
-			AppInfo.launch_default_for_uri((url.index_of("www.") == 0) ? "http://" + url : url, null);
+			try {
+				AppInfo.launch_default_for_uri((url.index_of("www.") == 0) ? "http://" + url : url, null);
+			} catch (Error e) { warning("Launching %s failed: %s", url, e.message); }
 			return;
 
 		default:
@@ -470,14 +472,18 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		application = new FinalTerm();
 
-		application.settings = new Settings.load_from_schema("org.gnome.finalterm");
+		FinalTerm.settings = new Settings.load_from_schema("org.gnome.finalterm");
 
-		application.color_scheme = color_schemes.get(application.settings.color_scheme_name);
-		application.dark = application.settings.dark;
+		application.color_scheme = color_schemes.get(FinalTerm.settings.color_scheme_name);
+		if (application.color_scheme == null)
+			error("Color scheme %s does not exist - exiting.", FinalTerm.settings.color_scheme_name);
+		application.dark = FinalTerm.settings.dark;
 		application.set_color_scheme_all(application.color_scheme, application.dark);
-		application.theme = themes.get(application.settings.theme_name);
+		application.theme = themes.get(FinalTerm.settings.theme_name);
+		if (application.theme == null)
+			error("Theme %s does not exist - exiting.", FinalTerm.settings.theme_name);
 		application.set_theme_all(application.theme);
-		application.opacity = application.settings.opacity;
+		application.opacity = FinalTerm.settings.opacity;
 
 		Command.execute_function = application.execute_command;
 

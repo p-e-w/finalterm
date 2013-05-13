@@ -607,7 +607,11 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 		private static void add_sequence_pattern(ControlSequenceType control_sequence_type, string pattern, unichar final_character) {
 			// TODO: A vala bug prevents inlining this (GCC error)
-			var patternRegex = new Regex(pattern, RegexCompileFlags.OPTIMIZE);
+			Regex patternRegex;
+			try {
+				patternRegex = new Regex(pattern, RegexCompileFlags.OPTIMIZE);
+			} catch (Error e) { error(e.message); }
+
 			control_sequence_specifications.set(
 					final_character,
 					ControlSequenceSpecification() { type = control_sequence_type, pattern = patternRegex });

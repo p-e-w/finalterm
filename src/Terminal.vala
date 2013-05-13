@@ -141,15 +141,19 @@ public class Terminal : Object, Themable {
 	}
 
 	public void send_character(unichar character) {
-		command_channel.write_unichar(character);
-		command_channel.flush();
+		try {
+			command_channel.write_unichar(character);
+			command_channel.flush();
+		} catch (Error e) { warning("Writing unichar failed: %s", e.message); }
 	}
 
 	public void send_text(string text) {
 		var text_chars = text.to_utf8();
 		size_t bytes_written;
-		command_channel.write_chars(text_chars, out bytes_written);
-		command_channel.flush();
+		try {
+			command_channel.write_chars(text_chars, out bytes_written);
+			command_channel.flush();
+		} catch (Error e) { warning("Writing chars failed: %s", e.message); }
 	}
 
 	// Makes the PTY aware that the size (lines and columns)
@@ -222,7 +226,9 @@ public class Terminal : Object, Themable {
 
 			// TODO: Read all available characters rather than one
 			unichar character;
-			command_channel.read_unichar(out character);
+			try {
+				command_channel.read_unichar(out character);
+			} catch (Error e) { warning("Reading unichar failed: %s", e.message); }
 
 			// Measured from outside because parse_character has multiple return points
 			//Metrics.start_block_timer("TerminalStream.parse_character (outside)");

@@ -70,46 +70,50 @@ public class ColorScheme : Object {
 
 		// Load color values from file, overriding default colors if necessary
 		var colors_file = new KeyFile();
-		colors_file.load_from_file(filename, KeyFileFlags.NONE);
+		try {
+			colors_file.load_from_file(filename, KeyFileFlags.NONE);
+		} catch (Error e) { error("Failed to load colorscheme %s: %s", filename, e.message); }
 
-		name   = colors_file.get_string("About", "name");
-		author = colors_file.get_string("About", "author");
+		try {
+			name   = colors_file.get_string("About", "name");
+			author = colors_file.get_string("About", "author");
 
-		foreach (var key in colors_file.get_keys("Dark")) {
-			var color = Clutter.Color.from_string(colors_file.get_string("Dark", key));
-			switch (key) {
-			case "cursor":
-				dark_cursor_color = color;
-				break;
-			case "foreground":
-				dark_foreground_color = color;
-				break;
-			case "background":
-				dark_background_color = color;
-				break;
-			default:
-				dark_indexed_colors.set(int.parse(key), color);
-				break;
+			foreach (var key in colors_file.get_keys("Dark")) {
+				var color = Clutter.Color.from_string(colors_file.get_string("Dark", key));
+				switch (key) {
+				case "cursor":
+					dark_cursor_color = color;
+					break;
+				case "foreground":
+					dark_foreground_color = color;
+					break;
+				case "background":
+					dark_background_color = color;
+					break;
+				default:
+					dark_indexed_colors.set(int.parse(key), color);
+					break;
+				}
 			}
-		}
 
-		foreach (var key in colors_file.get_keys("Light")) {
-			var color = Clutter.Color.from_string(colors_file.get_string("Light", key));
-			switch (key) {
-			case "cursor":
-				light_cursor_color = color;
-				break;
-			case "foreground":
-				light_foreground_color = color;
-				break;
-			case "background":
-				light_background_color = color;
-				break;
-			default:
-				light_indexed_colors.set(int.parse(key), color);
-				break;
+			foreach (var key in colors_file.get_keys("Light")) {
+				var color = Clutter.Color.from_string(colors_file.get_string("Light", key));
+				switch (key) {
+				case "cursor":
+					light_cursor_color = color;
+					break;
+				case "foreground":
+					light_foreground_color = color;
+					break;
+				case "background":
+					light_background_color = color;
+					break;
+				default:
+					light_indexed_colors.set(int.parse(key), color);
+					break;
+				}
 			}
-		}
+		} catch (Error e) { warning("Error in %s color scheme: %s", filename, e.message); }
 	}
 
 	public Clutter.Color get_cursor_color(bool dark) {
