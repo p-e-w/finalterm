@@ -72,7 +72,7 @@ public class ColorScheme : Object {
 		var colors_file = new KeyFile();
 		try {
 			colors_file.load_from_file(filename, KeyFileFlags.NONE);
-		} catch (Error e) { error("Failed to load colorscheme %s: %s", filename, e.message); }
+		} catch (Error e) { error("Failed to load color scheme %s: %s", filename, e.message); }
 
 		try {
 			name   = colors_file.get_string("About", "name");

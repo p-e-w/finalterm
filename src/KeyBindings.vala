@@ -34,7 +34,7 @@ public class KeyBindings : Object {
 		var key_bindings_file = new KeyFile();
 		try {
 			key_bindings_file.load_from_file(filename, KeyFileFlags.NONE);
-		} catch (Error e) { error("Loading keybindings file %s failed: %s", filename, e.message); }
+		} catch (Error e) { error("Loading key bindings file %s failed: %s", filename, e.message); }
 
 		try {
 			string[] group_names = { "Global", "Application" };

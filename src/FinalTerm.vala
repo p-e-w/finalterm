@@ -132,7 +132,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		// TODO: Apparently, Vala is incapable of compiling variables of type GLib.ActionEntry
 		//       correctly (various GCC errors). This prevents a dynamic array of ActionEntries
 		//       from being used here and necessitates this hack in order to dynamically set
-		//       the entries' states based on FinalTerm settings.
+		//       the entries' states based on Final Term settings.
 		((SimpleAction)lookup_action("dark-look")).set_state(settings.dark);
 		((SimpleAction)lookup_action("color-scheme")).set_state(settings.color_scheme_name);
 		((SimpleAction)lookup_action("theme")).set_state(settings.theme_name);
