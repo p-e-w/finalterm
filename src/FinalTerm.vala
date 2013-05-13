@@ -76,9 +76,8 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 
-		// TODO: Send configure event to ensure correct wrapping + rendering?
-
 		clutter_embed = new GtkClutter.Embed();
+		// TODO: Send configure event once to ensure correct wrapping + rendering?
 		clutter_embed.configure_event.connect(on_configure_event);
 		clutter_embed.show();
 		main_window.add(clutter_embed);
@@ -229,15 +228,18 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	}
 
 	private void about_action() {
-		string[] authors = { "Philipp Emanuel Weidmann <pew@worldwidemann.com>", null };
+		string[] authors = {
+			"Philipp Emanuel Weidmann <pew@worldwidemann.com> (original author)",
+			"Tom Beckmann <tomjonabc@gmail.com>",
+			null };
 		string[] artists = { "Matthieu James (Faenza icon, modified)", null };
 
 		Gtk.show_about_dialog(main_window,
 				"program-name", "Final Term",
 				"logo-icon-name", "final-term",
-				"version", "0.1.0",
+				"version", "pre-alpha",
 				"comments", "At last – a modern terminal emulator.",
-				"copyright", "Copyright © 2013 Philipp Emanuel Weidmann",
+				"copyright", "Copyright © 2013 Philipp Emanuel Weidmann & contributors",
 				"license-type", Gtk.License.GPL_3_0,
 				"authors", authors,
 				"artists", artists,
@@ -425,7 +427,6 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		Environment.set_application_name("Final Term");
 
-		// TODO: Icon resolution is wrong when switching applications (Alt + Tab)
 		Gtk.Window.set_default_icon_name("final-term");
 
 		text_menus_by_code    = new Gee.HashMap<int, TextMenu>();
@@ -458,11 +459,13 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 			KeyBindings.load_from_file(filename);
 		}
 
-		var localdatadir = File.new_for_path (Environment.get_user_data_dir() + "/finalterm");
-		if (!localdatadir.query_exists()) {
+		var data_dir = File.new_for_path(Environment.get_user_data_dir() + "/finalterm");
+		if (!data_dir.query_exists()) {
 			try {
-				localdatadir.make_directory();
-			} catch (Error e) { error ("Cannot access local data dir: %s", e.message); }
+				data_dir.make_directory();
+			} catch (Error e) {
+				critical("Cannot access data directory: %s", e.message);
+			}
 		}
 
 		application = new FinalTerm();
@@ -479,11 +482,11 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		Command.execute_function = application.execute_command;
 
 		autocompletion = new Autocompletion();
-		autocompletion.load_entries_from_file(localdatadir.get_path() + "/commands.ftcompletion");
+		autocompletion.load_entries_from_file(data_dir.get_path() + "/commands.ftcompletion");
 
 		var result = application.run(args);
 
-		autocompletion.save_entries_to_file(localdatadir.get_path() + "/commands.ftcompletion");
+		autocompletion.save_entries_to_file(data_dir.get_path() + "/commands.ftcompletion");
 
 		return result;
 	}

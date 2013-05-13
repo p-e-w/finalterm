@@ -18,7 +18,7 @@ function final_term_control_sequence() {
 	# TODO: Remove last semicolon
 	# this DOLLAR is required for the cmake configure_file
 	# when using a $ it'd try to replace the control_sequence
-	# with one of it's own variables and thus remove it
+	# with one of its own variables and thus remove it
 	control_sequence="${DOLLAR}{control_sequence}Y"
 
 	# TODO: Should "-ne" be added here?
@@ -84,6 +84,6 @@ pushd @PKGDATADIR@/Termlets > /dev/null
 for filename in *; do
 	alias $filename="if [ -t 1 ]; then '$(pwd)/$filename'; else '$filename'; fi"
 done
-
 popd > /dev/null
-#cd ~
+
+cd ~

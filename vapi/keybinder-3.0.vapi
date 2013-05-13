@@ -1,4 +1,3 @@
-
 [CCode (cprefix = "KEYBINDER", lower_case_cprefix = "keybinder_",
         cheader_filename="keybinder.h")]
 namespace Keybinder {
