@@ -204,7 +204,7 @@ public class Terminal : Object, Themable {
 
 		// Replace child process with shell process
 		Posix.execvp(FinalTerm.settings.shell_path,
-				{ FinalTerm.settings.shell_path, "--rcfile", "Startup/bash_startup", "-i" });
+				{ FinalTerm.settings.shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" });
 
 		// If this line is reached, execvp() must have failed
 		critical("execvp failed");

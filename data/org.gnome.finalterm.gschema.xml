@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema path="/org/gnome/finalterm/" id="org.gnome.finalterm" gettext-domain="finalterm">
+		<key type="s" name="color-scheme">
+			<default>'Default'</default>
+			<summary>Color scheme to be used</summary>
+			<description></description>
+		</key>
+		<key type="s" name="theme">
+			<default>'Default'</default>
+			<summary>Theme to be used</summary>
+			<description></description>
+		</key>
+		<key type="b" name="dark">
+			<default>true</default>
+			<summary>Use dark theme</summary>
+			<description></description>
+		</key>
+		<key type="d" name="opacity">
+			<default>0.9</default>
+			<summary>Background opacity</summary>
+			<description></description>
+		</key>
+		<key type="i" name="terminal-lines">
+			<default>24</default>
+			<summary></summary>
+			<description></description>
+		</key>
+		<key type="i" name="terminal-columns">
+			<default>80</default>
+			<summary></summary>
+			<description></description>
+		</key>
+		<key type="s" name="shell-path">
+			<default>'/bin/bash'</default>
+			<summary>Path to shell executable</summary>
+			<description>Path to the shell executable which is to be run (NOTE: Only bash is currently supported)</description>
+		</key>
+		<key type="s" name="emulated-terminal">
+			<default>'xterm-256color'</default>
+			<summary>Value that the TERM environment variable will be set to</summary>
+			<description>Value that the TERM environment variable will be set to (NOTE: Changing this variable may affect shell behavior)</description>
+		</key>
+		<key type="i" name="render-interval">
+			<default>10</default>
+			<summary>Minimum time between successive output rendering cycles, in milliseconds</summary>
+			<description></description>
+		</key>
+		<key type="i" name="resize-interval">
+			<default>10</default>
+			<summary>Minimum time between successive resizing cycles, in milliseconds</summary>
+			<description></description>
+		</key>
+	</schema>
+</schemalist>
+

@@ -16,7 +16,10 @@ function final_term_control_sequence() {
 		control_sequence="$control_sequence$argument;"
 	done
 	# TODO: Remove last semicolon
-	control_sequence="${control_sequence}Y"
+	# this DOLLAR is required for the cmake configure_file
+	# when using a $ it'd try to replace the control_sequence
+	# with one of it's own variables and thus remove it
+	control_sequence="${DOLLAR}{control_sequence}Y"
 
 	# TODO: Should "-ne" be added here?
 	echo "$control_sequence"
@@ -77,10 +80,10 @@ function send_progress() {
 export -f send_progress
 
 # Set up termlet aliases
-cd Termlets
+pushd @PKGDATADIR@/Termlets > /dev/null
 for filename in *; do
 	alias $filename="if [ -t 1 ]; then '$(pwd)/$filename'; else '$filename'; fi"
 done
 
-cd ..
+popd > /dev/null
 #cd ~

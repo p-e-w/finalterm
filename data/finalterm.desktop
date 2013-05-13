@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Final Term
+GenericName=Terminal
+Comment=Don't just use your system — command it!
+Exec=finalterm
+Icon=final-term
+Terminal=false
+Type=Application
+Categories=Accessories;
+
