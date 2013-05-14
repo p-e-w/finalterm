@@ -37,6 +37,8 @@ sudo make install
 
 ## Instructions for Fedora
 
+_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8QkZ5UnRiSzhnTVU/edit) (and one for keybinder [here](https://docs.google.com/file/d/0B48uS582CBl8Wjg1ZVI0bXBrLUE/edit))._
+
 The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Fedora 18 system:
 
 ### Install prerequisites
