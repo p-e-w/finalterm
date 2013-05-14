@@ -53,19 +53,19 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		add(collapse_button);
 
 		text_container = new Clutter.Text();
+		text_container.x_expand = true;
 		text_container.line_wrap = true;
 		text_container.line_wrap_mode = Pango.WrapMode.CHAR;
 
 		text_container.reactive = true;
 		text_container.motion_event.connect(on_text_container_motion_event);
 
-		text_container.margin_right = theme.margin_right;
-		text_container.x_expand = true;
-
 		add(text_container);
 
 		FinalTerm.register_color_schemable(this);
 		FinalTerm.register_themable(this);
+
+		text_container.margin_right = theme.margin_right;
 	}
 
 	private void on_collapse_button_clicked() {
