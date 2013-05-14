@@ -45,13 +45,13 @@ public class Command : Object {
 	public static CommandExecuteFunction execute_function;
 
 	public static void initialize() {
-		// Supports up to 5 parameters
-		// Note the DOTALL flag, required because parameters may contain newlines
 		try {
+			// Supports up to 5 parameters
+			// Note the DOTALL flag, required because parameters may contain newlines
 			command_pattern = new Regex(
 				"(\\w+)(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?",
 				RegexCompileFlags.OPTIMIZE | RegexCompileFlags.DOTALL);
-		} catch (Error e) { error (e.message); }
+		} catch (Error e) { error(e.message); }
 	}
 
 	public Command.from_command_specification(string command_specification) {

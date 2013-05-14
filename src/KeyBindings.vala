@@ -66,7 +66,7 @@ public class KeyBindings : Object {
 					}
 				}
 			}
-		} catch (Error e) { warning("Error in keybindings file %s: %s", filename, e.message); }
+		} catch (Error e) { warning("Error in key bindings file %s: %s", filename, e.message); }
 	}
 
 	public static Gee.List<Command>? get_key_commands(Gdk.ModifierType modifiers, uint key) {

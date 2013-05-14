@@ -39,7 +39,7 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 	public bool is_collapsible_end   { get; set; default = false; }
 
 	public LineView(TerminalOutput.OutputLine output_line) {
-		layout_manager = new Clutter.BoxLayout ();
+		layout_manager = new Clutter.BoxLayout();
 
 		original_output_line = output_line;
 
@@ -59,13 +59,13 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		text_container.reactive = true;
 		text_container.motion_event.connect(on_text_container_motion_event);
 
+		text_container.margin_right = theme.margin_right;
+		text_container.x_expand = true;
+
 		add(text_container);
 
 		FinalTerm.register_color_schemable(this);
 		FinalTerm.register_themable(this);
-
-		text_container.margin_right = theme.margin_right;
-		text_container.x_expand = true;
 	}
 
 	private void on_collapse_button_clicked() {
@@ -199,17 +199,17 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 	}
 
 	private void update_left_margin() {
-		// may happen as color_scheme is set first, which calls render_line,
-		// which in turn calls this function while theme's still null
+		// This may happen as the color scheme is set first, which calls render_line,
+		// which in turn calls this function while the theme is still null
 		if (theme == null)
 			return;
 
-		// if the collapse button is visible, the text container will
-		// already be pushed left, so we need to subtract that
+		// If the collapse button is visible, the text container will
+		// already be pushed to the left, so we need to subtract that
 		text_container.margin_left = theme.margin_left +
-			(is_collapsible_start ?
-			 theme.gutter_size - theme.collapse_button_width - theme.collapse_button_x :
-			 theme.gutter_size);
+				(is_collapsible_start ?
+				 theme.gutter_size - theme.collapse_button_width - theme.collapse_button_x :
+				 theme.gutter_size);
 	}
 
 }
