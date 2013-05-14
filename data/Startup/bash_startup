@@ -79,10 +79,18 @@ function send_progress() {
 }
 export -f send_progress
 
+function run_termlet() {
+	if [ -t 1 ]; then
+		"@PKGDATADIR@/Termlets/$@"
+	else
+		"$@"
+	fi
+}
+
 # Set up termlet aliases
-pushd @PKGDATADIR@/Termlets > /dev/null
+pushd "@PKGDATADIR@/Termlets" > /dev/null
 for filename in *; do
-	alias $filename="if [ -t 1 ]; then '$(pwd)/$filename'; else '$filename'; fi"
+	alias $filename="run_termlet '$filename'"
 done
 popd > /dev/null
 
