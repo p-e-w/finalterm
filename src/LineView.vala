@@ -64,8 +64,6 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 
 		FinalTerm.register_color_schemable(this);
 		FinalTerm.register_themable(this);
-
-		text_container.margin_right = theme.margin_right;
 	}
 
 	private void on_collapse_button_clicked() {
@@ -192,6 +190,8 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		collapse_button.height = theme.collapse_button_height;
 
 		update_left_margin();
+
+		text_container.margin_right = theme.margin_right;
 
 		// TODO: Clutter bug? The following sometimes does not work:
 		//text_container.font_description = theme.monospaced_font;
