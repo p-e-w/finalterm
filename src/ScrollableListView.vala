@@ -116,7 +116,7 @@ public class ScrollableListView<T, E> : Clutter.Actor, Themable {
 		if (!is_valid_item_index(item_index))
 			return null;
 
-		return (ItemView)list_view.get_children().nth_data(item_index);
+		return (ItemView)list_view.get_child_at_index(item_index);
 	}
 
 	public void update_item(int item_index) {

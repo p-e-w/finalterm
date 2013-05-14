@@ -684,26 +684,28 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				// Loop over all matches and split them off as
 				// separate text elements with the appropriate
 				// text menu attached to them
-				do {
-					int start_position;
-					int end_position;
-					match_info.fetch_pos(0, out start_position, out end_position);
+				try {
+					do {
+						int start_position;
+						int end_position;
+						match_info.fetch_pos(0, out start_position, out end_position);
 
-					if (start_position > old_end_position) {
-						// There is text to the left of the match
+						if (start_position > old_end_position) {
+							// There is text to the left of the match
+							text_elements.add(new TextElement(
+									text_element.text.substring(old_end_position, start_position - old_end_position),
+									new CharacterAttributes.copy(text_element.attributes)));
+						}
+
+						var character_attributes = new CharacterAttributes.copy(text_element.attributes);
+						character_attributes.text_menu = FinalTerm.text_menus_by_pattern.get(pattern);
 						text_elements.add(new TextElement(
-								text_element.text.substring(old_end_position, start_position - old_end_position),
-								new CharacterAttributes.copy(text_element.attributes)));
-					}
+								text_element.text.substring(start_position, end_position - start_position),
+								character_attributes));
 
-					var character_attributes = new CharacterAttributes.copy(text_element.attributes);
-					character_attributes.text_menu = FinalTerm.text_menus_by_pattern.get(pattern);
-					text_elements.add(new TextElement(
-							text_element.text.substring(start_position, end_position - start_position),
-							character_attributes));
-
-					old_end_position = end_position;
-				} while (match_info.next());
+						old_end_position = end_position;
+					} while (match_info.next());
+				} catch (Error e) { warning(e.message); }
 
 				if (old_end_position < text_element.text.length) {
 					// There is text to the right of the last match

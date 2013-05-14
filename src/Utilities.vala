@@ -35,8 +35,15 @@ public class Utilities : Object {
 	public static Gee.Set<string> get_files_in_directory(string directory_name, string extension = "", bool recursive = false) {
 		var files = new Gee.HashSet<string>();
 
-		var directory = Dir.open(directory_name);
-		var pattern = new Regex(".*" + Regex.escape_string(extension) + "$", RegexCompileFlags.OPTIMIZE);
+		Dir directory = null;
+		try {
+			directory = Dir.open(directory_name);
+		} catch (Error e) { error("Failed to get %s files in %s: %s", extension, directory_name, e.message); }
+
+		Regex pattern = null;
+		try {
+			pattern = new Regex(".*" + Regex.escape_string(extension) + "$", RegexCompileFlags.OPTIMIZE);
+		} catch (Error e) { error(e.message); }
 
 		string filename;
 		while ((filename = directory.read_name()) != null) {
@@ -134,8 +141,10 @@ public class Utilities : Object {
 			if (line == null)
 				break;
 
-			T item = Json.gobject_from_data(item_type, line);
-			list.add(item);
+			try {
+				T item = Json.gobject_from_data(item_type, line);
+				list.add(item);
+			} catch (Error e) { warning("Error while parsing %s JSON: %s", filename, e.message); }
 		}
 
 		return list;

@@ -39,6 +39,8 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 	public bool is_collapsible_end   { get; set; default = false; }
 
 	public LineView(TerminalOutput.OutputLine output_line) {
+		layout_manager = new Clutter.BoxLayout ();
+
 		original_output_line = output_line;
 
 		collapse_button = new Mx.Button.with_label("▼");
@@ -59,12 +61,11 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 
 		add(text_container);
 
-		allocation_changed.connect((box, flags) => {
-			text_container.width = box.get_width() - (theme.gutter_size + theme.margin_left + theme.margin_right);
-		});
-
 		FinalTerm.register_color_schemable(this);
 		FinalTerm.register_themable(this);
+
+		text_container.margin_right = theme.margin_right;
+		text_container.x_expand = true;
 	}
 
 	private void on_collapse_button_clicked() {
@@ -142,6 +143,8 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		is_collapsible_start = output_line.is_prompt_line;
 		is_collapsible_end   = output_line.is_prompt_line;
 
+		update_left_margin();
+
 		collapse_button.visible = is_collapsible_start;
 
 		text_container.set_markup(get_markup(output_line));
@@ -183,15 +186,30 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 
 		collapse_button.style = theme.style;
 
-		collapse_button.x = theme.collapse_button_x;
-		collapse_button.y = theme.collapse_button_y;
+		collapse_button.margin_left = theme.collapse_button_x;
+		collapse_button.margin_top = theme.collapse_button_y;
 		collapse_button.width = theme.collapse_button_width;
 		collapse_button.height = theme.collapse_button_height;
+
+		update_left_margin();
 
 		// TODO: Clutter bug? The following sometimes does not work:
 		//text_container.font_description = theme.monospaced_font;
 		text_container.font_name = theme.monospaced_font.to_string();
-		text_container.x = theme.gutter_size + theme.margin_left;
+	}
+
+	private void update_left_margin() {
+		// may happen as color_scheme is set first, which calls render_line,
+		// which in turn calls this function while theme's still null
+		if (theme == null)
+			return;
+
+		// if the collapse button is visible, the text container will
+		// already be pushed left, so we need to subtract that
+		text_container.margin_left = theme.margin_left +
+			(is_collapsible_start ?
+			 theme.gutter_size - theme.collapse_button_width - theme.collapse_button_x :
+			 theme.gutter_size);
 	}
 
 }

@@ -52,44 +52,48 @@ public class Theme : Object {
 
 	public Theme.load_from_file(string filename) {
 		var theme_file = new KeyFile();
-		theme_file.load_from_file(filename, KeyFileFlags.NONE);
+		try {
+			theme_file.load_from_file(filename, KeyFileFlags.NONE);
+		} catch (Error e) { error("Could not load theme %s: %s", filename, e.message); }
 
-		name   = theme_file.get_string("About", "name");
-		author = theme_file.get_string("About", "author");
+		try {
+			name   = theme_file.get_string("About", "name");
+			author = theme_file.get_string("About", "author");
 
-		monospaced_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "monospaced-font"));
-		// In a monospaced font, "X" should have the same dimensions
-		// as all other characters
-		int character_width;
-		int character_height;
-		Utilities.get_text_size(monospaced_font, "X", out character_width, out character_height);
-		this.character_width  = character_width;
-		this.character_height = character_height;
+			monospaced_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "monospaced-font"));
+			// In a monospaced font, "X" should have the same dimensions
+			// as all other characters
+			int character_width;
+			int character_height;
+			Utilities.get_text_size(monospaced_font, "X", out character_width, out character_height);
+			this.character_width  = character_width;
+			this.character_height = character_height;
 
-		proportional_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "proportional-font"));
+			proportional_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "proportional-font"));
 
-		style = new Mx.Style();
-		style.load_from_file(Utilities.get_absolute_filename(filename,
-				theme_file.get_string("Theme", "stylesheet")));
+			style = new Mx.Style();
+			style.load_from_file(Utilities.get_absolute_filename(filename,
+					theme_file.get_string("Theme", "stylesheet")));
 
-		gutter_size = theme_file.get_integer("Theme", "gutter-size");
+			gutter_size = theme_file.get_integer("Theme", "gutter-size");
 
-		gutter_color = Clutter.Color.from_string(theme_file.get_string("Theme", "gutter-color"));
-		gutter_border_color = Clutter.Color.from_string(theme_file.get_string("Theme", "gutter-border-color"));
+			gutter_color = Clutter.Color.from_string(theme_file.get_string("Theme", "gutter-color"));
+			gutter_border_color = Clutter.Color.from_string(theme_file.get_string("Theme", "gutter-border-color"));
 
-		collapse_button_x = theme_file.get_integer("Theme", "collapse-button-x");
-		collapse_button_y = theme_file.get_integer("Theme", "collapse-button-y");
-		collapse_button_width = theme_file.get_integer("Theme", "collapse-button-width");
-		collapse_button_height = theme_file.get_integer("Theme", "collapse-button-height");
+			collapse_button_x = theme_file.get_integer("Theme", "collapse-button-x");
+			collapse_button_y = theme_file.get_integer("Theme", "collapse-button-y");
+			collapse_button_width = theme_file.get_integer("Theme", "collapse-button-width");
+			collapse_button_height = theme_file.get_integer("Theme", "collapse-button-height");
 
-		menu_button_arrow_color = Clutter.Color.from_string(theme_file.get_string("Theme", "menu-button-arrow-color"));
+			menu_button_arrow_color = Clutter.Color.from_string(theme_file.get_string("Theme", "menu-button-arrow-color"));
 
-		margin_left = theme_file.get_integer("Theme", "margin-left");
-		margin_right = theme_file.get_integer("Theme", "margin-right");
+			margin_left = theme_file.get_integer("Theme", "margin-left");
+			margin_right = theme_file.get_integer("Theme", "margin-right");
 
-		cursor_minimum_opacity = theme_file.get_integer("Theme", "cursor-minimum-opacity");
-		cursor_maximum_opacity = theme_file.get_integer("Theme", "cursor-maximum-opacity");
-		cursor_animation_duration = theme_file.get_integer("Theme", "cursor-animation-duration");
+			cursor_minimum_opacity = theme_file.get_integer("Theme", "cursor-minimum-opacity");
+			cursor_maximum_opacity = theme_file.get_integer("Theme", "cursor-maximum-opacity");
+			cursor_animation_duration = theme_file.get_integer("Theme", "cursor-animation-duration");
+		} catch (Error e) { warning("Error in theme %s: %s\n", filename, e.message); }
 	}
 
 }
