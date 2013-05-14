@@ -32,37 +32,41 @@ public class KeyBindings : Object {
 
 	public static void load_from_file(string filename) {
 		var key_bindings_file = new KeyFile();
-		key_bindings_file.load_from_file(filename, KeyFileFlags.NONE);
+		try {
+			key_bindings_file.load_from_file(filename, KeyFileFlags.NONE);
+		} catch (Error e) { error("Loading key bindings file %s failed: %s", filename, e.message); }
 
-		string[] group_names = { "Global", "Application" };
-		foreach (var group_name in group_names) {
-			foreach (var key_specification in key_bindings_file.get_keys(group_name)) {
-				var commands = new Gee.ArrayList<Command>();
-				foreach (var command_specification in key_bindings_file.get_string_list(group_name, key_specification)) {
-					commands.add(new Command.from_command_specification(command_specification));
-				}
+		try {
+			string[] group_names = { "Global", "Application" };
+			foreach (var group_name in group_names) {
+				foreach (var key_specification in key_bindings_file.get_keys(group_name)) {
+					var commands = new Gee.ArrayList<Command>();
+					foreach (var command_specification in key_bindings_file.get_string_list(group_name, key_specification)) {
+						commands.add(new Command.from_command_specification(command_specification));
+					}
 
-				key_bindings.set(key_specification, commands);
+					key_bindings.set(key_specification, commands);
 
-				if (group_name == "Global") {
-					// Keybinder.bind is declared in the VAPI file with
-					// [CCode(has_target=false)], so the closure does not receive
-					// the context information needed to use the commands variable.
-					// As a workaround, the key specification is passed as
-					// user data and the commands are retrieved when the
-					// callback is invoked.
-					Keybinder.bind(key_specification, (keystring, user_data) => {
-						//message("Global key: %s", (string)user_data);
-						foreach (var command in key_bindings.get((string)user_data)) {
-							command.execute();
-						}
-					},
-					// Trick to create a new string in-place to avoid
-					// the data at the variable's address getting overwritten
-					key_specification + "");
+					if (group_name == "Global") {
+						// Keybinder.bind is declared in the VAPI file with
+						// [CCode(has_target=false)], so the closure does not receive
+						// the context information needed to use the commands variable.
+						// As a workaround, the key specification is passed as
+						// user data and the commands are retrieved when the
+						// callback is invoked.
+						Keybinder.bind(key_specification, (keystring, user_data) => {
+							//message("Global key: %s", (string)user_data);
+							foreach (var command in key_bindings.get((string)user_data)) {
+								command.execute();
+							}
+						},
+						// Trick to create a new string in-place to avoid
+						// the data at the variable's address getting overwritten
+						key_specification + "");
+					}
 				}
 			}
-		}
+		} catch (Error e) { warning("Error in keybindings file %s: %s", filename, e.message); }
 	}
 
 	public static Gee.List<Command>? get_key_commands(Gdk.ModifierType modifiers, uint key) {

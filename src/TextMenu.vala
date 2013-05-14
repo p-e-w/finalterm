@@ -41,51 +41,55 @@ public class TextMenu : Object {
 
 	public TextMenu.load_from_file(string filename) {
 		var menu_file = new KeyFile();
-		menu_file.load_from_file(filename, KeyFileFlags.NONE);
+		try {
+			menu_file.load_from_file(filename, KeyFileFlags.NONE);
+		} catch (Error e) { error("Failed to load text menu definitions %s: %s", filename, e.message); }
 
-		if (menu_file.get_string("Parameters", "marker-type") == "code") {
-			marker_type = MarkerType.CODE;
-			code = menu_file.get_integer("Parameters", "code");
-		} else {
-			marker_type = MarkerType.PATTERN;
-			pattern = new Regex(menu_file.get_value("Parameters", "pattern"), RegexCompileFlags.OPTIMIZE);
-		}
-
-		label = menu_file.get_string("Parameters", "label");
-		color = menu_file.get_integer("Parameters", "color");
-
-		menu = new Gtk.Menu();
-		var root_item = new Gtk.MenuItem();
-		root_item.set_submenu(menu);
-
-		foreach (var label in menu_file.get_keys("Menu")) {
-			if (label == "$$$SEPARATOR$$$") {
-				menu.append(new Gtk.SeparatorMenuItem());
-
+		try {
+			if (menu_file.get_string("Parameters", "marker-type") == "code") {
+				marker_type = MarkerType.CODE;
+				code = menu_file.get_integer("Parameters", "code");
 			} else {
-				var menu_item = new Gtk.MenuItem.with_label("");
-
-				Gtk.Label menu_item_label = (Gtk.Label)menu_item.get_children().nth_data(0);
-				menu_item_label.set_markup(label);
-
-				var commands = new Gee.ArrayList<Command>();
-				foreach (var command_specification in menu_file.get_string_list("Menu", label)) {
-					commands.add(new Command.from_command_specification(command_specification));
-				}
-
-				menu_item.activate.connect(() => {
-					var placeholder_substitutes = new Gee.ArrayList<string>();
-					placeholder_substitutes.add(text);
-					foreach (var command in commands) {
-						command.execute(placeholder_substitutes);
-					}
-				});
-
-				menu.append(menu_item);
+				marker_type = MarkerType.PATTERN;
+				pattern = new Regex(menu_file.get_value("Parameters", "pattern"), RegexCompileFlags.OPTIMIZE);
 			}
-		}
 
-		menu.show_all();
+			label = menu_file.get_string("Parameters", "label");
+			color = menu_file.get_integer("Parameters", "color");
+
+			menu = new Gtk.Menu();
+			var root_item = new Gtk.MenuItem();
+			root_item.set_submenu(menu);
+
+			foreach (var label in menu_file.get_keys("Menu")) {
+				if (label == "$$$SEPARATOR$$$") {
+					menu.append(new Gtk.SeparatorMenuItem());
+
+				} else {
+					var menu_item = new Gtk.MenuItem.with_label("");
+
+					Gtk.Label menu_item_label = (Gtk.Label)menu_item.get_children().nth_data(0);
+					menu_item_label.set_markup(label);
+
+					var commands = new Gee.ArrayList<Command>();
+					foreach (var command_specification in menu_file.get_string_list("Menu", label)) {
+						commands.add(new Command.from_command_specification(command_specification));
+					}
+
+					menu_item.activate.connect(() => {
+						var placeholder_substitutes = new Gee.ArrayList<string>();
+						placeholder_substitutes.add(text);
+						foreach (var command in commands) {
+							command.execute(placeholder_substitutes);
+						}
+					});
+
+					menu.append(menu_item);
+				}
+			}
+
+			menu.show_all();
+		} catch (Error e) { warning("Error in text menu %s: %s", filename, e.message); }
 	}
 
 }
