@@ -416,7 +416,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 	public static int main(string[] args) {
 		if (GtkClutter.init(ref args) != Clutter.InitError.SUCCESS) {
-			critical("Failed to initialize Clutter");
+			error("Failed to initialize Clutter");
 			return Posix.EXIT_FAILURE;
 		}
 
@@ -465,9 +465,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		if (!data_dir.query_exists()) {
 			try {
 				data_dir.make_directory();
-			} catch (Error e) {
-				critical("Cannot access data directory: %s", e.message);
-			}
+			} catch (Error e) { error("Cannot access data directory: %s", e.message); }
 		}
 
 		application = new FinalTerm();
