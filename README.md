@@ -18,7 +18,7 @@ Final Term is written in [Vala](https://live.gnome.org/Vala) and built on top of
 
 * [Gee](https://live.gnome.org/Libgee)
 * [GTK+ 3](http://www.gtk.org)
-* [Clutter](http://blogs.gnome.org/clutter/)
+* [Clutter](http://blogs.gnome.org/clutter/) >= 1.12
 * [Clutter-Gtk](http://blogs.gnome.org/clutter/)
 * [Mx](https://github.com/clutter-project/mx)
 * [keybinder-3.0](https://github.com/engla/keybinder/tree/keybinder-3.0)
