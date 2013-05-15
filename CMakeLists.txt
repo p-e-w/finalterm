@@ -1,4 +1,3 @@
-
 project(finalterm)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.6)
@@ -16,7 +15,7 @@ set(VALAFLAGS "")
 configure_file(${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
 configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup)
 
-set(PKGS clutter-gtk-1.0 mx-1.0 gee-1.0 keybinder-3.0)
+set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0)
 
 find_package(PkgConfig)
 
@@ -26,7 +25,10 @@ if (UNITY_FOUND)
 	set(VALAFLAGS ${VALAFLAGS}
 		--define=HAS_UNITY)
 	set(PKGS ${PKGS}
-		unity)
+		gee-1.0 unity)
+else (UNITY_FOUND)
+	set(PKGS ${PKGS}
+		gee-0.8)
 endif (UNITY_FOUND)
 
 # see if we got libnotify
@@ -94,4 +96,3 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Termlets DESTINATION share/fi
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/TextMenus DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Themes DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Icons/hicolor DESTINATION share/icons)
-
