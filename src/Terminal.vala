@@ -53,7 +53,7 @@ public class Terminal : Object, Themable {
 		terminal_output.progress_finished.connect(on_output_progress_finished);
 		terminal_output.cursor_position_changed.connect(on_output_cursor_position_changed);
 #if HAS_NOTIFY
-		terminal_output.prompt_showing.connect(on_output_prompt_showing);
+		terminal_output.prompt_shown.connect(on_output_prompt_shown);
 #endif
 
 		initialize_pty();
@@ -144,7 +144,7 @@ public class Terminal : Object, Themable {
 	}
 
 #if HAS_NOTIFY
-	private void on_output_prompt_showing() {
+	private void on_output_prompt_shown() {
 		if (terminal_view.window_has_focus())
 			return;
 

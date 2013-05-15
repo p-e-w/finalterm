@@ -259,7 +259,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				switch (stream_element.get_numeric_parameter(0, -1)) {
 				case FTCS_PROMPT_START:
 					get(cursor_position.line).is_prompt_line = true;
-					prompt_showing();
+					prompt_shown();
 					break;
 				case FTCS_COMMAND_START:
 					if (command_mode) {
@@ -502,7 +502,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public signal void cursor_position_changed(CursorPosition new_position);
 
-	public signal void prompt_showing();
+	public signal void prompt_shown();
 
 
 	public class OutputLine : Gee.ArrayList<TextElement> {
