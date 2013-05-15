@@ -485,12 +485,16 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		Command.execute_function = application.execute_command;
 
+		string autocompletion_filename = data_dir.get_path() + "/commands.ftcompletion";
+
 		autocompletion = new Autocompletion();
-		autocompletion.load_entries_from_file(data_dir.get_path() + "/commands.ftcompletion");
+
+		if (File.new_for_path(autocompletion_filename).query_exists())
+			autocompletion.load_entries_from_file(autocompletion_filename);
 
 		var result = application.run(args);
 
-		autocompletion.save_entries_to_file(data_dir.get_path() + "/commands.ftcompletion");
+		autocompletion.save_entries_to_file(autocompletion_filename);
 
 		return result;
 	}
