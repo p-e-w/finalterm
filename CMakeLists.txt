@@ -26,7 +26,7 @@ if (UNITY_FOUND)
 	set(VALAFLAGS ${VALAFLAGS}
 		--define=HAS_UNITY)
 	set(PKGS ${PKGS}
-		libnotify)
+		unity)
 endif (UNITY_FOUND)
 
 # see if we got libnotify
@@ -35,7 +35,7 @@ if (NOTIFY_FOUND)
 	set(VALAFLAGS ${VALAFLAGS}
 		--define=HAS_NOTIFY)
 	set(PKGS ${PKGS}
-		unity)
+		libnotify)
 endif (NOTIFY_FOUND)
 
 pkg_check_modules(DEPS REQUIRED ${PKGS})
