@@ -52,6 +52,9 @@ public class Terminal : Object, Themable {
 		terminal_output.progress_updated.connect(on_output_progress_updated);
 		terminal_output.progress_finished.connect(on_output_progress_finished);
 		terminal_output.cursor_position_changed.connect(on_output_cursor_position_changed);
+#if HAS_NOTIFY
+		terminal_output.prompt_shown.connect(on_output_prompt_shown);
+#endif
 
 		initialize_pty();
 
@@ -124,12 +127,34 @@ public class Terminal : Object, Themable {
 	}
 
 	private void on_output_progress_updated(int percentage) {
+#if HAS_UNITY
+		FinalTerm.launcher.progress_visible = true;
+		FinalTerm.launcher.progress = percentage / 100.0;
+#endif
+
 		terminal_view.show_progress("Progress", percentage);
 	}
 
 	private void on_output_progress_finished() {
+#if HAS_UNITY
+		FinalTerm.launcher.progress_visible = false;
+#endif
+
 		terminal_view.hide_progress();
 	}
+
+#if HAS_NOTIFY
+	private void on_output_prompt_shown() {
+		if (terminal_view.window_has_focus())
+			return;
+
+		var notification = new Notify.Notification("Process terminated",
+				"The current process has terminated.", "final-term");
+		try {
+			notification.show();
+		} catch (Error e) { warning("Failed to show notification: %s", e.message); }
+	}
+#endif
 
 	private void on_output_cursor_position_changed(TerminalOutput.CursorPosition new_position) {
 		// TODO: This does not currently work because the line has yet to be rendered

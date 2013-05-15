@@ -113,6 +113,10 @@ public class TerminalView : Mx.BoxLayout, Themable {
 		progress_bar.style = theme.style;
 	}
 
+	public bool window_has_focus() {
+		return (clutter_embed.get_toplevel() as Gtk.Window).has_toplevel_focus;
+	}
+
 }
 
 
