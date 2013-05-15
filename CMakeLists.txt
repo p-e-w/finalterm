@@ -11,15 +11,34 @@ set(VERSION 0.1)
 set(GETTEXT_PACKAGE "finalterm")
 set(CMAKE_C_FLAGS "-ggdb")
 set(DOLLAR "$")
+set(VALAFLAGS "")
 
 configure_file(${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
 configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup)
 
-set(PKGS clutter-gtk-1.0 mx-1.0 gee-0.8 keybinder-3.0)
+set(PKGS clutter-gtk-1.0 mx-1.0 gee-1.0 keybinder-3.0)
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED ${PKGS})
 
+# see if we got libunity
+pkg_check_modules(UNITY unity)
+if (UNITY_FOUND)
+	set(VALAFLAGS ${VALAFLAGS}
+		--define=HAS_UNITY)
+	set(PKGS ${PKGS}
+		unity)
+endif (UNITY_FOUND)
+
+# see if we got libnotify
+pkg_check_modules(NOTIFY libnotify)
+if (NOTIFY_FOUND)
+	set(VALAFLAGS ${VALAFLAGS}
+		--define=HAS_NOTIFY)
+	set(PKGS ${PKGS}
+		libnotify)
+endif (NOTIFY_FOUND)
+
+pkg_check_modules(DEPS REQUIRED ${PKGS})
 add_definitions(${DEPS_CFLAGS})
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 link_libraries(${DEPS_LIBRARIES})
@@ -57,6 +76,7 @@ PACKAGES
 OPTIONS
 	-g
 	--vapidir=${CMAKE_CURRENT_SOURCE_DIR}/vapi/
+	${VALAFLAGS}
 )
 
 include(GSettings)

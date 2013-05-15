@@ -50,6 +50,10 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	private Terminal terminal;
 	private TerminalView terminal_view;
 
+#if HAS_UNITY
+	public static Unity.LauncherEntry launcher;
+#endif
+
 	private const ActionEntry[] action_entries = {
 		// TODO: If the default state for this entry is not set here,
 		//       the toggle button does not show up in the application menu
@@ -66,6 +70,10 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		base.startup();
 
 		app_menu = create_application_menu();
+
+#if HAS_UNITY
+		launcher = Unity.LauncherEntry.get_for_desktop_id("finalterm.desktop");
+#endif
 
 		terminal = new Terminal();
 		terminal.title_updated.connect(on_terminal_title_updated);
@@ -426,6 +434,9 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		Metrics.initialize();
 		KeyBindings.initialize();
 		Command.initialize();
+#if HAS_NOTIFY
+		Notify.init("Final Term");
+#endif
 
 		Environment.set_application_name("Final Term");
 
