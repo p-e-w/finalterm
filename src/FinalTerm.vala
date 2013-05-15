@@ -72,7 +72,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		app_menu = create_application_menu();
 
 #if HAS_UNITY
-		launcher = Unity.LauncherEntry.get_for_desktop_id ("finalterm.desktop");
+		launcher = Unity.LauncherEntry.get_for_desktop_id("finalterm.desktop");
 #endif
 
 		terminal = new Terminal();
@@ -435,7 +435,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		KeyBindings.initialize();
 		Command.initialize();
 #if HAS_NOTIFY
-		Notify.init ("Final Term");
+		Notify.init("Final Term");
 #endif
 
 		Environment.set_application_name("Final Term");
