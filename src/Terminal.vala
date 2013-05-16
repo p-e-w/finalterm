@@ -48,13 +48,13 @@ public class Terminal : Object, Themable {
 		terminal_output.text_updated.connect(on_output_text_updated);
 		terminal_output.command_updated.connect(on_output_command_updated);
 		terminal_output.command_executed.connect(on_output_command_executed);
+#if HAS_NOTIFY
+		terminal_output.command_finished.connect(on_output_command_finished);
+#endif
 		terminal_output.title_updated.connect(on_output_title_updated);
 		terminal_output.progress_updated.connect(on_output_progress_updated);
 		terminal_output.progress_finished.connect(on_output_progress_finished);
 		terminal_output.cursor_position_changed.connect(on_output_cursor_position_changed);
-#if HAS_NOTIFY
-		terminal_output.prompt_shown.connect(on_output_prompt_shown);
-#endif
 
 		initialize_pty();
 
@@ -144,12 +144,11 @@ public class Terminal : Object, Themable {
 	}
 
 #if HAS_NOTIFY
-	private void on_output_prompt_shown() {
+	private void on_output_command_finished(string command) {
 		if (terminal_view.window_has_focus())
 			return;
 
-		var notification = new Notify.Notification("Process terminated",
-				"The current process has terminated.", "final-term");
+		var notification = new Notify.Notification("Command finished", command, "final-term");
 		try {
 			notification.show();
 		} catch (Error e) { warning("Failed to show notification: %s", e.message); }

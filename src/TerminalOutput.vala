@@ -52,6 +52,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private string transient_text = "";
 	private string printed_transient_text = "";
 
+	private string last_command = null;
+
 	// Final Term control sequence codes
 	private const int FTCS_PROMPT_START    = 1;
 	private const int FTCS_COMMAND_START   = 2;
@@ -259,7 +261,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				switch (stream_element.get_numeric_parameter(0, -1)) {
 				case FTCS_PROMPT_START:
 					get(cursor_position.line).is_prompt_line = true;
-					prompt_shown();
+					if (last_command != null)
+						command_finished(last_command);
 					break;
 				case FTCS_COMMAND_START:
 					if (command_mode) {
@@ -275,7 +278,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 						command_mode = false;
 						// TODO: This breaks if cursor is moved backward using arrow keys
 						command_end_position = cursor_position;
-						command_executed(get_command());
+						last_command = get_command();
+						command_executed(last_command);
 					} else {
 						// Commented out because this is actually a common occurrence and
 						// makes the output very verbose
@@ -494,6 +498,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public signal void command_executed(string command);
 
+	public signal void command_finished(string command);
+
 	public signal void title_updated(string new_title);
 
 	public signal void progress_updated(int percentage);
@@ -501,8 +507,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public signal void progress_finished();
 
 	public signal void cursor_position_changed(CursorPosition new_position);
-
-	public signal void prompt_shown();
 
 
 	public class OutputLine : Gee.ArrayList<TextElement> {
