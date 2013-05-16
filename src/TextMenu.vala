@@ -58,8 +58,6 @@ public class TextMenu : Object {
 			color = menu_file.get_integer("Parameters", "color");
 
 			menu = new Gtk.Menu();
-			var root_item = new Gtk.MenuItem();
-			root_item.set_submenu(menu);
 
 			foreach (var label in menu_file.get_keys("Menu")) {
 				if (label == "$$$SEPARATOR$$$") {
