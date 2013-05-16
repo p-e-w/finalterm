@@ -22,6 +22,8 @@ Final Term is written in [Vala](https://live.gnome.org/Vala) and built on top of
 * [Clutter-Gtk](http://blogs.gnome.org/clutter/)
 * [Mx](https://github.com/clutter-project/mx)
 * [keybinder-3.0](https://github.com/engla/keybinder/tree/keybinder-3.0)
+* [libnotify](https://developer.gnome.org/libnotify/) _Optional_, for desktop notifications support
+* [libunity](https://launchpad.net/libunity) _Optional_, for Unity launcher integration (progress bars)
 
 To install Final Term, execute these shell commands:
 
@@ -44,7 +46,7 @@ The following concrete steps have been tested and work to get Final Term install
 ### Install prerequisites
 
 ```
-sudo yum install git cmake vala libgee-devel gnome-common gtk-doc gtk3-devel libmx-devel clutter-gtk-devel
+sudo yum install git cmake vala libgee-devel gnome-common gtk-doc gtk3-devel libmx-devel clutter-gtk-devel libnotify-devel
 ```
 
 ### Install keybinder-3.0
@@ -86,7 +88,7 @@ export PKG_CONFIG_PATH
 
 ## Instructions for Ubuntu
 
-The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Ubuntu 12.10 ("Quantal Quetzal") system:
+The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Ubuntu 12.10 ("Quantal Quetzal") or 13.04 ("Raring Ringtail") system:
 
 ### Add Vala repository
 
@@ -99,7 +101,7 @@ sudo add-apt-repository ppa:vala-team
 ### Install prerequisites
 
 ```
-sudo apt-get install git cmake valac-0.18 libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev
+sudo apt-get install git cmake valac-0.18 libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev libnotify-dev libunity-dev
 ```
 
 ### Install Final Term
