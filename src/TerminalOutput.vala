@@ -52,13 +52,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private string transient_text = "";
 	private string printed_transient_text = "";
 
-	// Final Term control sequence codes
-	private const int FTCS_PROMPT_START    = 1;
-	private const int FTCS_COMMAND_START   = 2;
-	private const int FTCS_COMMAND_END     = 3;
-	private const int FTCS_TEXT_MENU_START = 4;
-	private const int FTCS_TEXT_MENU_END   = 5;
-	private const int FTCS_PROGRESS        = 6;
+	private string last_command = null;
 
 	public bool command_mode = false;
 	public CursorPosition command_start_position;
@@ -232,73 +226,65 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					// TODO: Change icon name(?)
 					print_interpretation_status(stream_element, InterpretationStatus.PARTIALLY_SUPPORTED);
 					break;
-				case 1:
-					// Change Icon Name
-					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
-					break;
 				case 2:
 					// Change Window Title
 					terminal_title = stream_element.get_text_parameter(1, "Final Term");
 					title_updated(terminal_title);
 					break;
-				case 3:
-					// Set X property on top-level window
-					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
-					break;
-				case 4:
-					// Change Color Number
-					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
-					break;
 				default:
-					print_interpretation_status(stream_element, InterpretationStatus.INVALID);
+					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
 					break;
 				}
 				break;
 
-			case TerminalStream.StreamElement.ControlSequenceType.FINAL_TERM:
-				switch (stream_element.get_numeric_parameter(0, -1)) {
-				case FTCS_PROMPT_START:
-					get(cursor_position.line).is_prompt_line = true;
-					prompt_shown();
-					break;
-				case FTCS_COMMAND_START:
-					if (command_mode) {
-						warning("Command start control sequence received while already in command mode");
-					} else {
-						command_mode = true;
-						command_start_position = cursor_position;
-						message("Command mode entered");
-					}
-					break;
-				case FTCS_COMMAND_END:
-					if (command_mode) {
-						command_mode = false;
-						// TODO: This breaks if cursor is moved backward using arrow keys
-						command_end_position = cursor_position;
-						command_executed(get_command());
-					} else {
-						// Commented out because this is actually a common occurrence and
-						// makes the output very verbose
-						// TODO: Investigate further when exactly this occurs
-						//warning("Command end control sequence received while not in command mode");
-					}
-					break;
-				case FTCS_TEXT_MENU_START:
-					current_attributes = new CharacterAttributes.copy(current_attributes);
-					current_attributes.text_menu = FinalTerm.text_menus_by_code.get(stream_element.get_numeric_parameter(1, -1));
-					break;
-				case FTCS_TEXT_MENU_END:
-					current_attributes = new CharacterAttributes.copy(current_attributes);
-					current_attributes.text_menu = null;
-					break;
-				case FTCS_PROGRESS:
-					var percentage = stream_element.get_numeric_parameter(1, -1);
-					if (percentage == -1) {
-						progress_finished();
-					} else {
-						progress_updated(percentage);
-					}
-					break;
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROMPT_START:
+				get(cursor_position.line).is_prompt_line = true;
+				if (last_command != null)
+					command_finished(last_command);
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_START:
+				if (command_mode) {
+					warning("Command start control sequence received while already in command mode");
+				} else {
+					command_mode = true;
+					command_start_position = cursor_position;
+					message("Command mode entered");
+				}
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_END:
+				if (command_mode) {
+					command_mode = false;
+					// TODO: This breaks if cursor is moved backward using arrow keys
+					command_end_position = cursor_position;
+					last_command = get_command();
+					command_executed(last_command);
+				} else {
+					// Commented out because this is actually a common occurrence and
+					// makes the output very verbose
+					// TODO: Investigate further when exactly this occurs
+					//warning("Command end control sequence received while not in command mode");
+				}
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_TEXT_MENU_START:
+				current_attributes = new CharacterAttributes.copy(current_attributes);
+				current_attributes.text_menu = FinalTerm.text_menus_by_code.get(stream_element.get_numeric_parameter(0, -1));
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_TEXT_MENU_END:
+				current_attributes = new CharacterAttributes.copy(current_attributes);
+				current_attributes.text_menu = null;
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROGRESS:
+				var percentage = stream_element.get_numeric_parameter(0, -1);
+				if (percentage == -1) {
+					progress_finished();
+				} else {
+					var operation = stream_element.get_text_parameter(1, "");
+					progress_updated(percentage, operation);
 				}
 				break;
 
@@ -494,15 +480,15 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public signal void command_executed(string command);
 
+	public signal void command_finished(string command);
+
 	public signal void title_updated(string new_title);
 
-	public signal void progress_updated(int percentage);
+	public signal void progress_updated(int percentage, string operation);
 
 	public signal void progress_finished();
 
 	public signal void cursor_position_changed(CursorPosition new_position);
-
-	public signal void prompt_shown();
 
 
 	public class OutputLine : Gee.ArrayList<TextElement> {

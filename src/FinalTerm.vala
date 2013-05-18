@@ -339,7 +339,6 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	public static int main(string[] args) {
 		if (GtkClutter.init(ref args) != Clutter.InitError.SUCCESS) {
 			error("Failed to initialize Clutter");
-			return Posix.EXIT_FAILURE;
 		}
 
 		Keybinder.init();

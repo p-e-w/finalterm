@@ -25,4 +25,3 @@ namespace Config {
 	public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
 	public const string VERSION = "@VERSION@";
 }
-

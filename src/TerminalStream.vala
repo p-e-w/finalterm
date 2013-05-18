@@ -45,13 +45,13 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 	// All xterm single-character functions (except Space (TODO?))
 	// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-	private const string CONTROL_CHARACTERS = "\007\010\015\005\014\012\017\016\011\013";
+	private const string CONTROL_CHARACTERS = "\x07\x08\x0D\x05\x0C\x0A\x0F\x0E\x09\x0B";
 
 	// TODO: Generalize this idea to parse any sequence based on start / end characters
-	private const string ESCAPE_SEQUENCE_START_CHARACTER = "\033";
-	private const string DCS_SEQUENCE_START_CHARACTER = "\0220";
-	private const string CSI_SEQUENCE_START_CHARACTER = "\0233";
-	private const string OSC_SEQUENCE_START_CHARACTER = "\0235";
+	private const string ESCAPE_SEQUENCE_START_CHARACTER = "\x1B";
+	private const string DCS_SEQUENCE_START_CHARACTER = "\x90";
+	private const string CSI_SEQUENCE_START_CHARACTER = "\x9B";
+	private const string OSC_SEQUENCE_START_CHARACTER = "\x9D";
 	private const string ESCAPE_SEQUENCE_DCS = "P";
 	private const string ESCAPE_SEQUENCE_CSI = "[";
 	private const string ESCAPE_SEQUENCE_OSC = "]";
@@ -60,14 +60,14 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 	// NOTE: The characters "P" (DCS), "[" (CSI) and "]" (OSC) are excluded here
 	private const string ESCAPE_SEQUENCE_END_CHARACTERS = "DEHMNOVWXZ\\^_FGLMN34568@G0AB4C5RQKYE6ZH7=6789=>Fclmno|}~";
 
-	private const string DCS_SEQUENCE_END_CHARACTERS = "\0234";
+	private const string DCS_SEQUENCE_END_CHARACTERS = "\x9C";
 
 	// "The final character of these sequences is in the range ASCII 64 to 126 [...]" (Wikipedia)
 	private const string CSI_SEQUENCE_END_CHARACTERS = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	// "[...] in many cases BEL is an acceptable alternative to ST." (Wikipedia)
 	// TODO: Handle alternative ST notation (ESC + "\")
-	private const string OSC_SEQUENCE_END_CHARACTERS = "\07\0234";
+	private const string OSC_SEQUENCE_END_CHARACTERS = "\x07\x9C";
 
 	public void parse_character(unichar character) {
 		ParseState old_parse_state = parse_state;
@@ -347,7 +347,12 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 			SET_TEXT_PARAMETERS,
 
-			FINAL_TERM
+			FTCS_PROMPT_START,
+			FTCS_COMMAND_START,
+			FTCS_COMMAND_END,
+			FTCS_TEXT_MENU_START,
+			FTCS_TEXT_MENU_END,
+			FTCS_PROGRESS
 		}
 
 		// TODO: Use accessor methods ("add_parameter()") instead of public(?)
@@ -364,16 +369,21 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 		private static Gee.MultiMap<unichar, ControlSequenceSpecification?> control_sequence_specifications =
 				new Gee.HashMultiMap<unichar, ControlSequenceSpecification?>();
 
-		private const string ESC_PATTERN_START = "\\033";
-		private const string DCS_PATTERN_START = "(?:(?:\\033P)|\\220)";
-		private const string DCS_PATTERN_END   = "\\234";
-		private const string CSI_PATTERN_START = "(?:(?:\\033\\[)|\\233)";
-		private const string OSC_PATTERN_START = "(?:(?:\\033\\])|\\235)";
-		private const string OSC_PATTERN_END   = "(?:\\007|\\234)";
+		private const string ESC_PATTERN_START = "\\x1B";
+		private const string DCS_PATTERN_START = "(?:(?:\\x1BP)|\\x90)";
+		private const string DCS_PATTERN_END   = "\\x9C";
+		private const string CSI_PATTERN_START = "(?:(?:\\x1B\\[)|\\x9B)";
+		private const string OSC_PATTERN_START = "(?:(?:\\x1B\\])|\\x9D)";
+		private const string OSC_PATTERN_END   = "(?:\\x07|\\x9C)";
+
+		// Used to differentiate Final Term control sequences from ordinary OSC sequences
+		private const string FINAL_TERM_PATTERN_DESIGNATOR = "133;";
 
 		// TODO: More accurate / specific parameter matching
 		private const string PARAMETER_LIST_PATTERN   = "(.*)";
 		private const string PARAMETER_LIST_DELIMITER = ";";
+
+		private const string[] OSC_FINAL_CHARACTERS = { "\x07", "\x9C" };
 
 		private const string[] CHARACTER_SET_DESIGNATOR_FINAL_CHARACTERS =
 				{ "0", "A", "B", "4", "C", "5", "R", "Q", "K", "Y", "E", "6", "Z", "H", "7", "=" };
@@ -381,16 +391,16 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 		static construct {
 			// All xterm single-character functions (except Space (TODO?))
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-			add_scf_sequence_pattern(ControlSequenceType.BELL, "\007");
-			add_scf_sequence_pattern(ControlSequenceType.BACKSPACE, "\010");
-			add_scf_sequence_pattern(ControlSequenceType.CARRIAGE_RETURN, "\015");
-			add_scf_sequence_pattern(ControlSequenceType.RETURN_TERMINAL_STATUS, "\005");
-			add_scf_sequence_pattern(ControlSequenceType.FORM_FEED, "\014");
-			add_scf_sequence_pattern(ControlSequenceType.LINE_FEED, "\012");
-			add_scf_sequence_pattern(ControlSequenceType.SHIFT_IN, "\017");
-			add_scf_sequence_pattern(ControlSequenceType.SHIFT_OUT, "\016");
-			add_scf_sequence_pattern(ControlSequenceType.HORIZONTAL_TAB, "\011");
-			add_scf_sequence_pattern(ControlSequenceType.VERTICAL_TAB, "\013");
+			add_scf_sequence_pattern(ControlSequenceType.BELL, "\x07");
+			add_scf_sequence_pattern(ControlSequenceType.BACKSPACE, "\x08");
+			add_scf_sequence_pattern(ControlSequenceType.CARRIAGE_RETURN, "\x0D");
+			add_scf_sequence_pattern(ControlSequenceType.RETURN_TERMINAL_STATUS, "\x05");
+			add_scf_sequence_pattern(ControlSequenceType.FORM_FEED, "\x0C");
+			add_scf_sequence_pattern(ControlSequenceType.LINE_FEED, "\x0A");
+			add_scf_sequence_pattern(ControlSequenceType.SHIFT_IN, "\x0F");
+			add_scf_sequence_pattern(ControlSequenceType.SHIFT_OUT, "\x0E");
+			add_scf_sequence_pattern(ControlSequenceType.HORIZONTAL_TAB, "\x09");
+			add_scf_sequence_pattern(ControlSequenceType.VERTICAL_TAB, "\x0B");
 
 			// All xterm ESC control sequences (VT100 mode)
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
@@ -526,22 +536,21 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 			// All xterm OSC control sequences
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-			// TODO: This is a hack to handle the fact that OSC allows for two different final characters
-			add_sequence_pattern(
-					ControlSequenceType.SET_TEXT_PARAMETERS,
-					OSC_PATTERN_START + PARAMETER_LIST_PATTERN + OSC_PATTERN_END,
-					get_final_character("\007"));
-			add_sequence_pattern(
-					ControlSequenceType.SET_TEXT_PARAMETERS,
-					OSC_PATTERN_START + PARAMETER_LIST_PATTERN + OSC_PATTERN_END,
-					get_final_character("\0234"));
+			add_osc_sequence_pattern(ControlSequenceType.SET_TEXT_PARAMETERS,
+					// Negative lookahead
+					"(?!" + Regex.escape_string(FINAL_TERM_PATTERN_DESIGNATOR) + ")" +
+					PARAMETER_LIST_PATTERN);
+
+			// Final Term control sequences (note that these are actually OSC sequences)
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROMPT_START, "A");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_START, "B");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_END, "C");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_START, "D");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_END, "E");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROGRESS, "F");
 
 			// xterm implements no PM functions
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-
-			// Final Term control sequences
-			// Differentiation is based on parameters only because the namespace is limited
-			add_csi_sequence_pattern(ControlSequenceType.FINAL_TERM, "Y", "?");
 		}
 
 		private static void add_scf_sequence_pattern(ControlSequenceType control_sequence_type, string character) {
@@ -579,7 +588,8 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 			}
 		}
 
-		private static void add_dcs_sequence_pattern(ControlSequenceType control_sequence_type, string intermediate_characters) {
+		private static void add_dcs_sequence_pattern(ControlSequenceType control_sequence_type,
+					string intermediate_characters) {
 			add_sequence_pattern(
 					control_sequence_type,
 
@@ -588,7 +598,7 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 					PARAMETER_LIST_PATTERN +
 					DCS_PATTERN_END,
 
-					get_final_character("\0234"));
+					get_final_character("\x9C"));
 		}
 
 		private static void add_csi_sequence_pattern(ControlSequenceType control_sequence_type,
@@ -605,7 +615,35 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 					get_final_character(final_characters));
 		}
 
-		private static void add_sequence_pattern(ControlSequenceType control_sequence_type, string pattern, unichar final_character) {
+		private static void add_osc_sequence_pattern(ControlSequenceType control_sequence_type,
+					string intermediate_pattern) {
+			foreach (var final_character in OSC_FINAL_CHARACTERS) {
+				add_sequence_pattern(
+						control_sequence_type,
+						OSC_PATTERN_START + intermediate_pattern + OSC_PATTERN_END,
+						get_final_character(final_character));
+			}
+		}
+
+		private static void add_final_term_sequence_pattern(ControlSequenceType control_sequence_type,
+					string intermediate_characters) {
+			// Final Term control sequences are of the form
+			//
+			// OSC 133 ; { intermediate_characters ; parameter_1 (; parameter_2 [...]) } BEL
+			//
+			// Since the part in curly parentheses is a printable string, it matches the
+			// "Pt" specification in http://invisible-island.net/xterm/ctlseqs/ctlseqs.html,
+			// thus making Final Term control sequences OSC sequences with an unused "Ps" value,
+			// which should be ignored by other terminal emulators (though in practice they aren't).
+			add_osc_sequence_pattern(control_sequence_type,
+
+					Regex.escape_string(FINAL_TERM_PATTERN_DESIGNATOR) +
+					Regex.escape_string(intermediate_characters) + ";" +
+					PARAMETER_LIST_PATTERN);
+		}
+
+		private static void add_sequence_pattern(ControlSequenceType control_sequence_type, string pattern,
+					unichar final_character) {
 			// TODO: A vala bug prevents inlining this (GCC error)
 			Regex patternRegex;
 			try {

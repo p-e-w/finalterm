@@ -87,9 +87,17 @@ MxScrollBar MxButton.vhandle:active {
   border-image: none;
 }
 
-MxLabel.status-label {
-  padding: 2 10 4 5;
-  color: #777777;
+MxLabel.progress-label {
+  padding: 2 5 4 5;
+  color: #ffffff;
+  /* TODO: This should work according to https://github.com/clutter-project/mx/commit/c108215, but doesn't */
+  /*text-shadow: 2 2 2 #000000;*/
+}
+
+/* This is the workaround */
+MxLabel.progress-label-shadow {
+  padding: 3 4 3 6;
+  color: #000000;
 }
 
 MxProgressBar {
