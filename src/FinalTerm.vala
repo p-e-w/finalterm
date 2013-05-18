@@ -29,20 +29,17 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	public static Gee.Map<int, TextMenu> text_menus_by_code { get; set; }
 	public static Gee.Map<Regex, TextMenu> text_menus_by_pattern { get; set; }
 
-	private static Gee.Map<string, ColorScheme> color_schemes;
-	private static Gee.Map<string, Theme> themes;
+	public static Gee.Map<string, ColorScheme> color_schemes;
+	public static Gee.Map<string, Theme> themes;
 
-	private ColorScheme color_scheme;
-	private bool dark;
 	private Theme theme;
-	private double opacity;
 
 	private Gee.Set<ColorSchemable> color_schemables = new Gee.HashSet<ColorSchemable>();
 	private Gee.Set<Themable> themables = new Gee.HashSet<Themable>();
 
 	public static Autocompletion autocompletion { get; set; }
 
-	private Gtk.Window main_window;
+	public Gtk.Window main_window;
 
 	private Clutter.Stage stage;
 	private GtkClutter.Embed clutter_embed;
@@ -55,13 +52,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 #endif
 
 	private const ActionEntry[] action_entries = {
-		// TODO: If the default state for this entry is not set here,
-		//       the toggle button does not show up in the application menu
-		//       despite the state being set later
-		{ "dark-look", toggle_action, null, "false", dark_look_action },
-		{ "color-scheme", radio_action, "s", "''", color_scheme_action },
-		{ "theme", radio_action, "s", "''", theme_action },
-		{ "opacity", radio_action, "s", "''", opacity_action },
+		{ "settings", settings_action },
 		{ "about", about_action },
 		{ "quit", quit_action }
 	};
@@ -110,9 +101,9 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		// TODO: Use set_default_geometry instead?
 		main_window.set_default_size(
 				terminal_view.terminal_output_view.get_horizontal_padding() +
-					(terminal.columns * theme.character_width),
+					(terminal.columns * settings.theme.character_width),
 				terminal_view.terminal_output_view.get_vertical_padding() +
-					(terminal.lines * theme.character_height));
+					(terminal.lines * settings.theme.character_height));
 
 		main_window.present();
 
@@ -125,8 +116,8 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
 		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
 		// TODO: Update geometry when theme is changed
-		geometry.width_inc   = theme.character_width;
-		geometry.height_inc  = theme.character_height;
+		geometry.width_inc   = settings.theme.character_width;
+		geometry.height_inc  = settings.theme.character_height;
 		// TODO: Move values into constants / settings
 		geometry.min_width   = geometry.base_width + (20 * geometry.width_inc);
 		geometry.min_height  = geometry.base_height + (5 * geometry.height_inc);
@@ -137,46 +128,12 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	private Menu create_application_menu() {
 		add_action_entries(action_entries, this);
 
-		// TODO: Apparently, Vala is incapable of compiling variables of type GLib.ActionEntry
-		//       correctly (various GCC errors). This prevents a dynamic array of ActionEntries
-		//       from being used here and necessitates this hack in order to dynamically set
-		//       the entries' states based on Final Term settings.
-		((SimpleAction)lookup_action("dark-look")).set_state(settings.dark);
-		((SimpleAction)lookup_action("color-scheme")).set_state(settings.color_scheme_name);
-		((SimpleAction)lookup_action("theme")).set_state(settings.theme_name);
-		string opacity_string = ((int)Math.round(settings.opacity * 100.0)).to_string();
-		((SimpleAction)lookup_action("opacity")).set_state(opacity_string);
-
 		var menu = new Menu();
 		Menu menu_section;
 
 		menu_section = new Menu();
-		menu_section.append("_Dark look", "app.dark-look");
-
-		var color_scheme_menu = new Menu();
-		foreach (var color_scheme_name in color_schemes.keys) {
-			color_scheme_menu.append(color_scheme_name, "app.color-scheme::" + color_scheme_name);
-		}
-		menu_section.append_submenu("_Color scheme", color_scheme_menu);
-
-		var theme_menu = new Menu();
-		foreach (var theme_name in themes.keys) {
-			theme_menu.append(theme_name, "app.theme::" + theme_name);
-		}
-		menu_section.append_submenu("_Theme", theme_menu);
-
-		// TODO: This should be a slider item instead
-		//       (cf. http://git.gnome.org/browse/gnome-shell/tree/js/ui/popupMenu.js:PopupSliderMenuItem),
-		//       but that does not appear to be supported in an application menu
-		var opacity_menu = new Menu();
-		opacity_menu.append("0 % (transparent)", "app.opacity::0");
-		for (int i = 10; i <= 90; i += 10) {
-			opacity_menu.append(i.to_string() + " %", "app.opacity::" + i.to_string());
-		}
-		opacity_menu.append("100 % (opaque)", "app.opacity::100");
-		menu_section.append_submenu("_Opacity", opacity_menu);
-
-		menu.append_section("Appearance", menu_section);
+		menu_section.append("_Preferences", "app.settings");
+		menu.append_section(null, menu_section);
 
 		menu_section = new Menu();
 		menu_section.append("_About Final Term", "app.about");
@@ -186,53 +143,11 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		return menu;
 	}
 
-	private void toggle_action(SimpleAction action, Variant? parameter) {
-		var state = action.get_state().get_boolean();
-		action.change_state(new Variant.boolean(!state));
-	}
-
-	private void radio_action(SimpleAction action, Variant? parameter) {
-		action.change_state(parameter);
-	}
-
-	private void dark_look_action(SimpleAction action, Variant value) {
-		if (value == null)
-			return;
-
-		var dark_value = value.get_boolean();
-		set_color_scheme_all(color_scheme, dark_value);
-
-		action.set_state(value);
-	}
-
-	private void color_scheme_action(SimpleAction action, Variant value) {
-		if (value == null)
-			return;
-
-		var color_scheme_value = color_schemes.get(value.get_string());
-		set_color_scheme_all(color_scheme_value, dark);
-
-		action.set_state(value);
-	}
-
-	private void theme_action(SimpleAction action, Variant value) {
-		if (value == null)
-			return;
-
-		var theme_value = themes.get(value.get_string());
-		set_theme_all(theme_value);
-
-		action.set_state(value);
-	}
-
-	private void opacity_action(SimpleAction action, Variant value) {
-		if (value == null)
-			return;
-
-		opacity = double.parse(value.get_string()) / 100.0;
-		set_background(color_scheme.get_background_color(dark), opacity);
-
-		action.set_state(value);
+	private void settings_action() {
+		var settings = new SettingsWindow(this);
+		settings.show_all();
+		settings.run();
+		settings.destroy();
 	}
 
 	private void about_action() {
@@ -388,7 +303,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 				main_window.decorated = false;
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
-				main_window.resize(main_window.screen.get_width(), 15 * theme.character_height);
+				main_window.resize(main_window.screen.get_width(), 15 * settings.theme.character_height);
 				// TODO: Always on top(?)
 				main_window.show();
 			} else {
@@ -482,16 +397,12 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		FinalTerm.settings = new Settings.load_from_schema("org.gnome.finalterm");
 
-		application.color_scheme = color_schemes.get(FinalTerm.settings.color_scheme_name);
-		if (application.color_scheme == null)
+		if (FinalTerm.settings.color_scheme == null)
 			error("Color scheme %s does not exist - exiting.", FinalTerm.settings.color_scheme_name);
-		application.dark = FinalTerm.settings.dark;
-		application.set_color_scheme_all(application.color_scheme, application.dark);
-		application.theme = themes.get(FinalTerm.settings.theme_name);
-		if (application.theme == null)
+		application.set_color_scheme_all(FinalTerm.settings.color_scheme, FinalTerm.settings.dark);
+		if (FinalTerm.settings.theme == null)
 			error("Theme %s does not exist - exiting.", FinalTerm.settings.theme_name);
-		application.set_theme_all(application.theme);
-		application.opacity = FinalTerm.settings.opacity;
+		application.set_theme_all(FinalTerm.settings.theme);
 
 		Command.execute_function = application.execute_command;
 
@@ -509,23 +420,20 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		return result;
 	}
 
-	private void set_color_scheme_all(ColorScheme color_scheme, bool dark) {
+	public void set_color_scheme_all(ColorScheme color_scheme, bool dark) {
 		foreach (var color_schemable in color_schemables) {
 			color_schemable.set_color_scheme(color_scheme, dark);
 		}
 	}
 
-	private void set_theme_all(Theme theme) {
+	public void set_theme_all(Theme theme) {
 		foreach (var themable in themables) {
 			themable.set_theme(theme);
 		}
 	}
 
 	public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-		this.color_scheme = color_scheme;
-		this.dark = dark;
-
-		set_background(color_scheme.get_background_color(dark), opacity);
+		set_background(color_scheme.get_background_color(dark), settings.opacity);
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = dark;
 	}
 
@@ -533,19 +441,19 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		this.theme = theme;
 	}
 
-	private void set_background(Clutter.Color color, double opacity) {
+	public void set_background(Clutter.Color color, double opacity) {
 		color.alpha = (uint8)(opacity * 255.0);
 		stage.background_color = color;
 	}
 
 	public static void register_color_schemable(ColorSchemable color_schemable) {
 		application.color_schemables.add(color_schemable);
-		color_schemable.set_color_scheme(application.color_scheme, application.dark);
+		color_schemable.set_color_scheme(settings.color_scheme, settings.dark);
 	}
 
 	public static void register_themable(Themable themable) {
 		application.themables.add(themable);
-		themable.set_theme(application.theme);
+		themable.set_theme(settings.theme);
 	}
 
 }

@@ -22,10 +22,26 @@
 
 public class Settings : Object {
 
-	public string color_scheme_name { get; set; }
 	public bool dark { get; set; }
-	public string theme_name { get; set; }
 	public double opacity { get; set; }
+
+	public string color_scheme_name { get; set; }
+	public ColorScheme color_scheme {
+		owned get {
+			return FinalTerm.color_schemes.get(color_scheme_name);
+		}
+		private set {
+		}
+	}
+
+	public string theme_name { get; set; }
+	public Theme theme {
+		owned get {
+			return FinalTerm.themes.get(theme_name);
+		}
+		private set {
+		}
+	}
 
 	public int terminal_lines { get; set; }
 	public int terminal_columns { get; set; }
@@ -36,8 +52,10 @@ public class Settings : Object {
 	public int render_interval { get; set; }
 	public int resize_interval { get; set; }
 
+	public GLib.Settings settings { get; set; }
+
 	public Settings.load_from_schema(string schema_name) {
-		var settings = new GLib.Settings(schema_name);
+		settings = new GLib.Settings(schema_name);
 
 		color_scheme_name = settings.get_string("color-scheme");
 		dark = settings.get_boolean("dark");
