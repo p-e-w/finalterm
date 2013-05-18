@@ -11,7 +11,7 @@ source ~/.bashrc
 # NOTE: xterm properly ignores sequences of this type as unknown,
 #       while some other terminals (such as GNOME Terminal) print them
 function final_term_control_sequence() {
-	control_sequence="\e[?"
+	control_sequence="\e]133;"
 	for argument in "$@"; do
 		control_sequence="$control_sequence$argument;"
 	done
@@ -19,7 +19,7 @@ function final_term_control_sequence() {
 	# this DOLLAR is required for the cmake configure_file
 	# when using a $ it'd try to replace the control_sequence
 	# with one of its own variables and thus remove it
-	control_sequence="${DOLLAR}{control_sequence}Y"
+	control_sequence="${DOLLAR}{control_sequence}\a"
 
 	# TODO: Should "-ne" be added here?
 	echo "$control_sequence"
@@ -40,15 +40,15 @@ function get_current_trap_command() {
 }
 
 # Sequence marking the start of the command prompt
-FTCS_PROMPT_START=$(final_term_control_sequence '1')
+FTCS_PROMPT_START=$(final_term_control_sequence 'A')
 
 # Sequence marking the start of the command
 # read from the command prompt
-FTCS_COMMAND_START=$(final_term_control_sequence '2')
+FTCS_COMMAND_START=$(final_term_control_sequence 'B')
 
 # Sequence marking the end of the command
 # read from the command prompt
-FTCS_COMMAND_END=$(final_term_control_sequence '3')
+FTCS_COMMAND_END=$(final_term_control_sequence 'C')
 
 # Note that it is safe to prepend a new command to the current one
 # but not to append it, because bash does not allow a semicolon
@@ -65,17 +65,17 @@ trap "if [ -t 1 ]; then send_control_sequence \"$FTCS_COMMAND_END\"; fi; $(get_c
 # Termlet-related logic
 
 function text_menu_start() {
-	echo $(final_term_control_sequence '4' "$1")
+	echo $(final_term_control_sequence 'D' "$1")
 }
 export -f text_menu_start
 
 function text_menu_end() {
-	echo $(final_term_control_sequence '5' "$1")
+	echo $(final_term_control_sequence 'E' "$1")
 }
 export -f text_menu_end
 
 function send_progress() {
-	send_control_sequence $(final_term_control_sequence '6' "$1")
+	send_control_sequence $(final_term_control_sequence 'F' "$1")
 }
 export -f send_progress
 
