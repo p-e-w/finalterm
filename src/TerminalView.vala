@@ -30,9 +30,10 @@ public class TerminalView : Mx.BoxLayout, Themable {
 
 	public TerminalOutputView terminal_output_view;
 
-	private Mx.BoxLayout status_container;
-	private Mx.Label status_label;
+	private Clutter.Actor status_container;
 	private Mx.ProgressBar progress_bar;
+	private Mx.Label progress_label;
+	private Mx.Label progress_label_shadow;
 
 	public TerminalView(Terminal terminal, GtkClutter.Embed clutter_embed) {
 		this.terminal = terminal;
@@ -75,16 +76,18 @@ public class TerminalView : Mx.BoxLayout, Themable {
 		terminal_output_view.add_constraint(new Clutter.BindConstraint(container, Clutter.BindCoordinate.HEIGHT, 45));
 		container.clip_to_allocation = true;
 
-		status_container = new Mx.BoxLayout();
-		status_container.orientation = Mx.Orientation.HORIZONTAL;
-
-		status_label = new Mx.Label();
-		status_label.style_class = "status-label";
-		status_container.add(status_label);
+		status_container = new Clutter.Actor();
 
 		progress_bar = new Mx.ProgressBar();
 		status_container.add(progress_bar);
-		status_container.child_set_expand(progress_bar, true);
+		progress_bar.add_constraint(new Clutter.BindConstraint(status_container, Clutter.BindCoordinate.SIZE, 0));
+
+		progress_label_shadow = new Mx.Label();
+		progress_label_shadow.style_class = "progress-label-shadow";
+		status_container.add(progress_label_shadow);
+		progress_label = new Mx.Label();
+		progress_label.style_class = "progress-label";
+		status_container.add(progress_label);
 
 		add(status_container);
 
@@ -93,10 +96,11 @@ public class TerminalView : Mx.BoxLayout, Themable {
 		FinalTerm.register_themable(this);
 	}
 
-	public void show_progress(string caption, int percentage) {
+	public void show_progress(int percentage, string label = "") {
 		status_container.visible = true;
 		progress_bar.visible = true;
-		status_label.text = caption;
+		progress_label.text = label;
+		progress_label_shadow.text = label;
 		progress_bar.progress = (double)percentage / 100.0;
 	}
 
@@ -109,8 +113,9 @@ public class TerminalView : Mx.BoxLayout, Themable {
 		gutter.color = theme.gutter_color;
 		gutter.border_color = theme.gutter_border_color;
 
-		status_label.style = theme.style;
 		progress_bar.style = theme.style;
+		progress_label.style = theme.style;
+		progress_label_shadow.style = theme.style;
 	}
 
 	public bool window_has_focus() {

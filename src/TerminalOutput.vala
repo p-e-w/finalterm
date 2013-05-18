@@ -283,7 +283,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				if (percentage == -1) {
 					progress_finished();
 				} else {
-					progress_updated(percentage);
+					var operation = stream_element.get_text_parameter(1, "");
+					progress_updated(percentage, operation);
 				}
 				break;
 
@@ -483,7 +484,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public signal void title_updated(string new_title);
 
-	public signal void progress_updated(int percentage);
+	public signal void progress_updated(int percentage, string operation);
 
 	public signal void progress_finished();
 

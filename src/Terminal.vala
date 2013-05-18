@@ -126,13 +126,13 @@ public class Terminal : Object, Themable {
 		title_updated(new_title);
 	}
 
-	private void on_output_progress_updated(int percentage) {
+	private void on_output_progress_updated(int percentage, string operation) {
 #if HAS_UNITY
 		FinalTerm.launcher.progress_visible = true;
 		FinalTerm.launcher.progress = percentage / 100.0;
 #endif
 
-		terminal_view.show_progress("Progress", percentage);
+		terminal_view.show_progress(percentage, operation);
 	}
 
 	private void on_output_progress_finished() {

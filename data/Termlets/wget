@@ -15,14 +15,14 @@ while IFS= read -r line; do
 		while IFS= read -r -d $'\r' line; do
 			# Extract current progress percentage
 			if [[ $line =~ ^\ ?([0-9]{1,3})% ]]; then
-				send_progress "${BASH_REMATCH[1]}"
+				send_progress "${BASH_REMATCH[1]}" "Downloading $1..."
 			fi
 
 			echo -ne "\r$line"
 		done
 
 		# Process completed
-		send_progress "-1"
+		send_progress "-1" ""
 
 		# Print remaining output
 		echo -ne "\r$line"
