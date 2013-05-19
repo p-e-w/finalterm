@@ -23,7 +23,7 @@
 public class SettingsWindow : Gtk.Dialog {
 
 	public class SettingsWindow(FinalTerm application) {
-		title = "Settings";
+		title = "Preferences";
 		transient_for = application.main_window;
 		add_buttons(Gtk.Stock.CLOSE, Gtk.ResponseType.CANCEL);
 
