@@ -22,32 +22,33 @@
 
 public class SettingsWindow : Gtk.Dialog {
 
-	public class SettingsWindow(FinalTerm app) {
+	public class SettingsWindow(FinalTerm application) {
 		title = "Settings";
-		transient_for = app.main_window;
-		modal = true;
+		transient_for = application.main_window;
 		add_buttons(Gtk.Stock.CLOSE, Gtk.ResponseType.CANCEL);
 
-		var dimensions = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+		var dimensions_columns = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+		var dimensions_rows = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		var rows = new Gtk.SpinButton.with_range(10, 200, 1);
-		var cols = new Gtk.SpinButton.with_range(10, 300, 1);
+		var columns = new Gtk.SpinButton.with_range(10, 300, 1);
 		rows.value = FinalTerm.settings.terminal_lines;
 		rows.value_changed.connect(() => {
 			FinalTerm.settings.settings.set_int("terminal-lines", (int)rows.value);
 		});
-		cols.value = FinalTerm.settings.terminal_columns;
-		cols.value_changed.connect(() => {
-			FinalTerm.settings.settings.set_int("terminal-columns", (int)cols.value);
+		columns.value = FinalTerm.settings.terminal_columns;
+		columns.value_changed.connect(() => {
+			FinalTerm.settings.settings.set_int("terminal-columns", (int)columns.value);
 		});
-		dimensions.pack_start(cols, false);
-		dimensions.pack_start(new Gtk.Label("x"), false);
-		dimensions.pack_start(rows, false);
+		dimensions_columns.pack_start(columns, false);
+		dimensions_columns.pack_start(new Gtk.Label("columns"), false);
+		dimensions_rows.pack_start(rows, false);
+		dimensions_rows.pack_start(new Gtk.Label("rows"), false);
 
 		var dark_look = new Gtk.Switch();
 		dark_look.active = FinalTerm.settings.dark;
 		dark_look.halign = Gtk.Align.START;
 		dark_look.notify["active"].connect(() => {
-			app.set_color_scheme_all(app.color_scheme, dark_look.active);
+			application.set_color_scheme_all(FinalTerm.color_schemes.get(FinalTerm.settings.color_scheme_name), dark_look.active);
 			FinalTerm.settings.settings.set_boolean("dark", dark_look.active);
 		});
 
@@ -57,7 +58,7 @@ public class SettingsWindow : Gtk.Dialog {
 		}
 		color_scheme.active_id = FinalTerm.settings.color_scheme_name;
 		color_scheme.changed.connect(() => {
-			app.set_color_scheme_all(FinalTerm.color_schemes.get(color_scheme.active_id), app.dark);
+			application.set_color_scheme_all(FinalTerm.color_schemes.get(color_scheme.active_id), FinalTerm.settings.dark);
 			FinalTerm.settings.settings.set_string("color-scheme", color_scheme.active_id);
 		});
 
@@ -67,7 +68,7 @@ public class SettingsWindow : Gtk.Dialog {
 		}
 		theme.active_id = FinalTerm.settings.theme_name;
 		theme.changed.connect(() => {
-			app.set_theme_all(FinalTerm.themes.get(theme.active_id));
+			application.set_theme_all(FinalTerm.themes.get(theme.active_id));
 			FinalTerm.settings.settings.set_string("theme", theme.active_id);
 		});
 
@@ -76,7 +77,8 @@ public class SettingsWindow : Gtk.Dialog {
 		opacity.value_changed.connect(() => {
 			var val = opacity.get_value() / 100.0;
 			FinalTerm.settings.settings.set_double("opacity", val);
-			app.set_background(app.color_scheme.get_background_color(app.dark), val);
+			application.set_background(
+				FinalTerm.color_schemes.get(FinalTerm.settings.color_scheme_name).get_background_color(FinalTerm.settings.dark), val);
 		});
 
 		var grid = new Gtk.Grid();
@@ -85,29 +87,33 @@ public class SettingsWindow : Gtk.Dialog {
 		grid.row_spacing = 6;
 		grid.margin = 12;
 
-		grid.attach(create_caption("General:"), 0, 0, 1, 1);
+		grid.attach(create_header("General"), 0, 0, 1, 1);
 
 		grid.attach(create_label("Default dimensions:"), 0, 1, 1, 1);
-		grid.attach(dimensions, 1, 1, 1, 1);
+		grid.attach(dimensions_columns, 1, 1, 1, 1);
+		grid.attach(dimensions_rows, 1, 2, 1, 1);
 
-		grid.attach(create_caption("Appearance:"), 0, 2, 1, 1);
+		grid.attach(create_header("Appearance"), 0, 3, 1, 1);
 
-		grid.attach(create_label("Dark look:"), 0, 3, 1, 1);
-		grid.attach(dark_look, 1, 3, 1, 1);
+		grid.attach(create_label("Dark look:"), 0, 4, 1, 1);
+		grid.attach(dark_look, 1, 4, 1, 1);
 
-		grid.attach(create_label("Color scheme:"), 0, 4, 1, 1);
-		grid.attach(color_scheme, 1, 4, 1, 1);
+		grid.attach(create_label("Color scheme:"), 0, 5, 1, 1);
+		grid.attach(color_scheme, 1, 5, 1, 1);
 
-		grid.attach(create_label("Theme:"), 0, 5, 1, 1);
-		grid.attach(theme, 1, 5, 1, 1);
+		grid.attach(create_label("Theme:"), 0, 6, 1, 1);
+		grid.attach(theme, 1, 6, 1, 1);
 
-		grid.attach(create_label("Opacity:"), 0, 6, 1, 1);
-		grid.attach(opacity, 1, 6, 1, 1);
+		// this aligns quite badly at the center so we move it down
+		var label = create_label("Opacity:");
+		label.valign = Gtk.Align.END;
+		grid.attach(label, 0, 7, 1, 1);
+		grid.attach(opacity, 1, 7, 1, 1);
 
 		get_content_area().add(grid);
 	}
 
-	Gtk.Label create_caption(string title) {
+	Gtk.Label create_header(string title) {
 		var label = new Gtk.Label("<span weight='bold'>" + title + "</span>");
 		label.use_markup = true;
 		label.halign = Gtk.Align.START;

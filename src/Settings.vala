@@ -22,10 +22,26 @@
 
 public class Settings : Object {
 
-	public string color_scheme_name { get; set; }
 	public bool dark { get; set; }
-	public string theme_name { get; set; }
 	public double opacity { get; set; }
+
+	public string color_scheme_name { get; set; }
+	public ColorScheme color_scheme {
+		owned get {
+			return FinalTerm.color_schemes.get(color_scheme_name);
+		}
+		private set {
+		}
+	}
+
+	public string theme_name { get; set; }
+	public Theme theme {
+		owned get {
+			return FinalTerm.themes.get(theme_name);
+		}
+		private set {
+		}
+	}
 
 	public int terminal_lines { get; set; }
 	public int terminal_columns { get; set; }
