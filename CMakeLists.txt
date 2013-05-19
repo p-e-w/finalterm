@@ -63,6 +63,7 @@ vala_precompile(VALA_C
 	src/NotifyingList.vala
 	src/ScrollableListView.vala
 	src/Utilities.vala
+	src/SettingsWindow.vala
 	src/TextMenu.vala
 	src/ColorScheme.vala
 	src/Theme.vala
