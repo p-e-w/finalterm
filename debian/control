@@ -10,7 +10,7 @@ Vcs-Git: https://github.com/p-e-w/finalterm.git
 
 Package: finalterm
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, valac-0.18 | valac-0.20, libgee-0.8-2, libmx-dev, libclutter-gtk-1.0-dev, libnotify-dev, libunity-dev
+Depends: ${shlibs:Depends}
 Description: At last – a modern terminal emulator
  finalterm goes beyond mere emulation and understands what is
  happening inside the shell it is hosting. This allows it to
