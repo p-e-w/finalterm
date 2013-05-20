@@ -97,3 +97,4 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Termlets DESTINATION share/fi
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/TextMenus DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Themes DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Icons/hicolor DESTINATION share/icons)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/Icons/hicolor/48x48/apps/final-term.png DESTINATION share/pixmaps)
