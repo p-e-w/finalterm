@@ -16,6 +16,9 @@
 APP=finalterm
 VERSION=0.10
 
+# ensure that recent version of vala is available
+#sudo add-apt-repository ppa:vala-team
+
 # clean
 rm -f ${APP} \#* \.#* debian/*.log debian/*.substvars debian/files
 rm -rf debian/deb.* debian/${APP} build obj-*
