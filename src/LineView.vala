@@ -20,14 +20,10 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class LineView : Clutter.Actor, ColorSchemable, Themable {
+public class LineView : Clutter.Actor {
 
 	private TerminalOutput.OutputLine original_output_line;
 	private TerminalOutput.OutputLine output_line;
-
-	private ColorScheme color_scheme;
-	private bool dark;
-	private Theme theme;
 
 	private Mx.Button collapse_button;
 	private Clutter.Text text_container;
@@ -62,8 +58,8 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 
 		add(text_container);
 
-		FinalTerm.register_color_schemable(this);
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	private void on_collapse_button_clicked() {
@@ -117,8 +113,8 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 						this,
 						character_x,
 						character_y,
-						text_element.get_length() * theme.character_width,
-						theme.character_height,
+						text_element.get_length() * Settings.get_default().theme.character_width,
+						Settings.get_default().theme.character_height,
 						text_element.text,
 						text_element.attributes.text_menu);
 			}
@@ -141,9 +137,16 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		is_collapsible_start = output_line.is_prompt_line;
 		is_collapsible_end   = output_line.is_prompt_line;
 
-		update_left_margin();
-
 		collapse_button.visible = is_collapsible_start;
+
+		// If the collapse button is visible, the text container will
+		// already be pushed to the left, so we need to subtract that
+		text_container.margin_left = Settings.get_default().theme.margin_left +
+				(is_collapsible_start ?
+				 Settings.get_default().theme.gutter_size -
+				 	Settings.get_default().theme.collapse_button_width -
+				 	Settings.get_default().theme.collapse_button_x :
+				 Settings.get_default().theme.gutter_size);
 
 		text_container.set_markup(get_markup(output_line));
 
@@ -154,8 +157,10 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		var markup_builder = new StringBuilder();
 
 		foreach (var text_element in output_line) {
-			var text_attributes = text_element.attributes.get_text_attributes(color_scheme, dark);
-			var markup_attributes = text_attributes.get_markup_attributes(color_scheme, dark);
+			var text_attributes = text_element.attributes.get_text_attributes(
+					Settings.get_default().color_scheme, Settings.get_default().dark);
+			var markup_attributes = text_attributes.get_markup_attributes(
+					Settings.get_default().color_scheme, Settings.get_default().dark);
 
 			if (markup_attributes.length > 0) {
 				markup_builder.append(
@@ -170,46 +175,23 @@ public class LineView : Clutter.Actor, ColorSchemable, Themable {
 		return markup_builder.str;
 	}
 
-	public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-		this.color_scheme = color_scheme;
-		this.dark = dark;
+	private void on_settings_changed(string? key) {
+		text_container.color = Settings.get_default().foreground_color;
 
-		text_container.color = color_scheme.get_foreground_color(dark);
+		collapse_button.style = Settings.get_default().theme.style;
 
-		render_line();
-	}
+		collapse_button.margin_left = Settings.get_default().theme.collapse_button_x;
+		collapse_button.margin_top = Settings.get_default().theme.collapse_button_y;
+		collapse_button.width = Settings.get_default().theme.collapse_button_width;
+		collapse_button.height = Settings.get_default().theme.collapse_button_height;
 
-	public void set_theme(Theme theme) {
-		this.theme = theme;
-
-		collapse_button.style = theme.style;
-
-		collapse_button.margin_left = theme.collapse_button_x;
-		collapse_button.margin_top = theme.collapse_button_y;
-		collapse_button.width = theme.collapse_button_width;
-		collapse_button.height = theme.collapse_button_height;
-
-		update_left_margin();
-
-		text_container.margin_right = theme.margin_right;
+		text_container.margin_right = Settings.get_default().theme.margin_right;
 
 		// TODO: Clutter bug? The following sometimes does not work:
 		//text_container.font_description = theme.monospaced_font;
-		text_container.font_name = theme.monospaced_font.to_string();
-	}
+		text_container.font_name = Settings.get_default().theme.monospaced_font.to_string();
 
-	private void update_left_margin() {
-		// This may happen as the color scheme is set first, which calls render_line,
-		// which in turn calls this function while the theme is still null
-		if (theme == null)
-			return;
-
-		// If the collapse button is visible, the text container will
-		// already be pushed to the left, so we need to subtract that
-		text_container.margin_left = theme.margin_left +
-				(is_collapsible_start ?
-				 theme.gutter_size - theme.collapse_button_width - theme.collapse_button_x :
-				 theme.gutter_size);
+		render_line();
 	}
 
 }

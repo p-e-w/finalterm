@@ -21,7 +21,7 @@
  */
 
 // TODO: Clean up the relationship between TerminalView and TerminalOutputView
-public class TerminalView : Mx.BoxLayout, Themable {
+public class TerminalView : Mx.BoxLayout {
 
 	private Terminal terminal;
 	private GtkClutter.Embed clutter_embed;
@@ -93,7 +93,8 @@ public class TerminalView : Mx.BoxLayout, Themable {
 
 		status_container.visible = false;
 
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	public void show_progress(int percentage, string label = "") {
@@ -108,29 +109,25 @@ public class TerminalView : Mx.BoxLayout, Themable {
 		status_container.visible = false;
 	}
 
-	public void set_theme(Theme theme) {
-		gutter.width = theme.gutter_size;
-		gutter.color = theme.gutter_color;
-		gutter.border_color = theme.gutter_border_color;
-
-		progress_bar.style = theme.style;
-		progress_label.style = theme.style;
-		progress_label_shadow.style = theme.style;
-	}
-
 	public bool window_has_focus() {
 		return (clutter_embed.get_toplevel() as Gtk.Window).has_toplevel_focus;
+	}
+
+	private void on_settings_changed(string? key) {
+		gutter.width = Settings.get_default().theme.gutter_size;
+		gutter.color = Settings.get_default().theme.gutter_color;
+		gutter.border_color = Settings.get_default().theme.gutter_border_color;
+
+		progress_bar.style = Settings.get_default().theme.style;
+		progress_label.style = Settings.get_default().theme.style;
+		progress_label_shadow.style = Settings.get_default().theme.style;
 	}
 
 }
 
 
 // TODO: Reimplement this on top of ScrollableListView
-public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
-
-	private ColorScheme color_scheme;
-	private bool dark;
-	private Theme theme;
+public class TerminalOutputView : Mx.ScrollView {
 
 	private Terminal terminal;
 	private GtkClutter.Embed clutter_embed;
@@ -201,8 +198,8 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 			get_stage().add(menu_button);
 		});
 
-		FinalTerm.register_color_schemable(this);
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	private void on_menu_button_clicked() {
@@ -278,22 +275,23 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 		this.text_menu   = text_menu;
 
 		menu_button.toggled = false;
-		menu_button.background_color = color_scheme.get_indexed_color(text_menu.color, dark);
+		menu_button.background_color = Settings.get_default().color_scheme.get_indexed_color(
+				text_menu.color, Settings.get_default().dark);
 
 		menu_button_label.text =
-				"<span font_desc=\"" + theme.proportional_font.to_string() + "\">" +
+				"<span font_desc=\"" + Settings.get_default().theme.proportional_font.to_string() + "\">" +
 				Markup.escape_text(text_menu.label) + ":  " +
 				"</span>" +
-				"<span font_desc=\"" + theme.monospaced_font.to_string() + "\">" +
+				"<span font_desc=\"" + Settings.get_default().theme.monospaced_font.to_string() + "\">" +
 				Markup.escape_text(text) +
 				"</span>" +
 				"<span foreground=\"" +
-				Utilities.get_parsable_color_string(theme.menu_button_arrow_color) +
+				Utilities.get_parsable_color_string(Settings.get_default().theme.menu_button_arrow_color) +
 				"\">  ▼</span>";
 
 		int descriptor_width;
 		int descriptor_height;
-		Utilities.get_text_size(theme.proportional_font, text_menu.label + ":  ",
+		Utilities.get_text_size(Settings.get_default().theme.proportional_font, text_menu.label + ":  ",
 				out descriptor_width, out descriptor_height);
 
 		float line_view_x;
@@ -358,11 +356,12 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 			// Cursor is at the end of the line
 			cursor_character = "";
 			// Default attributes
-			cursor_attributes = new CharacterAttributes().get_text_attributes(color_scheme, dark);
+			cursor_attributes = new CharacterAttributes().get_text_attributes(
+					Settings.get_default().color_scheme, Settings.get_default().dark);
 		} else {
 			cursor_character  = character_elements[cursor_position.column].text;
 			cursor_attributes = character_elements[cursor_position.column].attributes
-					.get_text_attributes(color_scheme, dark);
+					.get_text_attributes(Settings.get_default().color_scheme, Settings.get_default().dark);
 		}
 
 		// Switch foreground and background colors for cursor
@@ -370,9 +369,10 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 		cursor_attributes.foreground_color = cursor_attributes.background_color;
 		// Set attributes' background color to default to leave background color rendering
 		// to the actor rather than Pango (more reliable and consistent)
-		cursor_attributes.background_color = color_scheme.get_background_color(dark);
+		cursor_attributes.background_color = Settings.get_default().background_color;
 
-		var markup_attributes = cursor_attributes.get_markup_attributes(color_scheme, dark);
+		var markup_attributes = cursor_attributes.get_markup_attributes(
+				Settings.get_default().color_scheme, Settings.get_default().dark);
 
 		cursor.text =
 				"<span" + markup_attributes + ">" +
@@ -381,7 +381,7 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 
 		// Apparently, Mx recreates the Clutter text actor each time
 		// the label text is set, so the font has to be reset afterwards
-		cursor.clutter_text.font_name = theme.monospaced_font.to_string();
+		cursor.clutter_text.font_name = Settings.get_default().theme.monospaced_font.to_string();
 
 		// Rewind animation on each render (i.e. update) event
 		// to match standard editor user experience
@@ -463,7 +463,8 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 
 		int line_view_x;
 		int line_view_y;
-		Utilities.get_actor_screen_position(clutter_embed, line_views[position.line], out line_view_x, out line_view_y);
+		Utilities.get_actor_screen_position(clutter_embed, line_views[position.line],
+				out line_view_x, out line_view_y);
 
 		int character_x;
 		int character_y;
@@ -477,13 +478,13 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 		// 45 pixels is the size of the margin used to hide
 		// the ScrollView "shadow" (see above)
 		return ((int)height - get_vertical_padding() - 45) /
-			   theme.character_height;
+			   Settings.get_default().theme.character_height;
 	}
 
 	private int get_visible_columns() {
-		if (line_container.width > theme.gutter_size) {
+		if (line_container.width > Settings.get_default().theme.gutter_size) {
 			return ((int)width - get_horizontal_padding()) /
-				   theme.character_width;
+				   Settings.get_default().theme.character_width;
 		} else {
 			return 0;
 		}
@@ -494,7 +495,9 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 			// Account for scrollbar (if shown)
 			(int)(width - line_container.width) +
 			// Account for LineView padding
-			theme.gutter_size + theme.margin_left + theme.margin_right;
+			Settings.get_default().theme.gutter_size +
+				Settings.get_default().theme.margin_left +
+				Settings.get_default().theme.margin_right;
 	}
 
 	public int get_vertical_padding() {
@@ -504,7 +507,7 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 	// Called when size (or position) of line container changes
 	private void on_line_container_allocation_changed(Clutter.ActorBox box, Clutter.AllocationFlags flags) {
 		// TODO: Add information about instance to key
-		Utilities.schedule_execution(resize_terminal, "resize", FinalTerm.settings.resize_interval);
+		Utilities.schedule_execution(resize_terminal, "resize", Settings.get_default().resize_interval);
 	}
 
 	private void resize_terminal() {
@@ -524,28 +527,20 @@ public class TerminalOutputView : Mx.ScrollView, ColorSchemable, Themable {
 		terminal.update_size();
 	}
 
-	public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-		this.color_scheme = color_scheme;
-		this.dark = dark;
+	private void on_settings_changed(string? key) {
+		style = Settings.get_default().theme.style;
+		line_container.style = Settings.get_default().theme.style;
+		menu_button.style = Settings.get_default().theme.style;
+		menu_button_label.style = Settings.get_default().theme.style;
 
-		render_terminal_cursor();
-	}
-
-	public void set_theme(Theme theme) {
-		this.theme = theme;
-
-		style = theme.style;
-		line_container.style = theme.style;
-		menu_button.style = theme.style;
-		menu_button_label.style = theme.style;
-
-		cursor.width  = theme.character_width;
-		cursor.height = theme.character_height;
+		cursor.width  = Settings.get_default().theme.character_width;
+		cursor.height = Settings.get_default().theme.character_height;
 
 		var interval = new Clutter.Interval.with_values(typeof(int),
-				theme.cursor_maximum_opacity, theme.cursor_minimum_opacity);
+				Settings.get_default().theme.cursor_maximum_opacity,
+				Settings.get_default().theme.cursor_minimum_opacity);
 		blinking_animation.set_interval(interval);
-		blinking_animation.duration = theme.cursor_animation_duration;
+		blinking_animation.duration = Settings.get_default().theme.cursor_animation_duration;
 		cursor.remove_transition("blinking-animation");
 		cursor.add_transition("blinking-animation", blinking_animation);
 

@@ -22,54 +22,98 @@
 
 public class Settings : Object {
 
-	public bool dark { get; set; }
-	public double opacity { get; set; }
+	private static Settings? instance = null;
 
-	public string color_scheme_name { get; set; }
+	private GLib.Settings settings { get; set; }
+
+	public bool dark {
+		// TODO: GLib probably performs settings caching already.
+		//       If not, that should be implemented here to avoid
+		//       hitting the disk each time a value is retrieved.
+		get { return settings.get_boolean("dark"); }
+		set { settings.set_boolean("dark", value); }
+	}
+
+	public double opacity {
+		get { return settings.get_double("opacity"); }
+		set { settings.set_double("opacity", value); }
+	}
+
+	public string color_scheme_name {
+		owned get { return settings.get_string("color-scheme"); }
+		set { settings.set_string("color-scheme", value); }
+	}
+
 	public ColorScheme color_scheme {
-		owned get {
-			return FinalTerm.color_schemes.get(color_scheme_name);
-		}
-		private set {
-		}
+		owned get { return FinalTerm.color_schemes.get(color_scheme_name); }
 	}
 
-	public string theme_name { get; set; }
+	// Convenience properties for common cases
+	public Clutter.Color foreground_color {
+		get { return color_scheme.get_foreground_color(dark); }
+	}
+
+	public Clutter.Color background_color {
+		get { return color_scheme.get_background_color(dark); }
+	}
+
+	public string theme_name {
+		owned get { return settings.get_string("theme"); }
+		set { settings.set_string("theme", value); }
+	}
+
 	public Theme theme {
-		owned get {
-			return FinalTerm.themes.get(theme_name);
-		}
-		private set {
-		}
+		owned get { return FinalTerm.themes.get(theme_name); }
 	}
 
-	public int terminal_lines { get; set; }
-	public int terminal_columns { get; set; }
-
-	public string shell_path { get; set; }
-	public string emulated_terminal { get; set; }
-
-	public int render_interval { get; set; }
-	public int resize_interval { get; set; }
-
-	public GLib.Settings settings { get; set; }
-
-	public Settings.load_from_schema(string schema_name) {
-		settings = new GLib.Settings(schema_name);
-
-		color_scheme_name = settings.get_string("color-scheme");
-		dark = settings.get_boolean("dark");
-		theme_name = settings.get_string("theme");
-		opacity = settings.get_double("opacity");
-
-		terminal_lines = settings.get_int("terminal-lines");
-		terminal_columns = settings.get_int("terminal-columns");
-
-		shell_path = settings.get_string("shell-path");
-		emulated_terminal = settings.get_string("emulated-terminal");
-
-		render_interval = settings.get_int("render-interval");
-		resize_interval = settings.get_int("resize-interval");
+	public int terminal_lines {
+		get { return settings.get_int("terminal-lines"); }
+		set { settings.set_int("terminal-lines", value); }
 	}
+
+	public int terminal_columns {
+		get { return settings.get_int("terminal-columns"); }
+		set { settings.set_int("terminal-columns", value); }
+	}
+
+	public string shell_path {
+		owned get { return settings.get_string("shell-path"); }
+		set { settings.set_string("shell-path", value); }
+	}
+
+	public string emulated_terminal {
+		owned get { return settings.get_string("emulated-terminal"); }
+		set { settings.set_string("emulated-terminal", value); }
+	}
+
+	public int render_interval {
+		get { return settings.get_int("render-interval"); }
+		set { settings.set_int("render-interval", value); }
+	}
+
+	public int resize_interval {
+		get { return settings.get_int("resize-interval"); }
+		set { settings.set_int("resize-interval", value); }
+	}
+
+	public static void load_from_schema(string schema_name) {
+		if (instance == null)
+			instance = new Settings();
+
+		instance.settings = new GLib.Settings(schema_name);
+
+		instance.settings.changed.connect((key) => {
+			instance.changed(key);
+		});
+	}
+
+	public static Settings get_default() {
+		if (instance == null)
+			error("No Settings instance available yet");
+
+		return instance;
+	}
+
+	public signal void changed(string? key);
 
 }

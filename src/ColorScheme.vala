@@ -138,8 +138,3 @@ public class ColorScheme : Object {
 	}
 
 }
-
-
-public interface ColorSchemable : Object {
-	public abstract void set_color_scheme(ColorScheme color_scheme, bool dark);
-}

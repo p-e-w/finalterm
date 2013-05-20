@@ -20,7 +20,7 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class ScrollableListView<T, E> : Clutter.Actor, Themable {
+public class ScrollableListView<T, E> : Clutter.Actor {
 
 	private Mx.ScrollView scroll_view;
 	private Mx.ListView list_view;
@@ -69,7 +69,8 @@ public class ScrollableListView<T, E> : Clutter.Actor, Themable {
 			// TODO
 		});
 
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	// TODO: This does not work (Vala crash):
@@ -142,9 +143,9 @@ public class ScrollableListView<T, E> : Clutter.Actor, Themable {
 		scroll_view.ensure_visible(geometry);
 	}
 
-	public void set_theme(Theme theme) {
-		scroll_view.style = theme.style;
-		list_view.style = theme.style;
+	private void on_settings_changed(string? key) {
+		scroll_view.style = Settings.get_default().theme.style;
+		list_view.style = Settings.get_default().theme.style;
 	}
 
 

@@ -21,9 +21,7 @@
  */
 
 // TODO: Rename to "TerminalController"?
-public class Terminal : Object, Themable {
-
-	private Theme theme;
+public class Terminal : Object {
 
 	public int lines { get; set; }
 	public int columns { get; set; }
@@ -40,8 +38,8 @@ public class Terminal : Object, Themable {
 	private static Gee.Map<int, Terminal> terminals_by_pid = new Gee.HashMap<int, Terminal>();
 
 	public Terminal() {
-		lines = FinalTerm.settings.terminal_lines;
-		columns = FinalTerm.settings.terminal_columns;
+		lines = Settings.get_default().terminal_lines;
+		columns = Settings.get_default().terminal_columns;
 
 		terminal_stream.element_added.connect(on_stream_element_added);
 		terminal_stream.transient_text_updated.connect(on_stream_transient_text_updated);
@@ -58,7 +56,8 @@ public class Terminal : Object, Themable {
 
 		initialize_pty();
 
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	public bool is_autocompletion_active() {
@@ -71,7 +70,7 @@ public class Terminal : Object, Themable {
 		terminal_view.terminal_output_view.get_screen_position(
 				terminal_output.command_start_position, out x, out y);
 		// Move popup one character down so it doesn't occlude the input
-		y += theme.character_height;
+		y += Settings.get_default().theme.character_height;
 		FinalTerm.autocompletion.move_popup(x, y);
 	}
 
@@ -105,7 +104,7 @@ public class Terminal : Object, Themable {
 
 		// TODO: Add information about instance to key
 		Utilities.schedule_execution(terminal_view.terminal_output_view.render_terminal_output,
-				"render_terminal_output", FinalTerm.settings.render_interval);
+				"render_terminal_output", Settings.get_default().render_interval);
 	}
 
 	private void on_output_command_updated(string command) {
@@ -161,7 +160,7 @@ public class Terminal : Object, Themable {
 
 		// TODO: Add information about instance to key
 		Utilities.schedule_execution(terminal_view.terminal_output_view.render_terminal_output,
-				"render_terminal_output", FinalTerm.settings.render_interval);
+				"render_terminal_output", Settings.get_default().render_interval);
 	}
 
 	public void send_character(unichar character) {
@@ -228,11 +227,11 @@ public class Terminal : Object, Themable {
 	}
 
 	private void run_shell() {
-		Environment.set_variable("TERM", FinalTerm.settings.emulated_terminal, true);
+		Environment.set_variable("TERM", Settings.get_default().emulated_terminal, true);
 
 		// Replace child process with shell process
-		Posix.execvp(FinalTerm.settings.shell_path,
-				{ FinalTerm.settings.shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" });
+		Posix.execvp(Settings.get_default().shell_path,
+				{ Settings.get_default().shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" });
 
 		// If this line is reached, execvp() must have failed
 		critical("execvp failed");
@@ -263,9 +262,7 @@ public class Terminal : Object, Themable {
 		});
 	}
 
-	public void set_theme(Theme theme) {
-		this.theme = theme;
-
+	private void on_settings_changed(string? key) {
 		if (is_autocompletion_active())
 			update_autocompletion_position();
 	}

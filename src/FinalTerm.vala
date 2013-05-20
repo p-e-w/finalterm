@@ -20,22 +20,15 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
+public class FinalTerm : Gtk.Application {
 
 	private static FinalTerm application;
-
-	public static Settings settings { get; set; }
 
 	public static Gee.Map<int, TextMenu> text_menus_by_code { get; set; }
 	public static Gee.Map<Regex, TextMenu> text_menus_by_pattern { get; set; }
 
 	public static Gee.Map<string, ColorScheme> color_schemes;
 	public static Gee.Map<string, Theme> themes;
-
-	private Theme theme;
-
-	private Gee.Set<ColorSchemable> color_schemables = new Gee.HashSet<ColorSchemable>();
-	private Gee.Set<Themable> themables = new Gee.HashSet<Themable>();
 
 	public static Autocompletion autocompletion { get; set; }
 
@@ -93,17 +86,17 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		main_window.key_press_event.connect(on_key_press_event);
 
-		register_color_schemable(this);
-		register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	protected override void activate() {
 		// TODO: Use set_default_geometry instead?
 		main_window.set_default_size(
 				terminal_view.terminal_output_view.get_horizontal_padding() +
-					(terminal.columns * settings.theme.character_width),
+					(terminal.columns * Settings.get_default().theme.character_width),
 				terminal_view.terminal_output_view.get_vertical_padding() +
-					(terminal.lines * settings.theme.character_height));
+					(terminal.lines * Settings.get_default().theme.character_height));
 
 		main_window.present();
 
@@ -116,8 +109,8 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
 		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
 		// TODO: Update geometry when theme is changed
-		geometry.width_inc   = settings.theme.character_width;
-		geometry.height_inc  = settings.theme.character_height;
+		geometry.width_inc   = Settings.get_default().theme.character_width;
+		geometry.height_inc  = Settings.get_default().theme.character_height;
 		// TODO: Move values into constants / settings
 		geometry.min_width   = geometry.base_width + (20 * geometry.width_inc);
 		geometry.min_height  = geometry.base_height + (5 * geometry.height_inc);
@@ -144,17 +137,17 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 	}
 
 	private void settings_action() {
-		var settings = new SettingsWindow(this);
-		settings.show_all();
-		settings.run();
-		settings.destroy();
+		var settings_window = new SettingsWindow(this);
+		settings_window.show_all();
+		settings_window.run();
+		settings_window.destroy();
 	}
 
 	private void about_action() {
 		string[] authors = {
-			"Philipp Emanuel Weidmann <pew@worldwidemann.com> (original author)",
-			"Tom Beckmann <tomjonabc@gmail.com>",
-			null };
+				"Philipp Emanuel Weidmann <pew@worldwidemann.com> (original author)",
+				"Tom Beckmann <tomjonabc@gmail.com>",
+				null };
 		string[] artists = { "Matthieu James (Faenza icon, modified)", null };
 
 		Gtk.show_about_dialog(main_window,
@@ -303,7 +296,8 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 				main_window.decorated = false;
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
-				main_window.resize(main_window.screen.get_width(), 15 * settings.theme.character_height);
+				main_window.resize(main_window.screen.get_width(),
+						15 * Settings.get_default().theme.character_height);
 				// TODO: Always on top(?)
 				main_window.show();
 			} else {
@@ -395,14 +389,7 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 
 		application = new FinalTerm();
 
-		FinalTerm.settings = new Settings.load_from_schema("org.gnome.finalterm");
-
-		if (FinalTerm.settings.color_scheme == null)
-			error("Color scheme %s does not exist - exiting.", FinalTerm.settings.color_scheme_name);
-		application.set_color_scheme_all(FinalTerm.settings.color_scheme, FinalTerm.settings.dark);
-		if (FinalTerm.settings.theme == null)
-			error("Theme %s does not exist - exiting.", FinalTerm.settings.theme_name);
-		application.set_theme_all(FinalTerm.settings.theme);
+		Settings.load_from_schema("org.gnome.finalterm");
 
 		Command.execute_function = application.execute_command;
 
@@ -420,40 +407,14 @@ public class FinalTerm : Gtk.Application, ColorSchemable, Themable {
 		return result;
 	}
 
-	public void set_color_scheme_all(ColorScheme color_scheme, bool dark) {
-		foreach (var color_schemable in color_schemables) {
-			color_schemable.set_color_scheme(color_scheme, dark);
-		}
-	}
-
-	public void set_theme_all(Theme theme) {
-		foreach (var themable in themables) {
-			themable.set_theme(theme);
-		}
-	}
-
-	public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-		set_background(color_scheme.get_background_color(dark), settings.opacity);
-		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = dark;
-	}
-
-	public void set_theme(Theme theme) {
-		this.theme = theme;
-	}
-
-	public void set_background(Clutter.Color color, double opacity) {
+	private void set_background(Clutter.Color color, double opacity) {
 		color.alpha = (uint8)(opacity * 255.0);
 		stage.background_color = color;
 	}
 
-	public static void register_color_schemable(ColorSchemable color_schemable) {
-		application.color_schemables.add(color_schemable);
-		color_schemable.set_color_scheme(settings.color_scheme, settings.dark);
-	}
-
-	public static void register_themable(Themable themable) {
-		application.themables.add(themable);
-		themable.set_theme(settings.theme);
+	private void on_settings_changed(string? key) {
+		set_background(Settings.get_default().background_color, Settings.get_default().opacity);
+		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = Settings.get_default().dark;
 	}
 
 }

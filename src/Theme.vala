@@ -97,8 +97,3 @@ public class Theme : Object {
 	}
 
 }
-
-
-public interface Themable : Object {
-	public abstract void set_theme(Theme theme);
-}

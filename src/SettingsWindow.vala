@@ -22,63 +22,62 @@
 
 public class SettingsWindow : Gtk.Dialog {
 
-	public class SettingsWindow(FinalTerm application) {
-		title = "Settings";
+	public SettingsWindow(FinalTerm application) {
+		title = "Preferences";
+
 		transient_for = application.main_window;
+
 		add_buttons(Gtk.Stock.CLOSE, Gtk.ResponseType.CANCEL);
 
 		var dimensions_columns = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		var dimensions_rows = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		var rows = new Gtk.SpinButton.with_range(10, 200, 1);
 		var columns = new Gtk.SpinButton.with_range(10, 300, 1);
-		rows.value = FinalTerm.settings.terminal_lines;
+
+		rows.value = Settings.get_default().terminal_lines;
 		rows.value_changed.connect(() => {
-			FinalTerm.settings.settings.set_int("terminal-lines", (int)rows.value);
+			Settings.get_default().terminal_lines = (int)rows.value;
 		});
-		columns.value = FinalTerm.settings.terminal_columns;
+
+		columns.value = Settings.get_default().terminal_columns;
 		columns.value_changed.connect(() => {
-			FinalTerm.settings.settings.set_int("terminal-columns", (int)columns.value);
+			Settings.get_default().terminal_columns = (int)columns.value;
 		});
+
 		dimensions_columns.pack_start(columns, false);
 		dimensions_columns.pack_start(new Gtk.Label("columns"), false);
 		dimensions_rows.pack_start(rows, false);
 		dimensions_rows.pack_start(new Gtk.Label("rows"), false);
 
 		var dark_look = new Gtk.Switch();
-		dark_look.active = FinalTerm.settings.dark;
+		dark_look.active = Settings.get_default().dark;
 		dark_look.halign = Gtk.Align.START;
 		dark_look.notify["active"].connect(() => {
-			application.set_color_scheme_all(FinalTerm.color_schemes.get(FinalTerm.settings.color_scheme_name), dark_look.active);
-			FinalTerm.settings.settings.set_boolean("dark", dark_look.active);
+			Settings.get_default().dark = dark_look.active;
 		});
 
 		var color_scheme = new Gtk.ComboBoxText();
 		foreach (var color_scheme_name in FinalTerm.color_schemes.keys) {
 			color_scheme.append(color_scheme_name, color_scheme_name);
 		}
-		color_scheme.active_id = FinalTerm.settings.color_scheme_name;
+		color_scheme.active_id = Settings.get_default().color_scheme_name;
 		color_scheme.changed.connect(() => {
-			application.set_color_scheme_all(FinalTerm.color_schemes.get(color_scheme.active_id), FinalTerm.settings.dark);
-			FinalTerm.settings.settings.set_string("color-scheme", color_scheme.active_id);
+			Settings.get_default().color_scheme_name = color_scheme.active_id;
 		});
 
 		var theme = new Gtk.ComboBoxText();
 		foreach (var theme_name in FinalTerm.themes.keys) {
 			theme.append(theme_name, theme_name);
 		}
-		theme.active_id = FinalTerm.settings.theme_name;
+		theme.active_id = Settings.get_default().theme_name;
 		theme.changed.connect(() => {
-			application.set_theme_all(FinalTerm.themes.get(theme.active_id));
-			FinalTerm.settings.settings.set_string("theme", theme.active_id);
+			Settings.get_default().theme_name = theme.active_id;
 		});
 
 		var opacity = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1);
-		opacity.set_value(FinalTerm.settings.opacity * 100.0);
+		opacity.set_value(Settings.get_default().opacity * 100.0);
 		opacity.value_changed.connect(() => {
-			var val = opacity.get_value() / 100.0;
-			FinalTerm.settings.settings.set_double("opacity", val);
-			application.set_background(
-				FinalTerm.color_schemes.get(FinalTerm.settings.color_scheme_name).get_background_color(FinalTerm.settings.dark), val);
+			Settings.get_default().opacity = opacity.get_value() / 100.0;
 		});
 
 		var grid = new Gtk.Grid();
@@ -104,7 +103,8 @@ public class SettingsWindow : Gtk.Dialog {
 		grid.attach(create_label("Theme:"), 0, 6, 1, 1);
 		grid.attach(theme, 1, 6, 1, 1);
 
-		// this aligns quite badly at the center so we move it down
+		// This aligns quite badly at the center so we move it down
+		// TODO: Even with bottom alignment this looks ugly
 		var label = create_label("Opacity:");
 		label.valign = Gtk.Align.END;
 		grid.attach(label, 0, 7, 1, 1);
@@ -113,14 +113,14 @@ public class SettingsWindow : Gtk.Dialog {
 		get_content_area().add(grid);
 	}
 
-	Gtk.Label create_header(string title) {
+	private Gtk.Label create_header(string title) {
 		var label = new Gtk.Label("<span weight='bold'>" + title + "</span>");
 		label.use_markup = true;
 		label.halign = Gtk.Align.START;
 		return label;
 	}
 
-	Gtk.Label create_label(string text) {
+	private Gtk.Label create_label(string text) {
 		var label = new Gtk.Label(text);
 		label.halign = Gtk.Align.END;
 		return label;

@@ -20,11 +20,7 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Autocompletion : Object, ColorSchemable, Themable {
-
-	private ColorScheme color_scheme;
-	private bool dark;
-	private Theme theme;
+public class Autocompletion : Object {
 
 	private Gtk.Window popup_window;
 	private Clutter.Stage stage;
@@ -54,8 +50,8 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 		scrollable_list_view.set_filter_function(filter_function);
 		scrollable_list_view.set_sort_function(sort_function);
 
-		FinalTerm.register_color_schemable(this);
-		FinalTerm.register_themable(this);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	public void save_entries_to_file(string filename) {
@@ -189,8 +185,8 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 		}
 
 		// TODO: Move values into constants / settings
-		int width  = 50 + (maximum_length * theme.character_width);
-		int height = int.min(5, matches) * theme.character_height;
+		int width  = 50 + (maximum_length * Settings.get_default().theme.character_width);
+		int height = int.min(5, matches) * Settings.get_default().theme.character_height;
 		popup_window.resize(width, height);
 		scrollable_list_view.width  = width;
 		scrollable_list_view.height = height;
@@ -210,15 +206,8 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 		return popup_window.visible;
 	}
 
-	public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-		this.color_scheme = color_scheme;
-		this.dark = dark;
-
-		stage.set_background_color(color_scheme.get_foreground_color(dark));
-	}
-
-	public void set_theme(Theme theme) {
-		this.theme = theme;
+	private void on_settings_changed(string? key) {
+		stage.set_background_color(Settings.get_default().foreground_color);
 	}
 
 
@@ -233,14 +222,10 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 	}
 
 
-	private class AutocompletionEntryView : Mx.Label, ItemView, ColorSchemable, Themable {
+	private class AutocompletionEntryView : Mx.Label, ItemView {
 
 		public static int selected_index { get; set; }
 		public static string highlight_text { get; set; }
-
-		private ColorScheme color_scheme;
-		private bool dark;
-		private Theme theme;
 
 		public AutocompletionEntry entry { get; set; }
 
@@ -251,8 +236,8 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 		public void construct() {
 			use_markup = true;
 
-			FinalTerm.register_color_schemable(this);
-			FinalTerm.register_themable(this);
+			on_settings_changed(null);
+			Settings.get_default().changed.connect(on_settings_changed);
 		}
 
 		public void update() {
@@ -268,9 +253,10 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 			var index = get_parent().get_children().index(this);
 			if (index == selected_index) {
 				// TODO: Allow setting of highlight color in color scheme
-				background_color = color_scheme.get_indexed_color(3, dark);
+				background_color = Settings.get_default().color_scheme
+						.get_indexed_color(3, Settings.get_default().dark);
 			} else {
-				background_color = color_scheme.get_foreground_color(dark);
+				background_color = Settings.get_default().foreground_color;
 			}
 
 			// Highlight text in entry:
@@ -282,20 +268,13 @@ public class Autocompletion : Object, ColorSchemable, Themable {
 			markup = markup.replace("{$$$}", "<b>");
 			markup = markup.replace("{/$$$}", "</b>");
 
-			text = "<span foreground='" + Utilities.get_parsable_color_string(color_scheme.get_background_color(dark)) + "' " +
-					"font_desc='" + theme.monospaced_font.to_string() + "'>" + markup + "</span>";
+			text = "<span foreground='" +
+					Utilities.get_parsable_color_string(Settings.get_default().background_color) +
+					"' font_desc='" +
+					Settings.get_default().theme.monospaced_font.to_string() + "'>" + markup + "</span>";
 		}
 
-		public void set_color_scheme(ColorScheme color_scheme, bool dark) {
-			this.color_scheme = color_scheme;
-			this.dark = dark;
-
-			update();
-		}
-
-		public void set_theme(Theme theme) {
-			this.theme = theme;
-
+		private void on_settings_changed(string? key) {
 			update();
 		}
 
