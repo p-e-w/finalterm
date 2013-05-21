@@ -6,4 +6,4 @@ Exec=finalterm
 Icon=final-term
 Terminal=false
 Type=Application
-Categories=Accessories;
+Categories=System;TerminalEmulator;
