@@ -66,6 +66,45 @@ public class Settings : Object {
 		owned get { return FinalTerm.themes.get(theme_name); }
 	}
 
+	public string terminal_font_name {
+		owned get { return settings.get_string("terminal-font"); }
+		set { settings.set_string("terminal-font", value); }
+	}
+
+	public Pango.FontDescription terminal_font {
+		owned get { return Pango.FontDescription.from_string(terminal_font_name); }
+	}
+
+	// TODO: Both character_width and character_height should be cached
+	public int character_width {
+		get {
+			// In a monospaced font, "X" should have the same dimensions
+			// as all other characters
+			int character_width;
+			int character_height;
+			Utilities.get_text_size(terminal_font, "X", out character_width, out character_height);
+			return character_width;
+		}
+	}
+
+	public int character_height {
+		get {
+			int character_width;
+			int character_height;
+			Utilities.get_text_size(terminal_font, "X", out character_width, out character_height);
+			return character_height;
+		}
+	}
+
+	public string label_font_name {
+		owned get { return settings.get_string("label-font"); }
+		set { settings.set_string("label-font", value); }
+	}
+
+	public Pango.FontDescription label_font {
+		owned get { return Pango.FontDescription.from_string(label_font_name); }
+	}
+
 	public int terminal_lines {
 		get { return settings.get_int("terminal-lines"); }
 		set { settings.set_int("terminal-lines", value); }

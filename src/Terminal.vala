@@ -70,7 +70,7 @@ public class Terminal : Object {
 		terminal_view.terminal_output_view.get_screen_position(
 				terminal_output.command_start_position, out x, out y);
 		// Move popup one character down so it doesn't occlude the input
-		y += Settings.get_default().theme.character_height;
+		y += Settings.get_default().character_height;
 		FinalTerm.autocompletion.move_popup(x, y);
 	}
 

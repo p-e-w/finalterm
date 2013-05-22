@@ -279,10 +279,10 @@ public class TerminalOutputView : Mx.ScrollView {
 				text_menu.color, Settings.get_default().dark);
 
 		menu_button_label.text =
-				"<span font_desc=\"" + Settings.get_default().theme.proportional_font.to_string() + "\">" +
+				"<span font_desc=\"" + Settings.get_default().label_font_name + "\">" +
 				Markup.escape_text(text_menu.label) + ":  " +
 				"</span>" +
-				"<span font_desc=\"" + Settings.get_default().theme.monospaced_font.to_string() + "\">" +
+				"<span font_desc=\"" + Settings.get_default().terminal_font_name + "\">" +
 				Markup.escape_text(text) +
 				"</span>" +
 				"<span foreground=\"" +
@@ -291,7 +291,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		int descriptor_width;
 		int descriptor_height;
-		Utilities.get_text_size(Settings.get_default().theme.proportional_font, text_menu.label + ":  ",
+		Utilities.get_text_size(Settings.get_default().label_font, text_menu.label + ":  ",
 				out descriptor_width, out descriptor_height);
 
 		float line_view_x;
@@ -381,7 +381,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		// Apparently, Mx recreates the Clutter text actor each time
 		// the label text is set, so the font has to be reset afterwards
-		cursor.clutter_text.font_name = Settings.get_default().theme.monospaced_font.to_string();
+		cursor.clutter_text.font_name = Settings.get_default().terminal_font_name;
 
 		// Rewind animation on each render (i.e. update) event
 		// to match standard editor user experience
@@ -478,13 +478,13 @@ public class TerminalOutputView : Mx.ScrollView {
 		// 45 pixels is the size of the margin used to hide
 		// the ScrollView "shadow" (see above)
 		return ((int)height - get_vertical_padding() - 45) /
-			   Settings.get_default().theme.character_height;
+			   Settings.get_default().character_height;
 	}
 
 	private int get_visible_columns() {
 		if (line_container.width > Settings.get_default().theme.gutter_size) {
 			return ((int)width - get_horizontal_padding()) /
-				   Settings.get_default().theme.character_width;
+				   Settings.get_default().character_width;
 		} else {
 			return 0;
 		}
@@ -533,8 +533,8 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button.style = Settings.get_default().theme.style;
 		menu_button_label.style = Settings.get_default().theme.style;
 
-		cursor.width  = Settings.get_default().theme.character_width;
-		cursor.height = Settings.get_default().theme.character_height;
+		cursor.width  = Settings.get_default().character_width;
+		cursor.height = Settings.get_default().character_height;
 
 		var interval = new Clutter.Interval.with_values(typeof(int),
 				Settings.get_default().theme.cursor_maximum_opacity,

@@ -185,8 +185,8 @@ public class Autocompletion : Object {
 		}
 
 		// TODO: Move values into constants / settings
-		int width  = 50 + (maximum_length * Settings.get_default().theme.character_width);
-		int height = int.min(5, matches) * Settings.get_default().theme.character_height;
+		int width  = 50 + (maximum_length * Settings.get_default().character_width);
+		int height = int.min(5, matches) * Settings.get_default().character_height;
 		popup_window.resize(width, height);
 		scrollable_list_view.width  = width;
 		scrollable_list_view.height = height;
@@ -271,7 +271,7 @@ public class Autocompletion : Object {
 			text = "<span foreground='" +
 					Utilities.get_parsable_color_string(Settings.get_default().background_color) +
 					"' font_desc='" +
-					Settings.get_default().theme.monospaced_font.to_string() + "'>" + markup + "</span>";
+					Settings.get_default().terminal_font_name + "'>" + markup + "</span>";
 		}
 
 		private void on_settings_changed(string? key) {

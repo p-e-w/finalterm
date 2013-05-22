@@ -25,11 +25,6 @@ public class Theme : Object {
 	public string name { get; set; }
 	public string author { get; set; }
 
-	public Pango.FontDescription monospaced_font { get; set; }
-	public Pango.FontDescription proportional_font { get; set; }
-	public int character_width { get; set; }
-	public int character_height { get; set; }
-
 	public Mx.Style style { get; set; }
 
 	public int gutter_size { get; set; }
@@ -59,17 +54,6 @@ public class Theme : Object {
 		try {
 			name   = theme_file.get_string("About", "name");
 			author = theme_file.get_string("About", "author");
-
-			monospaced_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "monospaced-font"));
-			// In a monospaced font, "X" should have the same dimensions
-			// as all other characters
-			int character_width;
-			int character_height;
-			Utilities.get_text_size(monospaced_font, "X", out character_width, out character_height);
-			this.character_width  = character_width;
-			this.character_height = character_height;
-
-			proportional_font = Pango.FontDescription.from_string(theme_file.get_string("Theme", "proportional-font"));
 
 			style = new Mx.Style();
 			style.load_from_file(Utilities.get_absolute_filename(filename,

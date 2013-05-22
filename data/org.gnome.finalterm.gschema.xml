@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<schema path="/org/gnome/finalterm/" id="org.gnome.finalterm" gettext-domain="finalterm">
+		<key type="s" name="terminal-font">
+			<default>'Monospace 12'</default>
+			<summary>Font used for terminal output</summary>
+			<description></description>
+		</key>
+		<key type="s" name="label-font">
+			<default>'Sans Bold 10'</default>
+			<summary>Font used for menu button labels</summary>
+			<description></description>
+		</key>
 		<key type="s" name="color-scheme">
 			<default>'Default'</default>
 			<summary>Color scheme to be used</summary>

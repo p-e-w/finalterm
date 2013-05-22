@@ -8,12 +8,6 @@ author = Philipp Emanuel Weidmann
 
 [Theme]
 
-# Font used for terminal output
-monospaced-font = Monospace 12
-
-# Font used for menu button labels
-proportional-font = Sans Bold 10
-
 # Stylesheet file for Mx styles
 stylesheet = style.css
 

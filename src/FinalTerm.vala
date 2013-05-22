@@ -32,7 +32,7 @@ public class FinalTerm : Gtk.Application {
 
 	public static Autocompletion autocompletion { get; set; }
 
-	public Gtk.Window main_window;
+	private Gtk.Window main_window;
 
 	private Clutter.Stage stage;
 	private GtkClutter.Embed clutter_embed;
@@ -85,37 +85,15 @@ public class FinalTerm : Gtk.Application {
 		stage.use_alpha = true;
 
 		main_window.key_press_event.connect(on_key_press_event);
-
-		on_settings_changed(null);
-		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	protected override void activate() {
-		// TODO: Use set_default_geometry instead?
-		main_window.set_default_size(
-				terminal_view.terminal_output_view.get_horizontal_padding() +
-					(terminal.columns * Settings.get_default().theme.character_width),
-				terminal_view.terminal_output_view.get_vertical_padding() +
-					(terminal.lines * Settings.get_default().theme.character_height));
-
 		main_window.present();
 
-		// Restrict window resizing to multiples of character size
 		// NOTE: Changing geometry before the window is presented
 		//       results in a segmentation fault
-		// TODO: Make this optional (user setting)
-		var geometry = Gdk.Geometry();
-		// TODO: Account for appearing / disappearing scrollbars
-		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
-		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
-		// TODO: Update geometry when theme is changed
-		geometry.width_inc   = Settings.get_default().theme.character_width;
-		geometry.height_inc  = Settings.get_default().theme.character_height;
-		// TODO: Move values into constants / settings
-		geometry.min_width   = geometry.base_width + (20 * geometry.width_inc);
-		geometry.min_height  = geometry.base_height + (5 * geometry.height_inc);
-		main_window.get_window().set_geometry_hints(geometry,
-				Gdk.WindowHints.BASE_SIZE | Gdk.WindowHints.RESIZE_INC | Gdk.WindowHints.MIN_SIZE);
+		on_settings_changed(null);
+		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
 	private Menu create_application_menu() {
@@ -137,7 +115,8 @@ public class FinalTerm : Gtk.Application {
 	}
 
 	private void settings_action() {
-		var settings_window = new SettingsWindow(this);
+		var settings_window = new SettingsWindow();
+		settings_window.transient_for = main_window;
 		settings_window.show_all();
 		settings_window.run();
 		settings_window.destroy();
@@ -297,7 +276,7 @@ public class FinalTerm : Gtk.Application {
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
 				main_window.resize(main_window.screen.get_width(),
-						15 * Settings.get_default().theme.character_height);
+						15 * Settings.get_default().character_height);
 				// TODO: Always on top(?)
 				main_window.show();
 			} else {
@@ -415,6 +394,27 @@ public class FinalTerm : Gtk.Application {
 	private void on_settings_changed(string? key) {
 		set_background(Settings.get_default().background_color, Settings.get_default().opacity);
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = Settings.get_default().dark;
+
+		// Restrict window resizing to multiples of character size
+		// TODO: Make this optional (user setting)
+		var geometry = Gdk.Geometry();
+		// TODO: Account for appearing / disappearing scrollbars
+		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
+		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
+		geometry.width_inc   = Settings.get_default().character_width;
+		geometry.height_inc  = Settings.get_default().character_height;
+		// TODO: Move values into constants / settings
+		geometry.min_width   = geometry.base_width + (20 * geometry.width_inc);
+		geometry.min_height  = geometry.base_height + (5 * geometry.height_inc);
+		main_window.get_window().set_geometry_hints(geometry,
+				Gdk.WindowHints.BASE_SIZE | Gdk.WindowHints.RESIZE_INC | Gdk.WindowHints.MIN_SIZE);
+
+		// TODO: This should be resize_to_geometry, but that doesn't work
+		main_window.resize(
+			terminal_view.terminal_output_view.get_horizontal_padding() +
+				(terminal.columns * Settings.get_default().character_width),
+			terminal_view.terminal_output_view.get_vertical_padding() +
+				(terminal.lines * Settings.get_default().character_height));
 	}
 
 }

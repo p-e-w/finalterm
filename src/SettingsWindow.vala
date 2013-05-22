@@ -22,10 +22,8 @@
 
 public class SettingsWindow : Gtk.Dialog {
 
-	public SettingsWindow(FinalTerm application) {
+	public SettingsWindow() {
 		title = "Preferences";
-
-		transient_for = application.main_window;
 
 		add_buttons(Gtk.Stock.CLOSE, Gtk.ResponseType.CANCEL);
 
@@ -48,6 +46,24 @@ public class SettingsWindow : Gtk.Dialog {
 		dimensions_columns.pack_start(new Gtk.Label("columns"), false);
 		dimensions_rows.pack_start(rows, false);
 		dimensions_rows.pack_start(new Gtk.Label("rows"), false);
+
+		var terminal_font = new Gtk.FontButton();
+		terminal_font.use_font = true;
+		// Restrict selection to monospaced fonts
+		terminal_font.set_filter_func((family, face) => {
+			return family.is_monospace();
+		});
+		terminal_font.font_name = Settings.get_default().terminal_font_name;
+		terminal_font.font_set.connect(() => {
+			Settings.get_default().terminal_font_name = terminal_font.font_name;
+		});
+
+		var label_font = new Gtk.FontButton();
+		label_font.use_font = true;
+		label_font.font_name = Settings.get_default().label_font_name;
+		label_font.font_set.connect(() => {
+			Settings.get_default().label_font_name = label_font.font_name;
+		});
 
 		var dark_look = new Gtk.Switch();
 		dark_look.active = Settings.get_default().dark;
@@ -94,21 +110,24 @@ public class SettingsWindow : Gtk.Dialog {
 
 		grid.attach(create_header("Appearance"), 0, 3, 1, 1);
 
-		grid.attach(create_label("Dark look:"), 0, 4, 1, 1);
-		grid.attach(dark_look, 1, 4, 1, 1);
+		grid.attach(create_label("Terminal font:"), 0, 4, 1, 1);
+		grid.attach(terminal_font, 1, 4, 1, 1);
 
-		grid.attach(create_label("Color scheme:"), 0, 5, 1, 1);
-		grid.attach(color_scheme, 1, 5, 1, 1);
+		grid.attach(create_label("Label font:"), 0, 5, 1, 1);
+		grid.attach(label_font, 1, 5, 1, 1);
 
-		grid.attach(create_label("Theme:"), 0, 6, 1, 1);
-		grid.attach(theme, 1, 6, 1, 1);
+		grid.attach(create_label("Dark look:"), 0, 6, 1, 1);
+		grid.attach(dark_look, 1, 6, 1, 1);
 
-		// This aligns quite badly at the center so we move it down
-		// TODO: Even with bottom alignment this looks ugly
-		var label = create_label("Opacity:");
-		label.valign = Gtk.Align.END;
-		grid.attach(label, 0, 7, 1, 1);
-		grid.attach(opacity, 1, 7, 1, 1);
+		grid.attach(create_label("Color scheme:"), 0, 7, 1, 1);
+		grid.attach(color_scheme, 1, 7, 1, 1);
+
+		grid.attach(create_label("Theme:"), 0, 8, 1, 1);
+		grid.attach(theme, 1, 8, 1, 1);
+
+		// TODO: This looks ugly (alignment)
+		grid.attach(create_label("Opacity:"), 0, 9, 1, 1);
+		grid.attach(opacity, 1, 9, 1, 1);
 
 		get_content_area().add(grid);
 	}

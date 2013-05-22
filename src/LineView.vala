@@ -113,8 +113,8 @@ public class LineView : Clutter.Actor {
 						this,
 						character_x,
 						character_y,
-						text_element.get_length() * Settings.get_default().theme.character_width,
-						Settings.get_default().theme.character_height,
+						text_element.get_length() * Settings.get_default().character_width,
+						Settings.get_default().character_height,
 						text_element.text,
 						text_element.attributes.text_menu);
 			}
@@ -188,8 +188,8 @@ public class LineView : Clutter.Actor {
 		text_container.margin_right = Settings.get_default().theme.margin_right;
 
 		// TODO: Clutter bug? The following sometimes does not work:
-		//text_container.font_description = theme.monospaced_font;
-		text_container.font_name = Settings.get_default().theme.monospaced_font.to_string();
+		//text_container.font_description = Settings.get_default().terminal_font;
+		text_container.font_name = Settings.get_default().terminal_font_name;
 
 		render_line();
 	}
