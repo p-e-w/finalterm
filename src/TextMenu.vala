@@ -43,7 +43,7 @@ public class TextMenu : Object {
 		var menu_file = new KeyFile();
 		try {
 			menu_file.load_from_file(filename, KeyFileFlags.NONE);
-		} catch (Error e) { error("Failed to load text menu definitions %s: %s", filename, e.message); }
+		} catch (Error e) { error(_("Failed to load text menu definitions %s: %s"), filename, e.message); }
 
 		try {
 			if (menu_file.get_string("Parameters", "marker-type") == "code") {
@@ -87,7 +87,7 @@ public class TextMenu : Object {
 			}
 
 			menu.show_all();
-		} catch (Error e) { warning("Error in text menu %s: %s", filename, e.message); }
+		} catch (Error e) { warning(_("Error in text menu %s: %s"), filename, e.message); }
 	}
 
 }

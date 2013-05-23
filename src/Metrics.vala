@@ -41,7 +41,7 @@ public class Metrics : Object {
 			var block_metrics = block_metrics_by_block.get(block_name);
 
 			if (block_metrics.stop_timer_count == 0) {
-				critical("Attempting to restart a timer that has not been stopped");
+				critical(_("Attempting to restart a timer that has not been stopped"));
 				return;
 			}
 
@@ -58,14 +58,14 @@ public class Metrics : Object {
 
 	public static void stop_block_timer(string block_name) {
 		if (!block_metrics_by_block.has_key(block_name)) {
-			critical("Attempting to stop a timer that does not exist");
+			critical(_("Attempting to stop a timer that does not exist"));
 			return;
 		}
 
 		var block_metrics = block_metrics_by_block.get(block_name);
 
 		if (block_metrics.stop_timer_count >= block_metrics.start_timer_count) {
-			critical("Attempting to stop a timer that has not been started");
+			critical(_("Attempting to stop a timer that has not been started"));
 			return;
 		}
 
@@ -75,7 +75,7 @@ public class Metrics : Object {
 
 	public static void print_block_statistics() {
 		var message_builder = new StringBuilder();
-		message_builder.append("\nBLOCK STATISTICS:");
+		message_builder.append(_("\nBLOCK STATISTICS:"));
 
 		int maximum_length = 0;
 		foreach (var block_name in block_metrics_by_block.keys) {
@@ -95,15 +95,15 @@ public class Metrics : Object {
 			// Pad block name to align metrics for better readability
 			message_builder.append(string.nfill(maximum_length - entry.key.char_count(), ' '));
 
-			message_builder.append_printf("\tTotal time: %f", total_time);
-			message_builder.append_printf(",\tMean time: %f", mean_time);
-			message_builder.append_printf(",\tCycles: %i", entry.value.stop_timer_count);
+			message_builder.append_printf(_("\tTotal time: %f"), total_time);
+			message_builder.append_printf(_(",\tMean time: %f"), mean_time);
+			message_builder.append_printf(_(",\tCycles: %i"), entry.value.stop_timer_count);
 
 			if (entry.value.stop_timer_count < entry.value.start_timer_count)
-				message_builder.append(" [RUNNING]");
+				message_builder.append(_(" [RUNNING]"));
 		}
 
-		message_builder.append_printf("\nGrand total time: %f", grand_total_time);
+		message_builder.append_printf(_("\nGrand total time: %f"), grand_total_time);
 
 		message(message_builder.str);
 	}

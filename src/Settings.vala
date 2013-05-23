@@ -148,7 +148,7 @@ public class Settings : Object {
 
 	public static Settings get_default() {
 		if (instance == null)
-			error("No Settings instance available yet");
+			error(_("No Settings instance available yet"));
 
 		return instance;
 	}

@@ -23,7 +23,7 @@
 public class SettingsWindow : Gtk.Dialog {
 
 	public SettingsWindow() {
-		title = "Preferences";
+		title = _("Preferences");
 
 		add_buttons(Gtk.Stock.CLOSE, Gtk.ResponseType.CANCEL);
 
@@ -104,29 +104,29 @@ public class SettingsWindow : Gtk.Dialog {
 
 		grid.attach(create_header("General"), 0, 0, 1, 1);
 
-		grid.attach(create_label("Default dimensions:"), 0, 1, 1, 1);
+		grid.attach(create_label(_("Default dimensions:")), 0, 1, 1, 1);
 		grid.attach(dimensions_columns, 1, 1, 1, 1);
 		grid.attach(dimensions_rows, 1, 2, 1, 1);
 
-		grid.attach(create_header("Appearance"), 0, 3, 1, 1);
+		grid.attach(create_header(_("Appearance")), 0, 3, 1, 1);
 
-		grid.attach(create_label("Terminal font:"), 0, 4, 1, 1);
+		grid.attach(create_label(_("Terminal font:")), 0, 4, 1, 1);
 		grid.attach(terminal_font, 1, 4, 1, 1);
 
-		grid.attach(create_label("Label font:"), 0, 5, 1, 1);
+		grid.attach(create_label(_("Label font:")), 0, 5, 1, 1);
 		grid.attach(label_font, 1, 5, 1, 1);
 
-		grid.attach(create_label("Dark look:"), 0, 6, 1, 1);
+		grid.attach(create_label(_("Dark look:")), 0, 6, 1, 1);
 		grid.attach(dark_look, 1, 6, 1, 1);
 
-		grid.attach(create_label("Color scheme:"), 0, 7, 1, 1);
+		grid.attach(create_label(_("Color scheme:")), 0, 7, 1, 1);
 		grid.attach(color_scheme, 1, 7, 1, 1);
 
-		grid.attach(create_label("Theme:"), 0, 8, 1, 1);
+		grid.attach(create_label(_("Theme:")), 0, 8, 1, 1);
 		grid.attach(theme, 1, 8, 1, 1);
 
 		// TODO: This looks ugly (alignment)
-		grid.attach(create_label("Opacity:"), 0, 9, 1, 1);
+		grid.attach(create_label(_("Opacity:")), 0, 9, 1, 1);
 		grid.attach(opacity, 1, 9, 1, 1);
 
 		get_content_area().add(grid);

@@ -116,7 +116,7 @@ public class Terminal : Object {
 	}
 
 	private void on_output_command_executed(string command) {
-		message("Command executed: '%s'", command);
+		message(_("Command executed: '%s'"), command);
 		FinalTerm.autocompletion.hide_popup();
 		FinalTerm.autocompletion.add_command(command.strip());
 	}
@@ -147,10 +147,10 @@ public class Terminal : Object {
 		if (terminal_view.window_has_focus())
 			return;
 
-		var notification = new Notify.Notification("Command finished", command, "final-term");
+		var notification = new Notify.Notification(_("Command finished"), command, "final-term");
 		try {
 			notification.show();
-		} catch (Error e) { warning("Failed to show notification: %s", e.message); }
+		} catch (Error e) { warning(_("Failed to show notification: %s"), e.message); }
 	}
 #endif
 
@@ -167,7 +167,7 @@ public class Terminal : Object {
 		try {
 			command_channel.write_unichar(character);
 			command_channel.flush();
-		} catch (Error e) { warning("Writing unichar failed: %s", e.message); }
+		} catch (Error e) { warning(_("Writing unichar failed: %s"), e.message); }
 	}
 
 	public void send_text(string text) {
@@ -176,7 +176,7 @@ public class Terminal : Object {
 		try {
 			command_channel.write_chars(text_chars, out bytes_written);
 			command_channel.flush();
-		} catch (Error e) { warning("Writing chars failed: %s", e.message); }
+		} catch (Error e) { warning(_("Writing chars failed: %s"), e.message); }
 	}
 
 	// Makes the PTY aware that the size (lines and columns)
@@ -195,7 +195,7 @@ public class Terminal : Object {
 
 		switch (fork_pid) {
 		case -1: // Error
-			critical("Fork failed");
+			critical(_("Fork failed"));
 			break;
 
 		case 0: // This is the child process
@@ -234,7 +234,7 @@ public class Terminal : Object {
 				{ Settings.get_default().shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" });
 
 		// If this line is reached, execvp() must have failed
-		critical("execvp failed");
+		critical(_("execvp failed"));
 		Posix.exit(Posix.EXIT_FAILURE);
 	}
 
@@ -243,7 +243,7 @@ public class Terminal : Object {
 
 		command_channel.add_watch(IOCondition.IN, (source, condition) => {
 			if (condition == IOCondition.HUP) {
-				message("Connection broken");
+				message(_("Connection broken"));
 				return false;
 			}
 
@@ -251,7 +251,7 @@ public class Terminal : Object {
 			unichar character;
 			try {
 				command_channel.read_unichar(out character);
-			} catch (Error e) { warning("Reading unichar failed: %s", e.message); }
+			} catch (Error e) { warning(_("Reading unichar failed: %s"), e.message); }
 
 			// Measured from outside because parse_character has multiple return points
 			//Metrics.start_block_timer("TerminalStream.parse_character (outside)");

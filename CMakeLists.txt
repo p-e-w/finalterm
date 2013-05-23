@@ -8,6 +8,7 @@ set(DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set(PKGDATADIR "${DATADIR}/finalterm")
 set(VERSION 0.1)
 set(GETTEXT_PACKAGE "finalterm")
+set(LOCALE_DIR "${DATADIR}/locale")
 set(CMAKE_C_FLAGS "-ggdb")
 set(DOLLAR "$")
 set(VALAFLAGS "")
@@ -43,6 +44,7 @@ endif (NOTIFY_FOUND)
 pkg_check_modules(DEPS REQUIRED ${PKGS})
 add_definitions(${DEPS_CFLAGS})
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
+add_definitions(-DLOCALE_DIR=\"${LOCALE_DIR}\")
 link_libraries(${DEPS_LIBRARIES})
 link_directories(${DEPS_LIBRARY_DIRS})
 
@@ -81,6 +83,8 @@ OPTIONS
 	--vapidir=${CMAKE_CURRENT_SOURCE_DIR}/vapi/
 	${VALAFLAGS}
 )
+
+add_subdirectory (po)
 
 include(GSettings)
 add_schema ("data/org.gnome.finalterm.gschema.xml")

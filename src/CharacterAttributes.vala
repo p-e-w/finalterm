@@ -98,7 +98,7 @@ public class CharacterAttributes : Object {
 	public CharacterAttributes.from_stream_element(TerminalStream.StreamElement stream_element, CharacterAttributes current_attributes) {
 		if (!(stream_element.stream_element_type == TerminalStream.StreamElement.StreamElementType.CONTROL_SEQUENCE &&
 			  stream_element.control_sequence_type == TerminalStream.StreamElement.ControlSequenceType.CHARACTER_ATTRIBUTES)) {
-			critical("Cannot parse stream element into character attributes");
+			critical(_("Cannot parse stream element into character attributes"));
 			return;
 		}
 

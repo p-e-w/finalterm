@@ -57,7 +57,7 @@ public class Command : Object {
 	public Command.from_command_specification(string command_specification) {
 		MatchInfo match_info;
 		if (!command_pattern.match(command_specification, 0, out match_info)) {
-			warning("Invalid command specification: '%s'", command_specification);
+			warning(_("Invalid command specification: '%s'"), command_specification);
 			return;
 		}
 

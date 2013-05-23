@@ -77,7 +77,7 @@ public class Autocompletion : Object {
 		if (index_1 == -1 || index_2 == -1) {
 			// This condition actually occurs on each sort
 			// (apparently, the filter function is not taken into consideration when sorting):
-			//warning("Attempting to sort entries that do not both contain the current command: '%s' and '%s'",
+			//warning(_("Attempting to sort entries that do not both contain the current command: '%s' and '%s'"),
 			//		item_1.text, item_2.text);
 			return 0;
 		}
