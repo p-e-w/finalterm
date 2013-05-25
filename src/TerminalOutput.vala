@@ -29,7 +29,7 @@
  */
 public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
-	public string terminal_title { get; set; default = "Final Term"; }
+	public string terminal_title { get; set; default = _("Final Term"); }
 
 	private CharacterAttributes current_attributes;
 
@@ -72,7 +72,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 		switch (stream_element.stream_element_type) {
 		case TerminalStream.StreamElement.StreamElementType.TEXT:
-			//message("Text sequence received: '%s'", stream_element.text);
+			//message(_("Text sequence received: '%s'"), stream_element.text);
 
 			// Print only text that has not been printed yet
 			string text_left = stream_element.text.substring(
@@ -87,7 +87,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			break;
 
 		case TerminalStream.StreamElement.StreamElementType.CONTROL_SEQUENCE:
-			//message("Control sequence received: '%s' = '%s'", stream_element.text, stream_element.control_sequence_type.to_string());
+			//message(_("Control sequence received: '%s' = '%s'"), stream_element.text, stream_element.control_sequence_type.to_string());
 
 			// Descriptions of control sequence effects are taken from
 			// http://vt100.net/docs/vt100-ug/chapter3.html,
@@ -221,14 +221,14 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				switch (stream_element.get_numeric_parameter(0, -1)) {
 				case 0:
 					// Change Icon Name and Window Title
-					terminal_title = stream_element.get_text_parameter(1, "Final Term");
+					terminal_title = stream_element.get_text_parameter(1, _("Final Term"));
 					title_updated(terminal_title);
 					// TODO: Change icon name(?)
 					print_interpretation_status(stream_element, InterpretationStatus.PARTIALLY_SUPPORTED);
 					break;
 				case 2:
 					// Change Window Title
-					terminal_title = stream_element.get_text_parameter(1, "Final Term");
+					terminal_title = stream_element.get_text_parameter(1, _("Final Term"));
 					title_updated(terminal_title);
 					break;
 				default:
@@ -245,11 +245,11 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_START:
 				if (command_mode) {
-					warning("Command start control sequence received while already in command mode");
+					warning(_("Command start control sequence received while already in command mode"));
 				} else {
 					command_mode = true;
 					command_start_position = cursor_position;
-					message("Command mode entered");
+					message(_("Command mode entered"));
 				}
 				break;
 
@@ -264,7 +264,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					// Commented out because this is actually a common occurrence and
 					// makes the output very verbose
 					// TODO: Investigate further when exactly this occurs
-					//warning("Command end control sequence received while not in command mode");
+					//warning(_("Command end control sequence received while not in command mode"));
 				}
 				break;
 
@@ -316,33 +316,33 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public static void print_interpretation_status(TerminalStream.StreamElement stream_element,
 													InterpretationStatus interpretation_status) {
 		if (stream_element.stream_element_type != TerminalStream.StreamElement.StreamElementType.CONTROL_SEQUENCE) {
-			critical("print_interpretation_status should only be called on control sequence elements");
+			critical(_("print_interpretation_status should only be called on control sequence elements"));
 			return;
 		}
 
 		switch (interpretation_status) {
 		case InterpretationStatus.INVALID:
-			warning("Invalid control sequence: '%s' (%s)", stream_element.text,
+			warning(_("Invalid control sequence: '%s' (%s)"), stream_element.text,
 					stream_element.control_sequence_type.to_string());
 			break;
 		case InterpretationStatus.UNRECOGNIZED:
-			warning("Unrecognized control sequence: '%s' (%s)", stream_element.text,
+			warning(_("Unrecognized control sequence: '%s' (%s)"), stream_element.text,
 					stream_element.control_sequence_type.to_string());
 			break;
 		case InterpretationStatus.UNSUPPORTED:
-			warning("Unsupported control sequence: '%s' (%s)", stream_element.text,
+			warning(_("Unsupported control sequence: '%s' (%s)"), stream_element.text,
 					stream_element.control_sequence_type.to_string());
 			break;
 		case InterpretationStatus.PARTIALLY_SUPPORTED:
-			message("Partially supported control sequence: '%s' (%s)", stream_element.text,
+			message(_("Partially supported control sequence: '%s' (%s)"), stream_element.text,
 					stream_element.control_sequence_type.to_string());
 			break;
 		case InterpretationStatus.SUPPORTED:
-			debug("Supported control sequence: '%s' (%s)", stream_element.text,
+			debug(_("Supported control sequence: '%s' (%s)"), stream_element.text,
 					stream_element.control_sequence_type.to_string());
 			break;
 		default:
-			critical("Unrecognized interpretation status value");
+			critical(_("Unrecognized interpretation status value"));
 			break;
 		}
 	}

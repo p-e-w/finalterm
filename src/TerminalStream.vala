@@ -695,7 +695,7 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 				if (specification.pattern.match(control_sequence, RegexMatchFlags.ANCHORED, out match_info)) {
 					control_sequence_type = specification.type;
 
-					//message("Control sequence recognized: '%s' = '%s'", control_sequence, control_sequence_type.to_string());
+					//message(_("Control sequence recognized: '%s' = '%s'"), control_sequence, control_sequence_type.to_string());
 
 					// 0 is the full text of the match, 1 is the first capturing group,
 					// which matches the parameter part of the sequence

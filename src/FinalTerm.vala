@@ -64,7 +64,7 @@ public class FinalTerm : Gtk.Application {
 		terminal.shell_terminated.connect(on_terminal_shell_terminated);
 
 		main_window = new Gtk.ApplicationWindow(this);
-		main_window.title = "Final Term";
+		main_window.title = _("Final Term");
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 
@@ -103,12 +103,12 @@ public class FinalTerm : Gtk.Application {
 		Menu menu_section;
 
 		menu_section = new Menu();
-		menu_section.append("_Preferences", "app.settings");
+		menu_section.append("_" + _("Preferences"), "app.settings");
 		menu.append_section(null, menu_section);
 
 		menu_section = new Menu();
-		menu_section.append("_About Final Term", "app.about");
-		menu_section.append("_Quit", "app.quit");
+		menu_section.append("_" + _("About Final Term"), "app.about");
+		menu_section.append("_" + _("Quit"), "app.quit");
 		menu.append_section(null, menu_section);
 
 		return menu;
@@ -124,17 +124,17 @@ public class FinalTerm : Gtk.Application {
 
 	private void about_action() {
 		string[] authors = {
-				"Philipp Emanuel Weidmann <pew@worldwidemann.com> (original author)",
+				"Philipp Emanuel Weidmann <pew@worldwidemann.com>" + _(" (original author)"),
 				"Tom Beckmann <tomjonabc@gmail.com>",
 				null };
-		string[] artists = { "Matthieu James (Faenza icon, modified)", null };
+		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
 		Gtk.show_about_dialog(main_window,
-				"program-name", "Final Term",
+				"program-name", _("Final Term"),
 				"logo-icon-name", "final-term",
-				"version", "pre-alpha",
-				"comments", "At last – a modern terminal emulator.",
-				"copyright", "Copyright © 2013 Philipp Emanuel Weidmann & contributors",
+				"version", _("pre-alpha"),
+				"comments", _("At last – a modern terminal emulator."),
+				"copyright", _("Copyright © 2013 Philipp Emanuel Weidmann & contributors"),
 				"license-type", Gtk.License.GPL_3_0,
 				"authors", authors,
 				"artists", artists,
@@ -170,7 +170,7 @@ public class FinalTerm : Gtk.Application {
 	}
 
 	private bool on_key_press_event(Gdk.EventKey event) {
-		//message("Application key: %s", Gdk.keyval_name(event.keyval));
+		//message(_("Application key: %s"), Gdk.keyval_name(event.keyval));
 
 		// Handle non-configurable keys (for command completion)
 		if (terminal.is_autocompletion_active()) {
@@ -301,18 +301,21 @@ public class FinalTerm : Gtk.Application {
 			var url = command.parameters.get(0);
 			try {
 				AppInfo.launch_default_for_uri((url.index_of("www.") == 0) ? "http://" + url : url, null);
-			} catch (Error e) { warning("Launching %s failed: %s", url, e.message); }
+			} catch (Error e) { warning(_("Launching %s failed: %s"), url, e.message); }
 			return;
 
 		default:
-			warning("Unsupported command: %s", command.command.to_string());
+			warning(_("Unsupported command: %s"), command.command.to_string());
 			return;
 		}
 	}
 
 	public static int main(string[] args) {
+		Intl.textdomain (Config.GETTEXT_PACKAGE);
+		Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
+
 		if (GtkClutter.init(ref args) != Clutter.InitError.SUCCESS) {
-			error("Failed to initialize Clutter");
+			error(_("Failed to initialize Clutter"));
 		}
 
 		Keybinder.init();
@@ -322,10 +325,10 @@ public class FinalTerm : Gtk.Application {
 		KeyBindings.initialize();
 		Command.initialize();
 #if HAS_NOTIFY
-		Notify.init("Final Term");
+		Notify.init(_("Final Term"));
 #endif
 
-		Environment.set_application_name("Final Term");
+		Environment.set_application_name(_("Final Term"));
 
 		Gtk.Window.set_default_icon_name("final-term");
 
@@ -363,7 +366,7 @@ public class FinalTerm : Gtk.Application {
 		if (!data_dir.query_exists()) {
 			try {
 				data_dir.make_directory();
-			} catch (Error e) { error("Cannot access data directory: %s", e.message); }
+			} catch (Error e) { error(_("Cannot access data directory: %s"), e.message); }
 		}
 
 		application = new FinalTerm();

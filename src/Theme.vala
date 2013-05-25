@@ -49,7 +49,7 @@ public class Theme : Object {
 		var theme_file = new KeyFile();
 		try {
 			theme_file.load_from_file(filename, KeyFileFlags.NONE);
-		} catch (Error e) { error("Could not load theme %s: %s", filename, e.message); }
+		} catch (Error e) { error(_("Could not load theme %s: %s"), filename, e.message); }
 
 		try {
 			name   = theme_file.get_string("About", "name");
@@ -77,7 +77,7 @@ public class Theme : Object {
 			cursor_minimum_opacity = theme_file.get_integer("Theme", "cursor-minimum-opacity");
 			cursor_maximum_opacity = theme_file.get_integer("Theme", "cursor-maximum-opacity");
 			cursor_animation_duration = theme_file.get_integer("Theme", "cursor-animation-duration");
-		} catch (Error e) { warning("Error in theme %s: %s\n", filename, e.message); }
+		} catch (Error e) { warning(_("Error in theme %s: %s\n"), filename, e.message); }
 	}
 
 }

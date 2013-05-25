@@ -38,7 +38,7 @@ public class Utilities : Object {
 		Dir directory = null;
 		try {
 			directory = Dir.open(directory_name);
-		} catch (Error e) { error("Failed to get %s files in %s: %s", extension, directory_name, e.message); }
+		} catch (Error e) { error(_("Failed to get %s files in %s: %s"), extension, directory_name, e.message); }
 
 		Regex pattern = null;
 		try {
@@ -103,7 +103,7 @@ public class Utilities : Object {
 		unowned EnumValue? enum_value = enum_class.get_value_by_name(name);
 
 		if (enum_value == null) {
-			warning("Invalid enum value name: '%s'", name);
+			warning(_("Invalid enum value name: '%s'"), name);
 			return 0;
 		}
 
@@ -129,7 +129,7 @@ public class Utilities : Object {
 		var file_stream = FileStream.open(filename, "r");
 
 		if (file_stream == null) {
-			warning("Error while opening file '%s' for reading", filename);
+			warning(_("Error while opening file '%s' for reading"), filename);
 			return null;
 		}
 
@@ -144,7 +144,7 @@ public class Utilities : Object {
 			try {
 				T item = Json.gobject_from_data(item_type, line);
 				list.add(item);
-			} catch (Error e) { warning("Error while parsing %s JSON: %s", filename, e.message); }
+			} catch (Error e) { warning(_("Error while parsing %s JSON: %s"), filename, e.message); }
 		}
 
 		return list;

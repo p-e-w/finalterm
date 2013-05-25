@@ -72,7 +72,7 @@ public class ColorScheme : Object {
 		var colors_file = new KeyFile();
 		try {
 			colors_file.load_from_file(filename, KeyFileFlags.NONE);
-		} catch (Error e) { error("Failed to load color scheme %s: %s", filename, e.message); }
+		} catch (Error e) { error(_("Failed to load color scheme %s: %s"), filename, e.message); }
 
 		try {
 			name   = colors_file.get_string("About", "name");
@@ -113,7 +113,7 @@ public class ColorScheme : Object {
 					break;
 				}
 			}
-		} catch (Error e) { warning("Error in %s color scheme: %s", filename, e.message); }
+		} catch (Error e) { warning(_("Error in %s color scheme: %s"), filename, e.message); }
 	}
 
 	public Clutter.Color get_cursor_color(bool dark) {
@@ -132,7 +132,7 @@ public class ColorScheme : Object {
 		if (dark ? dark_indexed_colors.has_key(index) : light_indexed_colors.has_key(index)) {
 			return (dark ? dark_indexed_colors.get(index) : light_indexed_colors.get(index));
 		} else {
-			critical("Invalid color index: %i", index);
+			critical(_("Invalid color index: %i"), index);
 			return Clutter.Color.from_string("#00000000");
 		}
 	}

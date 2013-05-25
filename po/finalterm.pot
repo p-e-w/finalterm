@@ -1,0 +1,318 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: finalterm 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-05-25 17:42+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/Metrics.vala:98
+#, c-format
+msgid "\tTotal time: %f"
+msgstr ""
+
+#: ../src/Metrics.vala:78
+msgid ""
+"\n"
+"BLOCK STATISTICS:"
+msgstr ""
+
+#: ../src/Metrics.vala:106
+#, c-format
+msgid ""
+"\n"
+"Grand total time: %f"
+msgstr ""
+
+#: ../src/FinalTerm.vala:130
+msgid " (Faenza icon, modified)"
+msgstr ""
+
+#: ../src/FinalTerm.vala:127
+msgid " (original author)"
+msgstr ""
+
+#: ../src/Metrics.vala:103
+msgid " [RUNNING]"
+msgstr ""
+
+#: ../src/Metrics.vala:100
+#, c-format
+msgid ",\tCycles: %i"
+msgstr ""
+
+#: ../src/Metrics.vala:99
+#, c-format
+msgid ",\tMean time: %f"
+msgstr ""
+
+#: ../src/FinalTerm.vala:110
+msgid "About Final Term"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:111
+msgid "Appearance"
+msgstr ""
+
+#: ../src/FinalTerm.vala:136
+msgid "At last – a modern terminal emulator."
+msgstr ""
+
+#: ../src/Metrics.vala:44
+msgid "Attempting to restart a timer that has not been stopped"
+msgstr ""
+
+#: ../src/Metrics.vala:61
+msgid "Attempting to stop a timer that does not exist"
+msgstr ""
+
+#: ../src/Metrics.vala:68
+msgid "Attempting to stop a timer that has not been started"
+msgstr ""
+
+#: ../src/FinalTerm.vala:369
+#, c-format
+msgid "Cannot access data directory: %s"
+msgstr ""
+
+#: ../src/CharacterAttributes.vala:101
+msgid "Cannot parse stream element into character attributes"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:122
+msgid "Color scheme:"
+msgstr ""
+
+#: ../src/Terminal.vala:119
+#, c-format
+msgid "Command executed: '%s'"
+msgstr ""
+
+#: ../src/Terminal.vala:150
+msgid "Command finished"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:252
+msgid "Command mode entered"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:248
+msgid "Command start control sequence received while already in command mode"
+msgstr ""
+
+#: ../src/Terminal.vala:246
+msgid "Connection broken"
+msgstr ""
+
+#: ../src/FinalTerm.vala:137
+msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+msgstr ""
+
+#: ../src/Theme.vala:52
+#, c-format
+msgid "Could not load theme %s: %s"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:119
+msgid "Dark look:"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:107
+msgid "Default dimensions:"
+msgstr ""
+
+#: ../src/ColorScheme.vala:116
+#, c-format
+msgid "Error in %s color scheme: %s"
+msgstr ""
+
+#: ../src/KeyBindings.vala:69
+#, c-format
+msgid "Error in key bindings file %s: %s"
+msgstr ""
+
+#: ../src/TextMenu.vala:90
+#, c-format
+msgid "Error in text menu %s: %s"
+msgstr ""
+
+#: ../src/Theme.vala:80
+#, c-format
+msgid "Error in theme %s: %s\n"
+msgstr ""
+
+#: ../src/Utilities.vala:132
+#, c-format
+msgid "Error while opening file '%s' for reading"
+msgstr ""
+
+#: ../src/Utilities.vala:147
+#, c-format
+msgid "Error while parsing %s JSON: %s"
+msgstr ""
+
+#: ../src/Utilities.vala:41
+#, c-format
+msgid "Failed to get %s files in %s: %s"
+msgstr ""
+
+#: ../src/FinalTerm.vala:318
+msgid "Failed to initialize Clutter"
+msgstr ""
+
+#: ../src/ColorScheme.vala:75
+#, c-format
+msgid "Failed to load color scheme %s: %s"
+msgstr ""
+
+#: ../src/TextMenu.vala:46
+#, c-format
+msgid "Failed to load text menu definitions %s: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:153
+#, c-format
+msgid "Failed to show notification: %s"
+msgstr ""
+
+#: ../src/FinalTerm.vala:67 ../src/FinalTerm.vala:133
+#: ../src/FinalTerm.vala:328 ../src/FinalTerm.vala:331
+#: ../src/TerminalOutput.vala:32 ../src/TerminalOutput.vala:224
+#: ../src/TerminalOutput.vala:231
+msgid "Final Term"
+msgstr ""
+
+#: ../src/Terminal.vala:198
+msgid "Fork failed"
+msgstr ""
+
+#: ../src/ColorScheme.vala:135
+#, c-format
+msgid "Invalid color index: %i"
+msgstr ""
+
+#: ../src/Command.vala:60
+#, c-format
+msgid "Invalid command specification: '%s'"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:325
+#, c-format
+msgid "Invalid control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/Utilities.vala:106
+#, c-format
+msgid "Invalid enum value name: '%s'"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:116
+msgid "Label font:"
+msgstr ""
+
+#: ../src/FinalTerm.vala:304
+#, c-format
+msgid "Launching %s failed: %s"
+msgstr ""
+
+#: ../src/KeyBindings.vala:37
+#, c-format
+msgid "Loading key bindings file %s failed: %s"
+msgstr ""
+
+#: ../src/Settings.vala:151
+msgid "No Settings instance available yet"
+msgstr ""
+
+#: ../src/ScrollableListView.vala:165
+msgid "Object does not implement the ItemView interface"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:129
+msgid "Opacity:"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:337
+#, c-format
+msgid "Partially supported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/FinalTerm.vala:106 ../src/SettingsWindow.vala:26
+msgid "Preferences"
+msgstr ""
+
+#: ../src/FinalTerm.vala:111
+msgid "Quit"
+msgstr ""
+
+#: ../src/Terminal.vala:254
+#, c-format
+msgid "Reading unichar failed: %s"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:341
+#, c-format
+msgid "Supported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:113
+msgid "Terminal font:"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:125
+msgid "Theme:"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:329
+#, c-format
+msgid "Unrecognized control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:345
+msgid "Unrecognized interpretation status value"
+msgstr ""
+
+#: ../src/FinalTerm.vala:308
+#, c-format
+msgid "Unsupported command: %s"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:333
+#, c-format
+msgid "Unsupported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/Terminal.vala:179
+#, c-format
+msgid "Writing chars failed: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:170
+#, c-format
+msgid "Writing unichar failed: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:237
+msgid "execvp failed"
+msgstr ""
+
+#: ../src/FinalTerm.vala:135
+msgid "pre-alpha"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:319
+msgid ""
+"print_interpretation_status should only be called on control sequence "
+"elements"
+msgstr ""

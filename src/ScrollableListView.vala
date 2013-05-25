@@ -162,7 +162,7 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 			if (object is ItemView) {
 				((ItemView)object).construct();
 			} else {
-				critical("Object does not implement the ItemView interface");
+				critical(_("Object does not implement the ItemView interface"));
 			}
 			return (Clutter.Actor)object;
 		}
