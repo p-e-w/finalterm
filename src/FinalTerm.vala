@@ -64,7 +64,7 @@ public class FinalTerm : Gtk.Application {
 		terminal.shell_terminated.connect(on_terminal_shell_terminated);
 
 		main_window = new Gtk.ApplicationWindow(this);
-		main_window.title = _("Final Term");
+		main_window.title = "Final Term";
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 
@@ -103,12 +103,12 @@ public class FinalTerm : Gtk.Application {
 		Menu menu_section;
 
 		menu_section = new Menu();
-		menu_section.append("_" + _("Preferences"), "app.settings");
+		menu_section.append(_("_Preferences"), "app.settings");
 		menu.append_section(null, menu_section);
 
 		menu_section = new Menu();
-		menu_section.append("_" + _("About Final Term"), "app.about");
-		menu_section.append("_" + _("Quit"), "app.quit");
+		menu_section.append(_("_About Final Term"), "app.about");
+		menu_section.append(_("_Quit"), "app.quit");
 		menu.append_section(null, menu_section);
 
 		return menu;
@@ -126,11 +126,12 @@ public class FinalTerm : Gtk.Application {
 		string[] authors = {
 				"Philipp Emanuel Weidmann <pew@worldwidemann.com>" + _(" (original author)"),
 				"Tom Beckmann <tomjonabc@gmail.com>",
+				"Dominique Lasserre <lasserre.d@gmail.com>",
 				null };
 		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
 		Gtk.show_about_dialog(main_window,
-				"program-name", _("Final Term"),
+				"program-name", "Final Term",
 				"logo-icon-name", "final-term",
 				"version", _("pre-alpha"),
 				"comments", _("At last – a modern terminal emulator."),
@@ -311,8 +312,8 @@ public class FinalTerm : Gtk.Application {
 	}
 
 	public static int main(string[] args) {
-		Intl.textdomain (Config.GETTEXT_PACKAGE);
-		Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
+		Intl.textdomain(Config.GETTEXT_PACKAGE);
+		Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 
 		if (GtkClutter.init(ref args) != Clutter.InitError.SUCCESS) {
 			error(_("Failed to initialize Clutter"));
@@ -325,10 +326,10 @@ public class FinalTerm : Gtk.Application {
 		KeyBindings.initialize();
 		Command.initialize();
 #if HAS_NOTIFY
-		Notify.init(_("Final Term"));
+		Notify.init("Final Term");
 #endif
 
-		Environment.set_application_name(_("Final Term"));
+		Environment.set_application_name("Final Term");
 
 		Gtk.Window.set_default_icon_name("final-term");
 

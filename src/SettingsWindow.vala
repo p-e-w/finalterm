@@ -43,9 +43,9 @@ public class SettingsWindow : Gtk.Dialog {
 		});
 
 		dimensions_columns.pack_start(columns, false);
-		dimensions_columns.pack_start(new Gtk.Label("columns"), false);
+		dimensions_columns.pack_start(new Gtk.Label(_("columns")), false);
 		dimensions_rows.pack_start(rows, false);
-		dimensions_rows.pack_start(new Gtk.Label("rows"), false);
+		dimensions_rows.pack_start(new Gtk.Label(_("rows")), false);
 
 		var terminal_font = new Gtk.FontButton();
 		terminal_font.use_font = true;
@@ -102,7 +102,7 @@ public class SettingsWindow : Gtk.Dialog {
 		grid.row_spacing = 6;
 		grid.margin = 12;
 
-		grid.attach(create_header("General"), 0, 0, 1, 1);
+		grid.attach(create_header(_("General")), 0, 0, 1, 1);
 
 		grid.attach(create_label(_("Default dimensions:")), 0, 1, 1, 1);
 		grid.attach(dimensions_columns, 1, 1, 1, 1);

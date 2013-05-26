@@ -87,6 +87,7 @@ public class TextMenu : Object {
 			}
 
 			menu.show_all();
+
 		} catch (Error e) { warning(_("Error in text menu %s: %s"), filename, e.message); }
 	}
 

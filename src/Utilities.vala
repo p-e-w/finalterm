@@ -144,7 +144,7 @@ public class Utilities : Object {
 			try {
 				T item = Json.gobject_from_data(item_type, line);
 				list.add(item);
-			} catch (Error e) { warning(_("Error while parsing %s JSON: %s"), filename, e.message); }
+			} catch (Error e) { warning(_("Error while parsing JSON file %s: %s"), filename, e.message); }
 		}
 
 		return list;

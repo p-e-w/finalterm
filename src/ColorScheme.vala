@@ -113,7 +113,7 @@ public class ColorScheme : Object {
 					break;
 				}
 			}
-		} catch (Error e) { warning(_("Error in %s color scheme: %s"), filename, e.message); }
+		} catch (Error e) { warning(_("Error in color scheme %s: %s"), filename, e.message); }
 	}
 
 	public Clutter.Color get_cursor_color(bool dark) {

@@ -29,7 +29,7 @@
  */
 public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
-	public string terminal_title { get; set; default = _("Final Term"); }
+	public string terminal_title { get; set; default = "Final Term"; }
 
 	private CharacterAttributes current_attributes;
 
@@ -221,14 +221,14 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				switch (stream_element.get_numeric_parameter(0, -1)) {
 				case 0:
 					// Change Icon Name and Window Title
-					terminal_title = stream_element.get_text_parameter(1, _("Final Term"));
+					terminal_title = stream_element.get_text_parameter(1, "Final Term");
 					title_updated(terminal_title);
 					// TODO: Change icon name(?)
 					print_interpretation_status(stream_element, InterpretationStatus.PARTIALLY_SUPPORTED);
 					break;
 				case 2:
 					// Change Window Title
-					terminal_title = stream_element.get_text_parameter(1, _("Final Term"));
+					terminal_title = stream_element.get_text_parameter(1, "Final Term");
 					title_updated(terminal_title);
 					break;
 				default:

@@ -77,7 +77,7 @@ public class Theme : Object {
 			cursor_minimum_opacity = theme_file.get_integer("Theme", "cursor-minimum-opacity");
 			cursor_maximum_opacity = theme_file.get_integer("Theme", "cursor-maximum-opacity");
 			cursor_animation_duration = theme_file.get_integer("Theme", "cursor-animation-duration");
-		} catch (Error e) { warning(_("Error in theme %s: %s\n"), filename, e.message); }
+		} catch (Error e) { warning(_("Error in theme %s: %s"), filename, e.message); }
 	}
 
 }

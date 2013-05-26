@@ -108,7 +108,7 @@ public class Terminal : Object {
 	}
 
 	private void on_output_command_updated(string command) {
-		message("Command updated: '%s'", command);
+		message(_("Command updated: '%s'"), command);
 
 		// TODO: This should be scheduled to avoid congestion
 		FinalTerm.autocompletion.show_popup(command);

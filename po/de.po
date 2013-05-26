@@ -1,32 +1,35 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# German translations for finalterm package.
+# Copyright (C) 2013 THE finalterm'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the finalterm package.
+# Philipp Emanuel Weidmann <pew@worldwidemann.com>, 2013.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-26 10:07+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-05-26 11:18+0100\n"
+"Last-Translator: Philipp Emanuel Weidmann <pew@worldwidemann.com>\n"
+"Language-Team: German\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../src/Metrics.vala:98
 #, c-format
 msgid "\tTotal time: %f"
-msgstr ""
+msgstr "\tGesamtzeit: %f"
 
 #: ../src/Metrics.vala:78
 msgid ""
 "\n"
 "BLOCK STATISTICS:"
 msgstr ""
+"\n"
+"BLOCKSTATISTIK:"
 
 #: ../src/Metrics.vala:106
 #, c-format
@@ -34,299 +37,306 @@ msgid ""
 "\n"
 "Grand total time: %f"
 msgstr ""
+"\n"
+"Gesamtzeit für alle Blöcke: %f"
 
 #: ../src/FinalTerm.vala:131
 msgid " (Faenza icon, modified)"
-msgstr ""
+msgstr " (Faenza-Icon, angepasst)"
 
 #: ../src/FinalTerm.vala:127
 msgid " (original author)"
-msgstr ""
+msgstr " (ursprünglicher Entwickler)"
 
 #: ../src/Metrics.vala:103
 msgid " [RUNNING]"
-msgstr ""
+msgstr " [AKTIV]"
 
 #: ../src/Metrics.vala:100
 #, c-format
 msgid ",\tCycles: %i"
-msgstr ""
+msgstr ",\tDurchgänge: %i"
 
 #: ../src/Metrics.vala:99
 #, c-format
 msgid ",\tMean time: %f"
-msgstr ""
+msgstr ",\tDurchschnittszeit: %f"
 
 #: ../src/SettingsWindow.vala:111
 msgid "Appearance"
-msgstr ""
+msgstr "Erscheinungsbild"
 
 #: ../src/FinalTerm.vala:137
 msgid "At last – a modern terminal emulator."
-msgstr ""
+msgstr "Endlich – ein moderner Terminal-Emulator"
 
 #: ../src/Metrics.vala:44
 msgid "Attempting to restart a timer that has not been stopped"
 msgstr ""
+"Versuch, einen Zeitmesser neu zu starten, der noch nicht angehalten wurde"
 
 #: ../src/Metrics.vala:61
 msgid "Attempting to stop a timer that does not exist"
-msgstr ""
+msgstr "Versuch, einen Zeitmesser anzuhalten, der nicht existiert"
 
 #: ../src/Metrics.vala:68
 msgid "Attempting to stop a timer that has not been started"
-msgstr ""
+msgstr "Versuch, einen Zeitmesser anzuhalten, der noch nicht gestartet wurde"
 
 #: ../src/FinalTerm.vala:370
 #, c-format
 msgid "Cannot access data directory: %s"
-msgstr ""
+msgstr "Zugriff auf Datenordner fehlgeschlagen: %s"
 
 #: ../src/CharacterAttributes.vala:101
 msgid "Cannot parse stream element into character attributes"
-msgstr ""
+msgstr "Kann das Streamelement nicht in Zeichenattribute umwandeln"
 
 #: ../src/SettingsWindow.vala:122
 msgid "Color scheme:"
-msgstr ""
+msgstr "Farbschema:"
 
 #: ../src/Terminal.vala:119
 #, c-format
 msgid "Command executed: '%s'"
-msgstr ""
+msgstr "Befehl ausgeführt: '%s'"
 
 #: ../src/Terminal.vala:150
 msgid "Command finished"
-msgstr ""
+msgstr "Befehl abgeschlossen"
 
 #: ../src/TerminalOutput.vala:252
 msgid "Command mode entered"
-msgstr ""
+msgstr "Befehlsmodus aktiviert"
 
 #: ../src/TerminalOutput.vala:248
 msgid "Command start control sequence received while already in command mode"
 msgstr ""
+"Steuersequenz zum Aktivieren des Befehlsmodus empfangen, obwohl der "
+"Befehlsmodus bereits aktiv ist"
 
 #: ../src/Terminal.vala:111
 #, c-format
 msgid "Command updated: '%s'"
-msgstr ""
+msgstr "Befehl geändert: '%s'"
 
 #: ../src/Terminal.vala:246
 msgid "Connection broken"
-msgstr ""
+msgstr "Verbindung abgebrochen"
 
 #: ../src/FinalTerm.vala:138
 msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
-msgstr ""
+msgstr "Copyright © 2013 Philipp Emanuel Weidmann & Mitwirkende"
 
 #: ../src/Theme.vala:52
 #, c-format
 msgid "Could not load theme %s: %s"
-msgstr ""
+msgstr "Kann das Thema %s nicht laden: %s"
 
 #: ../src/SettingsWindow.vala:119
 msgid "Dark look:"
-msgstr ""
+msgstr "Dunkles Erscheinungsbild:"
 
 #: ../src/SettingsWindow.vala:107
 msgid "Default dimensions:"
-msgstr ""
+msgstr "Vorgabegröße:"
 
 #: ../src/ColorScheme.vala:116
 #, c-format
 msgid "Error in color scheme %s: %s"
-msgstr ""
+msgstr "Fehler im Farbschema %s: %s"
 
 #: ../src/KeyBindings.vala:69
 #, c-format
 msgid "Error in key bindings file %s: %s"
-msgstr ""
+msgstr "Fehler in der Tastaturbelegungsdatei %s: %s"
 
 #: ../src/TextMenu.vala:91
 #, c-format
 msgid "Error in text menu %s: %s"
-msgstr ""
+msgstr "Fehler im Textmenü %s: %s"
 
 #: ../src/Theme.vala:80
 #, c-format
 msgid "Error in theme %s: %s"
-msgstr ""
+msgstr "Fehler im Thema %s: %s"
 
 #: ../src/Utilities.vala:132
 #, c-format
 msgid "Error while opening file '%s' for reading"
-msgstr ""
+msgstr "Fehler beim Öffnen von '%s' für den Lesezugriff"
 
 #: ../src/Utilities.vala:147
 #, c-format
 msgid "Error while parsing JSON file %s: %s"
-msgstr ""
+msgstr "Fehler beim Parsen der JSON-Datei %s: %s"
 
 #: ../src/Utilities.vala:41
 #, c-format
 msgid "Failed to get %s files in %s: %s"
-msgstr ""
+msgstr "Fehler beim Ermitteln der %s-Dateien im Ordner %s: %s"
 
 #: ../src/FinalTerm.vala:319
 msgid "Failed to initialize Clutter"
-msgstr ""
+msgstr "Fehler bei der Initialisierung von Clutter"
 
 #: ../src/ColorScheme.vala:75
 #, c-format
 msgid "Failed to load color scheme %s: %s"
-msgstr ""
+msgstr "Fehler beim Laden des Farbschemas %s: %s"
 
 #: ../src/TextMenu.vala:46
 #, c-format
 msgid "Failed to load text menu definitions %s: %s"
-msgstr ""
+msgstr "Fehler beim Laden der Textmenü-Definition %s: %s"
 
 #: ../src/Terminal.vala:153
 #, c-format
 msgid "Failed to show notification: %s"
-msgstr ""
+msgstr "Fehler beim Anzeigen der Benachrichtigung: %s"
 
 #: ../src/Terminal.vala:198
 msgid "Fork failed"
-msgstr ""
+msgstr "Fork fehlgeschlagen"
 
 #: ../src/SettingsWindow.vala:105
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: ../src/ColorScheme.vala:135
 #, c-format
 msgid "Invalid color index: %i"
-msgstr ""
+msgstr "Ungültiger Farbindex: %i"
 
 #: ../src/Command.vala:60
 #, c-format
 msgid "Invalid command specification: '%s'"
-msgstr ""
+msgstr "Ungültige Befehlsspezifikation: '%s'"
 
 #: ../src/TerminalOutput.vala:325
 #, c-format
 msgid "Invalid control sequence: '%s' (%s)"
-msgstr ""
+msgstr "Ungültige Steuersequenz: '%s' (%s)"
 
 #: ../src/Utilities.vala:106
 #, c-format
 msgid "Invalid enum value name: '%s'"
-msgstr ""
+msgstr "Ungültiger Name für Aufzählungswert: '%s'"
 
 #: ../src/SettingsWindow.vala:116
 msgid "Label font:"
-msgstr ""
+msgstr "Schrift für Erläuterungen:"
 
 #: ../src/FinalTerm.vala:305
 #, c-format
 msgid "Launching %s failed: %s"
-msgstr ""
+msgstr "Fehler beim Starten von %s: %s"
 
 #: ../src/KeyBindings.vala:37
 #, c-format
 msgid "Loading key bindings file %s failed: %s"
-msgstr ""
+msgstr "Fehler beim Laden der Tastaturbelegungsdatei %s: %s"
 
 #: ../src/Settings.vala:151
 msgid "No Settings instance available yet"
-msgstr ""
+msgstr "Noch keine Instanz von Settings verfügbar"
 
 #: ../src/ScrollableListView.vala:165
 msgid "Object does not implement the ItemView interface"
-msgstr ""
+msgstr "Objekt implementiert die Schnittstelle ItemView nicht"
 
 #: ../src/SettingsWindow.vala:129
 msgid "Opacity:"
-msgstr ""
+msgstr "Transparenz:"
 
 #: ../src/TerminalOutput.vala:337
 #, c-format
 msgid "Partially supported control sequence: '%s' (%s)"
-msgstr ""
+msgstr "Teilweise unterstützte Steuersequenz: '%s' (%s)"
 
 #: ../src/SettingsWindow.vala:26
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: ../src/Terminal.vala:254
 #, c-format
 msgid "Reading unichar failed: %s"
-msgstr ""
+msgstr "Fehler beim Lesen von unichar: %s"
 
 #: ../src/TerminalOutput.vala:341
 #, c-format
 msgid "Supported control sequence: '%s' (%s)"
-msgstr ""
+msgstr "Unterstützte Steuersequenz: '%s' (%s)"
 
 #: ../src/SettingsWindow.vala:113
 msgid "Terminal font:"
-msgstr ""
+msgstr "Schrift für Terminal:"
 
 #: ../src/SettingsWindow.vala:125
 msgid "Theme:"
-msgstr ""
+msgstr "Thema:"
 
 #: ../src/TerminalOutput.vala:329
 #, c-format
 msgid "Unrecognized control sequence: '%s' (%s)"
-msgstr ""
+msgstr "Nicht erkannte Steuersequenz: '%s' (%s)"
 
 #: ../src/TerminalOutput.vala:345
 msgid "Unrecognized interpretation status value"
-msgstr ""
+msgstr "Wert für den Interpretationsstatus nicht erkannt"
 
 #: ../src/FinalTerm.vala:309
 #, c-format
 msgid "Unsupported command: %s"
-msgstr ""
+msgstr "Nicht unterstützter Befehl: %s"
 
 #: ../src/TerminalOutput.vala:333
 #, c-format
 msgid "Unsupported control sequence: '%s' (%s)"
-msgstr ""
+msgstr "Nicht unterstützte Steuersequenz: '%s' (%s)"
 
 #: ../src/Terminal.vala:179
 #, c-format
 msgid "Writing chars failed: %s"
-msgstr ""
+msgstr "Fehler beim Schreiben von Zeichen: %s"
 
 #: ../src/Terminal.vala:170
 #, c-format
 msgid "Writing unichar failed: %s"
-msgstr ""
+msgstr "Fehler beim Schreiben von unichar: %s"
 
 #: ../src/FinalTerm.vala:110
 msgid "_About Final Term"
-msgstr ""
+msgstr "_Info zu Final Term"
 
 #: ../src/FinalTerm.vala:106
 msgid "_Preferences"
-msgstr ""
+msgstr "_Einstellungen"
 
 #: ../src/FinalTerm.vala:111
 msgid "_Quit"
-msgstr ""
+msgstr "_Beenden"
 
 #: ../src/SettingsWindow.vala:46
 msgid "columns"
-msgstr ""
+msgstr "Spalten"
 
 #: ../src/Terminal.vala:237
 msgid "execvp failed"
-msgstr ""
+msgstr "execvp fehlgeschlagen"
 
 #: ../src/FinalTerm.vala:136
 msgid "pre-alpha"
-msgstr ""
+msgstr "pre-alpha"
 
 #: ../src/TerminalOutput.vala:319
 msgid ""
 "print_interpretation_status should only be called on control sequence "
 "elements"
 msgstr ""
+"print_interpretation_status sollte nur für Steuersequenzelemente aufgerufen "
+"werden"
 
 #: ../src/SettingsWindow.vala:48
 msgid "rows"
-msgstr ""
+msgstr "Zeilen"
