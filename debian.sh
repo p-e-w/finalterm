@@ -28,4 +28,4 @@ rm -f ../${APP}*.deb ../${APP}*.changes ../${APP}*.asc ../${APP}*.dsc
 tar -cvzf ../${APP}_${VERSION}.orig.tar.gz ../${APP}-${VERSION} --exclude=.git --exclude=build
 
 # Build the package
-fakeroot dpkg-buildpackage -F
+dpkg-buildpackage -F
