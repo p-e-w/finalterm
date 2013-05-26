@@ -19,6 +19,9 @@ VERSION=0.10
 # ensure that recent version of vala is available
 #sudo add-apt-repository ppa:vala-team
 
+# rename the directory
+mv ../finalterm ../finalterm-${VERSION}
+
 # clean
 rm -f ${APP} \#* \.#* debian/*.log debian/*.substvars debian/files
 rm -rf debian/deb.* debian/${APP} build obj-*
@@ -29,3 +32,6 @@ tar -cvzf ../${APP}_${VERSION}.orig.tar.gz ../${APP}-${VERSION} --exclude=.git -
 
 # Build the package
 dpkg-buildpackage -F
+
+# rename the parent directory back to the original
+mv ../finalterm-${VERSION} ../finalterm
