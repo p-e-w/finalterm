@@ -21,7 +21,7 @@ DIR=${APP}-${VERSION}
 #sudo add-apt-repository ppa:vala-team
 
 # rename the directory
-mv ../finalterm ../${DIR}
+mv ../${APP} ../${DIR}
 
 # clean
 rm -f ${APP} \#* \.#* debian/*.log debian/*.substvars debian/files
@@ -35,4 +35,4 @@ tar -cvzf ../${APP}_${VERSION}.orig.tar.gz ../${DIR} --exclude-vcs --exclude=bui
 dpkg-buildpackage -F
 
 # rename the parent directory back to the original
-mv ../${DIR} ../finalterm
+mv ../${DIR} ../${APP}
