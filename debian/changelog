@@ -1,0 +1,5 @@
+finalterm (0.10-1) raring; urgency=low
+
+  * Added Debian packaging
+
+ -- Bob Mottram (4096 bits) <bob@robotics.uk.to>  Mon, 20 May 2013 14:00:00 +0100

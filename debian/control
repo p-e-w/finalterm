@@ -1,0 +1,18 @@
+Source: finalterm
+Section: contrib/utils
+Priority: extra
+Maintainer: Philipp Emanuel Weidmann <pew@worldwidemann.com>
+Build-Depends: debhelper (>= 9.0.0), cmake, valac-0.18 | valac-0.20, libgee-0.8-2, libgee-0.8-dev, libmx-dev, libclutter-gtk-1.0-dev, libnotify-dev, libunity-dev, libkeybinder-3.0-dev
+Standards-Version: 3.9.4
+Homepage: http://finalterm.org/
+Vcs-Browser: https://github.com/p-e-w/finalterm
+Vcs-Git: https://github.com/p-e-w/finalterm.git
+
+Package: finalterm
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: At last – a modern terminal emulator
+ finalterm goes beyond mere emulation and understands what is
+ happening inside the shell it is hosting. This allows it to
+ offer features no other terminal can, including semantic text
+ menus, smart command completion and GUI terminal controls
