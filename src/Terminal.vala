@@ -77,7 +77,8 @@ public class Terminal : Object {
 	public void clear_command() {
 		// TODO: Handle cases where cursor is not at the end of the line
 		for (int i = 0; i < terminal_output.get_command().char_count(); i++) {
-			send_character(0x7F);
+			// Delete last character (backspace)
+			send_text("\x7F");
 		}
 	}
 
@@ -163,20 +164,12 @@ public class Terminal : Object {
 				"render_terminal_output", Settings.get_default().render_interval);
 	}
 
-	public void send_character(unichar character) {
-		try {
-			command_channel.write_unichar(character);
-			command_channel.flush();
-		} catch (Error e) { warning(_("Writing unichar failed: %s"), e.message); }
-	}
-
 	public void send_text(string text) {
-		var text_chars = text.to_utf8();
 		size_t bytes_written;
 		try {
-			command_channel.write_chars(text_chars, out bytes_written);
+			command_channel.write_chars((char[])text.data, out bytes_written);
 			command_channel.flush();
-		} catch (Error e) { warning(_("Writing chars failed: %s"), e.message); }
+		} catch (Error e) { warning(_("Sending text failed: %s"), e.message); }
 	}
 
 	// Makes the PTY aware that the size (lines and columns)

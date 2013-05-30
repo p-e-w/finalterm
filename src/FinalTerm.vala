@@ -171,7 +171,7 @@ public class FinalTerm : Gtk.Application {
 	}
 
 	private bool on_key_press_event(Gdk.EventKey event) {
-		//message(_("Application key: %s"), Gdk.keyval_name(event.keyval));
+		//message(_("Application key: %s (%s)"), Gdk.keyval_name(event.keyval), event.str);
 
 		// Handle non-configurable keys (for command completion)
 		if (terminal.is_autocompletion_active()) {
@@ -200,7 +200,6 @@ public class FinalTerm : Gtk.Application {
 
 		// Handle user-configured keys
 		var key_commands = KeyBindings.get_key_commands(event.state, event.keyval);
-
 		if (key_commands != null) {
 			foreach (var command in key_commands) {
 				command.execute();
@@ -208,16 +207,11 @@ public class FinalTerm : Gtk.Application {
 			return true;
 		}
 
-		unichar key_character = Gdk.keyval_to_unicode(event.keyval);
-
-		if (key_character.isprint()) {
-			// By default, printable keys are forwarded to the shell
-			terminal.send_character(key_character);
-			return true;
-		} else {
-			// By default, non-printable keys are ignored
+		if (event.length == 0)
 			return false;
-		}
+
+		terminal.send_text(event.str);
+		return true;
 	}
 
 	private void execute_command(Command command) {
