@@ -6,13 +6,18 @@ if(XGETTEXT_FOUND)
 			"src/*.vala"
 		TEXTMENUFILES
 			"data/TextMenus/*.ftmenu"
+		DESKTOPFILES
+			"data/finalterm.desktop.in"
+		GSETTINGSFILES
+			"data/org.gnome.finalterm.gschema.xml"
 		WORKING_DIRECTORY
 			"../"
 	)
 	option(UPDATE_PO "Update .po files." ON)
-	if(UPDATE_PO)
-		gettext_create_translations("${potfile}" ALL)
-	else()
-		gettext_create_translations("${potfile}" ALL NOUPDATE)
-	endif()
+  if(UPDATE_PO)
+    set(NOUPDATE)
+  else()
+    set(NOUPDATE "NOUPDATE")
+  endif()
+  gettext_create_translations("${potfile}" ALL ${NOUPDATE})
 endif()

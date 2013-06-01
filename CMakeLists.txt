@@ -93,7 +93,6 @@ add_executable(finalterm ${VALA_C})
 target_link_libraries(finalterm m util)
 
 install(TARGETS finalterm RUNTIME DESTINATION bin)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/finalterm.desktop DESTINATION share/applications)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/ColorSchemes DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/KeyBindings DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/Startup DESTINATION share/finalterm)
