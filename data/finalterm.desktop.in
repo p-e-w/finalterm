@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Final Term
-GenericName=Terminal
-Comment=Don't just use your system — command it!
+_Name=Final Term
+_GenericName=Terminal
+_Comment=Don't just use your system — command it!
 Exec=finalterm
 Icon=final-term
 Terminal=false
