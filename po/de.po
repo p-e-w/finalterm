@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-26 10:07+0200\n"
-"PO-Revision-Date: 2013-05-26 11:18+0100\n"
+"POT-Creation-Date: 2013-06-04 21:17+0200\n"
+"PO-Revision-Date: 2013-06-04 21:30+0100\n"
 "Last-Translator: Philipp Emanuel Weidmann <pew@worldwidemann.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -83,7 +83,11 @@ msgstr "Versuch, einen Zeitmesser anzuhalten, der nicht existiert"
 msgid "Attempting to stop a timer that has not been started"
 msgstr "Versuch, einen Zeitmesser anzuhalten, der noch nicht gestartet wurde"
 
-#: ../src/FinalTerm.vala:370
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr "Hintergrundtransparenz"
+
+#: ../src/FinalTerm.vala:364
 #, c-format
 msgid "Cannot access data directory: %s"
 msgstr "Zugriff auf Datenordner fehlgeschlagen: %s"
@@ -92,16 +96,20 @@ msgstr "Zugriff auf Datenordner fehlgeschlagen: %s"
 msgid "Cannot parse stream element into character attributes"
 msgstr "Kann das Streamelement nicht in Zeichenattribute umwandeln"
 
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr "Farbschema"
+
 #: ../src/SettingsWindow.vala:122
 msgid "Color scheme:"
 msgstr "Farbschema:"
 
-#: ../src/Terminal.vala:119
+#: ../src/Terminal.vala:120
 #, c-format
 msgid "Command executed: '%s'"
 msgstr "Befehl ausgeführt: '%s'"
 
-#: ../src/Terminal.vala:150
+#: ../src/Terminal.vala:151
 msgid "Command finished"
 msgstr "Befehl abgeschlossen"
 
@@ -115,12 +123,12 @@ msgstr ""
 "Steuersequenz zum Aktivieren des Befehlsmodus empfangen, obwohl der "
 "Befehlsmodus bereits aktiv ist"
 
-#: ../src/Terminal.vala:111
+#: ../src/Terminal.vala:112
 #, c-format
 msgid "Command updated: '%s'"
 msgstr "Befehl geändert: '%s'"
 
-#: ../src/Terminal.vala:246
+#: ../src/Terminal.vala:239
 msgid "Connection broken"
 msgstr "Verbindung abgebrochen"
 
@@ -140,6 +148,18 @@ msgstr "Dunkles Erscheinungsbild:"
 #: ../src/SettingsWindow.vala:107
 msgid "Default dimensions:"
 msgstr "Vorgabegröße:"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr "Standardanzahl Spalten im Terminal"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr "Standardanzahl Zeilen im Terminal"
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr "Benutzen Sie Ihr System nicht einfach — befehligen Sie es!"
 
 #: ../src/ColorScheme.vala:116
 #, c-format
@@ -176,7 +196,7 @@ msgstr "Fehler beim Parsen der JSON-Datei %s: %s"
 msgid "Failed to get %s files in %s: %s"
 msgstr "Fehler beim Ermitteln der %s-Dateien im Ordner %s: %s"
 
-#: ../src/FinalTerm.vala:319
+#: ../src/FinalTerm.vala:313
 msgid "Failed to initialize Clutter"
 msgstr "Fehler bei der Initialisierung von Clutter"
 
@@ -190,12 +210,20 @@ msgstr "Fehler beim Laden des Farbschemas %s: %s"
 msgid "Failed to load text menu definitions %s: %s"
 msgstr "Fehler beim Laden der Textmenü-Definition %s: %s"
 
-#: ../src/Terminal.vala:153
+#: ../src/Terminal.vala:154
 #, c-format
 msgid "Failed to show notification: %s"
 msgstr "Fehler beim Anzeigen der Benachrichtigung: %s"
 
-#: ../src/Terminal.vala:198
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr "Schrift für Erläuterungen auf Textmenüschaltern"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr "Schrift für Terminalausgabe"
+
+#: ../src/Terminal.vala:191
 msgid "Fork failed"
 msgstr "Fork fehlgeschlagen"
 
@@ -227,7 +255,7 @@ msgstr "Ungültiger Name für Aufzählungswert: '%s'"
 msgid "Label font:"
 msgstr "Schrift für Erläuterungen:"
 
-#: ../src/FinalTerm.vala:305
+#: ../src/FinalTerm.vala:299
 #, c-format
 msgid "Launching %s failed: %s"
 msgstr "Fehler beim Starten von %s: %s"
@@ -236,6 +264,19 @@ msgstr "Fehler beim Starten von %s: %s"
 #, c-format
 msgid "Loading key bindings file %s failed: %s"
 msgstr "Fehler beim Laden der Tastaturbelegungsdatei %s: %s"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+"Mindestzeitspanne zwischen aufeinanderfolgenden Zeichenzyklen, in "
+"Millisekunden"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+"Mindestzeitspanne zwischen aufeinanderfolgenden Größenänderungszyklen, in "
+"Millisekunden"
 
 #: ../src/Settings.vala:151
 msgid "No Settings instance available yet"
@@ -254,23 +295,44 @@ msgstr "Transparenz:"
 msgid "Partially supported control sequence: '%s' (%s)"
 msgstr "Teilweise unterstützte Steuersequenz: '%s' (%s)"
 
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+"Pfad zum auszuführenden Shell-Programm (NB: Derzeit wird nur bash "
+"unterstützt)"
+
 #: ../src/SettingsWindow.vala:26
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: ../src/Terminal.vala:254
+#: ../src/Terminal.vala:247
 #, c-format
 msgid "Reading unichar failed: %s"
 msgstr "Fehler beim Lesen von unichar: %s"
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
+msgstr "Fehler beim Senden von Text: %s"
 
 #: ../src/TerminalOutput.vala:341
 #, c-format
 msgid "Supported control sequence: '%s' (%s)"
 msgstr "Unterstützte Steuersequenz: '%s' (%s)"
 
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr "Terminal"
+
 #: ../src/SettingsWindow.vala:113
 msgid "Terminal font:"
 msgstr "Schrift für Terminal:"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr "Thema"
 
 #: ../src/SettingsWindow.vala:125
 msgid "Theme:"
@@ -285,7 +347,7 @@ msgstr "Nicht erkannte Steuersequenz: '%s' (%s)"
 msgid "Unrecognized interpretation status value"
 msgstr "Wert für den Interpretationsstatus nicht erkannt"
 
-#: ../src/FinalTerm.vala:309
+#: ../src/FinalTerm.vala:303
 #, c-format
 msgid "Unsupported command: %s"
 msgstr "Nicht unterstützter Befehl: %s"
@@ -295,15 +357,17 @@ msgstr "Nicht unterstützter Befehl: %s"
 msgid "Unsupported control sequence: '%s' (%s)"
 msgstr "Nicht unterstützte Steuersequenz: '%s' (%s)"
 
-#: ../src/Terminal.vala:179
-#, c-format
-msgid "Writing chars failed: %s"
-msgstr "Fehler beim Schreiben von Zeichen: %s"
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr "Dunkles Erscheinungsbild verwenden"
 
-#: ../src/Terminal.vala:170
-#, c-format
-msgid "Writing unichar failed: %s"
-msgstr "Fehler beim Schreiben von unichar: %s"
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr ""
+"Wert der Umgebungsvariable TERM (NB: Änderungen dieser Variable können das "
+"Verhalten der Shell beeinflussen)"
 
 #: ../src/FinalTerm.vala:110
 msgid "_About Final Term"
@@ -321,7 +385,7 @@ msgstr "_Beenden"
 msgid "columns"
 msgstr "Spalten"
 
-#: ../src/Terminal.vala:237
+#: ../src/Terminal.vala:230
 msgid "execvp failed"
 msgstr "execvp fehlgeschlagen"
 

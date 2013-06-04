@@ -33,23 +33,23 @@
 		</key>
 		<key type="i" name="terminal-lines">
 			<default>24</default>
-			<summary></summary>
+			<summary>Default number of lines in the terminal</summary>
 			<description></description>
 		</key>
 		<key type="i" name="terminal-columns">
 			<default>80</default>
-			<summary></summary>
+			<summary>Default number of columns in the terminal</summary>
 			<description></description>
 		</key>
 		<key type="s" name="shell-path">
 			<default>'/bin/bash'</default>
-			<summary>Path to shell executable</summary>
-			<description>Path to the shell executable which is to be run (NOTE: Only bash is currently supported)</description>
+			<summary>Path to the shell executable which is to be run (NOTE: Only bash is currently supported)</summary>
+			<description></description>
 		</key>
 		<key type="s" name="emulated-terminal">
 			<default>'xterm-256color'</default>
-			<summary>Value that the TERM environment variable will be set to</summary>
-			<description>Value that the TERM environment variable will be set to (NOTE: Changing this variable may affect shell behavior)</description>
+			<summary>Value that the TERM environment variable will be set to (NOTE: Changing this variable may affect shell behavior)</summary>
+			<description></description>
 		</key>
 		<key type="i" name="render-interval">
 			<default>10</default>

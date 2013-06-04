@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-26 10:07+0200\n"
+"POT-Creation-Date: 2013-06-04 21:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Attempting to stop a timer that has not been started"
 msgstr ""
 
-#: ../src/FinalTerm.vala:370
+#: ../src/FinalTerm.vala:364
 #, c-format
 msgid "Cannot access data directory: %s"
 msgstr ""
@@ -90,12 +90,12 @@ msgstr ""
 msgid "Color scheme:"
 msgstr ""
 
-#: ../src/Terminal.vala:119
+#: ../src/Terminal.vala:120
 #, c-format
 msgid "Command executed: '%s'"
 msgstr ""
 
-#: ../src/Terminal.vala:150
+#: ../src/Terminal.vala:151
 msgid "Command finished"
 msgstr ""
 
@@ -107,12 +107,12 @@ msgstr ""
 msgid "Command start control sequence received while already in command mode"
 msgstr ""
 
-#: ../src/Terminal.vala:111
+#: ../src/Terminal.vala:112
 #, c-format
 msgid "Command updated: '%s'"
 msgstr ""
 
-#: ../src/Terminal.vala:246
+#: ../src/Terminal.vala:239
 msgid "Connection broken"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "Failed to get %s files in %s: %s"
 msgstr ""
 
-#: ../src/FinalTerm.vala:319
+#: ../src/FinalTerm.vala:313
 msgid "Failed to initialize Clutter"
 msgstr ""
 
@@ -182,12 +182,12 @@ msgstr ""
 msgid "Failed to load text menu definitions %s: %s"
 msgstr ""
 
-#: ../src/Terminal.vala:153
+#: ../src/Terminal.vala:154
 #, c-format
 msgid "Failed to show notification: %s"
 msgstr ""
 
-#: ../src/Terminal.vala:198
+#: ../src/Terminal.vala:191
 msgid "Fork failed"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Label font:"
 msgstr ""
 
-#: ../src/FinalTerm.vala:305
+#: ../src/FinalTerm.vala:299
 #, c-format
 msgid "Launching %s failed: %s"
 msgstr ""
@@ -250,9 +250,14 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: ../src/Terminal.vala:254
+#: ../src/Terminal.vala:247
 #, c-format
 msgid "Reading unichar failed: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
 msgstr ""
 
 #: ../src/TerminalOutput.vala:341
@@ -277,7 +282,7 @@ msgstr ""
 msgid "Unrecognized interpretation status value"
 msgstr ""
 
-#: ../src/FinalTerm.vala:309
+#: ../src/FinalTerm.vala:303
 #, c-format
 msgid "Unsupported command: %s"
 msgstr ""
@@ -285,16 +290,6 @@ msgstr ""
 #: ../src/TerminalOutput.vala:333
 #, c-format
 msgid "Unsupported control sequence: '%s' (%s)"
-msgstr ""
-
-#: ../src/Terminal.vala:179
-#, c-format
-msgid "Writing chars failed: %s"
-msgstr ""
-
-#: ../src/Terminal.vala:170
-#, c-format
-msgid "Writing unichar failed: %s"
 msgstr ""
 
 #: ../src/FinalTerm.vala:110
@@ -313,7 +308,7 @@ msgstr ""
 msgid "columns"
 msgstr ""
 
-#: ../src/Terminal.vala:237
+#: ../src/Terminal.vala:230
 msgid "execvp failed"
 msgstr ""
 
@@ -329,4 +324,65 @@ msgstr ""
 
 #: ../src/SettingsWindow.vala:48
 msgid "rows"
+msgstr ""
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr ""
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
 msgstr ""

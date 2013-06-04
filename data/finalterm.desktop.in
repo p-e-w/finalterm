@@ -1,5 +1,5 @@
 [Desktop Entry]
-_Name=Final Term
+Name=Final Term
 _GenericName=Terminal
 _Comment=Don't just use your system — command it!
 Exec=finalterm
