@@ -169,37 +169,34 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					print_interpretation_status(stream_element, InterpretationStatus.INVALID);
 					break;
 				}
-				text_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.ERASE_IN_LINE_EL:
 				switch (stream_element.get_numeric_parameter(0, 0)) {
 				case 0:
 					// Erase from the active position to the end of the line, inclusive (default)
-					get(cursor_position.line).erase_range(cursor_position.column);
+					erase_line_range(cursor_position.line, cursor_position.column);
 					break;
 				case 1:
 					// Erase from the start of the screen to the active position, inclusive
 					// TODO: Is this "inclusive"?
 					// TODO: Should this erase from the start of the LINE instead (as implemented here)?
-					get(cursor_position.line).erase_range(0, cursor_position.column);
+					erase_line_range(cursor_position.line, 0, cursor_position.column);
 					break;
 				case 2:
 					// Erase all of the line, inclusive
-					get(cursor_position.line).erase_range();
+					erase_line_range(cursor_position.line);
 					break;
 				default:
 					print_interpretation_status(stream_element, InterpretationStatus.INVALID);
 					break;
 				}
-				text_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.DELETE_CHARACTERS:
 				// This control function deletes one or more characters from the cursor position to the right
-				get(cursor_position.line).erase_range(cursor_position.column,
+				erase_line_range(cursor_position.line, cursor_position.column,
 						cursor_position.column + stream_element.get_numeric_parameter(0, 1));
-				text_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_POSITION:
@@ -460,18 +457,23 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private void erase_range(CursorPosition start_position = {0, 0},
 							 CursorPosition end_position   = {size - 1, get(size - 1).get_length()}) {
 		if (start_position.line == end_position.line) {
-			get(start_position.line).erase_range(start_position.column, end_position.column);
+			erase_line_range(start_position.line, start_position.column, end_position.column);
 			return;
 		}
 
 		// Works because start and end position are on different lines
-		get(start_position.line).erase_range(start_position.column);
+		erase_line_range(start_position.line, start_position.column);
 
 		for (int i = start_position.line + 1; i < end_position.line; i++) {
-			get(i).erase_range();
+			erase_line_range(i);
 		}
 
-		get(end_position.line).erase_range(0, end_position.column);
+		erase_line_range(end_position.line, 0, end_position.column);
+	}
+
+	public void erase_line_range(int line, int start_position = 0, int end_position = -1) {
+		get(line).erase_range(start_position, end_position);
+		text_updated(line);
 	}
 
 	public signal void text_updated(int line_index);
