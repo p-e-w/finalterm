@@ -471,7 +471,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		erase_line_range(end_position.line, 0, end_position.column);
 	}
 
-	public void erase_line_range(int line, int start_position = 0, int end_position = -1) {
+	private void erase_line_range(int line, int start_position = 0, int end_position = -1) {
 		get(line).erase_range(start_position, end_position);
 		text_updated(line);
 	}
