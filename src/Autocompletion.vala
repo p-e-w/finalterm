@@ -259,14 +259,20 @@ public class Autocompletion : Object {
 				background_color = Settings.get_default().foreground_color;
 			}
 
-			// Highlight text in entry:
-			// Step 1: Place markers around text to be highlighted
-			var markup = entry.text.replace(highlight_text, "{$$$}" + highlight_text + "{/$$$}");
-			// Step 2: Replace reserved characters with markup entities
-			markup = Markup.escape_text(markup);
-			// Step 3: Replace markers with highlighting markup tags
-			markup = markup.replace("{$$$}", "<b>");
-			markup = markup.replace("{/$$$}", "</b>");
+			string markup;
+
+			if (highlight_text == null) {
+				markup = Markup.escape_text(entry.text);
+			} else {
+				// Highlight text in entry:
+				// Step 1: Place markers around text to be highlighted
+				markup = entry.text.replace(highlight_text, "{$$$}" + highlight_text + "{/$$$}");
+				// Step 2: Replace reserved characters with markup entities
+				markup = Markup.escape_text(markup);
+				// Step 3: Replace markers with highlighting markup tags
+				markup = markup.replace("{$$$}", "<b>");
+				markup = markup.replace("{/$$$}", "</b>");
+			}
 
 			text = "<span foreground='" +
 					Utilities.get_parsable_color_string(Settings.get_default().background_color) +
