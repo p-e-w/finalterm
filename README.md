@@ -39,6 +39,18 @@ make
 sudo make install
 ```
 
+## Instructions for Ubuntu
+
+Thanks to the work of Bob Mottram (packaging) and GitHub user versable (PPA setup), Ubuntu is currently the easiest platform to install Final Term on:
+
+```
+sudo add-apt-repository ppa:finalterm/daily
+sudo apt-get update
+sudo apt-get install finalterm
+```
+
+The PPA is synchronized with the GitHub repository and should always deliver the latest version with a few hours delay at most.
+
 ## Instructions for Fedora
 
 _**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8QkZ5UnRiSzhnTVU/edit) (and one for keybinder [here](https://docs.google.com/file/d/0B48uS582CBl8Wjg1ZVI0bXBrLUE/edit))._
@@ -84,43 +96,12 @@ The keybinder library is installed in `/usr/local/lib/` rather than `/usr/lib/`.
 To fix it, add `/usr/local/lib/pkgconfig/` to your pkg-config search path:
 
 ```
-PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
-export PKG_CONFIG_PATH
-```
-
-## Instructions for Ubuntu
-
-The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Ubuntu 12.10 ("Quantal Quetzal") or 13.04 ("Raring Ringtail") system:
-
-### Add Vala repository
-
-This is necessary because Ubuntu does not provide an up-to-date version of Vala in its default repositories.
-
-```
-sudo add-apt-repository ppa:vala-team
-```
-
-### Install prerequisites
-
-```
-sudo apt-get install git cmake valac-0.18 intltool libgee-0.8 libmx-dev libclutter-gtk-1.0-dev keybinder-3.0-dev libnotify-dev libunity-dev
-```
-
-### Install Final Term
-
-```
-git clone https://github.com/p-e-w/finalterm.git
-cd finalterm/
-mkdir build
-cd build/
-cmake ..
-make
-sudo make install
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
 ```
 
 ## Instructions for Arch Linux
 
-You're in luck, my friend: [https://aur.archlinux.org/packages/finalterm-git/](https://aur.archlinux.org/packages/finalterm-git/)
+There is an AUR for Final Term maintained by Arch Linux user kens: [https://aur.archlinux.org/packages/finalterm-git/](https://aur.archlinux.org/packages/finalterm-git/).
 
 # Acknowledgments
 
