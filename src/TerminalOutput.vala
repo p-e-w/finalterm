@@ -236,8 +236,10 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROMPT_START:
 				get(cursor_position.line).is_prompt_line = true;
-				if (last_command != null)
+				if (last_command != null) {
 					command_finished(last_command);
+					progress_finished();
+				}
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_START:
