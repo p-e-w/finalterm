@@ -1,0 +1,401 @@
+# Hungarian translations for finalterm package.
+# Copyright (C) 2013 THE finalterm'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the finalterm package.
+# Ferenc Erki <erkiferenc@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: finalterm 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-04 21:17+0200\n"
+"PO-Revision-Date: 2013-06-20 22:18+0200\n"
+"Last-Translator: Ferenc Erki <erkiferenc@gmail.com>\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: ../src/Metrics.vala:98
+#, c-format
+msgid "\tTotal time: %f"
+msgstr "\tTeljes idő: %f"
+
+#: ../src/Metrics.vala:78
+msgid ""
+"\n"
+"BLOCK STATISTICS:"
+msgstr ""
+"\n"
+"Blokkstatisztikák:"
+
+#: ../src/Metrics.vala:106
+#, c-format
+msgid ""
+"\n"
+"Grand total time: %f"
+msgstr ""
+"\n"
+"Összes idő: %f"
+
+#: ../src/FinalTerm.vala:131
+msgid " (Faenza icon, modified)"
+msgstr " (módosított Faenza ikon)"
+
+#: ../src/FinalTerm.vala:127
+msgid " (original author)"
+msgstr " (eredeti szerző)"
+
+#: ../src/Metrics.vala:103
+msgid " [RUNNING]"
+msgstr " [AKTÍV]"
+
+#: ../src/Metrics.vala:100
+#, c-format
+msgid ",\tCycles: %i"
+msgstr ",\tCiklusok: %i"
+
+#: ../src/Metrics.vala:99
+#, c-format
+msgid ",\tMean time: %f"
+msgstr ",\tÁtlagos idő: %f"
+
+#: ../src/SettingsWindow.vala:111
+msgid "Appearance"
+msgstr "Megjelenés"
+
+#: ../src/FinalTerm.vala:137
+msgid "At last – a modern terminal emulator."
+msgstr "Végre – egy modern terminálemulátor."
+
+#: ../src/Metrics.vala:44
+msgid "Attempting to restart a timer that has not been stopped"
+msgstr "Egy meg nem állított időmérő újraindításának kísérlete"
+
+#: ../src/Metrics.vala:61
+msgid "Attempting to stop a timer that does not exist"
+msgstr "Egy nem létező időmérő megállításának kísérlete"
+
+#: ../src/Metrics.vala:68
+msgid "Attempting to stop a timer that has not been started"
+msgstr "Egy el nem indított időmérő megállításának kísérlete"
+
+#: ../src/FinalTerm.vala:364
+#, c-format
+msgid "Cannot access data directory: %s"
+msgstr "Nem sikerült az adatkönyvtár megnyitása: %s"
+
+#: ../src/CharacterAttributes.vala:101
+msgid "Cannot parse stream element into character attributes"
+msgstr "Nem lehet a stream elemét karakterattribútumokká feldologzni"
+
+#: ../src/SettingsWindow.vala:122
+msgid "Color scheme:"
+msgstr "Színséma:"
+
+#: ../src/Terminal.vala:120
+#, c-format
+msgid "Command executed: '%s'"
+msgstr "Parancs végrehajtva: '%s'"
+
+#: ../src/Terminal.vala:151
+msgid "Command finished"
+msgstr "Parancs befejeződött"
+
+#: ../src/TerminalOutput.vala:252
+msgid "Command mode entered"
+msgstr "Végrehajtási mód aktiválva"
+
+#: ../src/TerminalOutput.vala:248
+msgid "Command start control sequence received while already in command mode"
+msgstr "Végrehajtási mód közben parancsindító vezérlőszekvencia érkezett"
+
+#: ../src/Terminal.vala:112
+#, c-format
+msgid "Command updated: '%s'"
+msgstr "Parancs frissítve: '%s'"
+
+#: ../src/Terminal.vala:239
+msgid "Connection broken"
+msgstr "A kapcsolat megszakadt"
+
+#: ../src/FinalTerm.vala:138
+msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+msgstr "Copyright © 2013 Philipp Emanuel Weidmann és a hozzájárulók"
+
+#: ../src/Theme.vala:52
+#, c-format
+msgid "Could not load theme %s: %s"
+msgstr "Nem sikerült a(z) %s témát betölteni: %s"
+
+#: ../src/SettingsWindow.vala:119
+msgid "Dark look:"
+msgstr "Sötét megjelenés:"
+
+#: ../src/SettingsWindow.vala:107
+msgid "Default dimensions:"
+msgstr "Alapértelmezett méret:"
+
+#: ../src/ColorScheme.vala:116
+#, c-format
+msgid "Error in color scheme %s: %s"
+msgstr "Hiba a(z) %s színsémában: %s"
+
+#: ../src/KeyBindings.vala:69
+#, c-format
+msgid "Error in key bindings file %s: %s"
+msgstr "Hiba a(z) %s billentyű-hozzárendelési fájlban: %s"
+
+#: ../src/TextMenu.vala:91
+#, c-format
+msgid "Error in text menu %s: %s"
+msgstr "Hiba a(z) %s szöveges menüben: %s"
+
+#: ../src/Theme.vala:80
+#, c-format
+msgid "Error in theme %s: %s"
+msgstr "Hiba a(z) %s témában: %s"
+
+#: ../src/Utilities.vala:132
+#, c-format
+msgid "Error while opening file '%s' for reading"
+msgstr "Hiba a(z) '%s' fájl olvasásra megnyitása közben"
+
+#: ../src/Utilities.vala:147
+#, c-format
+msgid "Error while parsing JSON file %s: %s"
+msgstr "Hiba a(z) %s JSON file feldolgozása során: %s"
+
+#: ../src/Utilities.vala:41
+#, c-format
+msgid "Failed to get %s files in %s: %s"
+msgstr "Nem sikerült a(z) %s fájlok megnyitása a(z) %s könyvtárból: %s"
+
+#: ../src/FinalTerm.vala:313
+msgid "Failed to initialize Clutter"
+msgstr "Nem sikerült a Clutter inicializálása"
+
+#: ../src/ColorScheme.vala:75
+#, c-format
+msgid "Failed to load color scheme %s: %s"
+msgstr "Nem sikerült a(z) %s színséma betöltése: %s"
+
+#: ../src/TextMenu.vala:46
+#, c-format
+msgid "Failed to load text menu definitions %s: %s"
+msgstr "Nem sikerült a(z) %s szöveges menü definíciók betöltése: %s"
+
+#: ../src/Terminal.vala:154
+#, c-format
+msgid "Failed to show notification: %s"
+msgstr "Nem sikerült megjeleníteni egy értesítést: %s"
+
+#: ../src/Terminal.vala:191
+msgid "Fork failed"
+msgstr "Sikertelen folyamatindítás"
+
+#: ../src/SettingsWindow.vala:105
+msgid "General"
+msgstr "Általános"
+
+#: ../src/ColorScheme.vala:135
+#, c-format
+msgid "Invalid color index: %i"
+msgstr "Érvénytelen színindex: %i"
+
+#: ../src/Command.vala:60
+#, c-format
+msgid "Invalid command specification: '%s'"
+msgstr "Érvénytelen parancsspecifikáció: '%s'"
+
+#: ../src/TerminalOutput.vala:325
+#, c-format
+msgid "Invalid control sequence: '%s' (%s)"
+msgstr "Érvénytelen vezérlőszekvencia: '%s' (%s)"
+
+#: ../src/Utilities.vala:106
+#, c-format
+msgid "Invalid enum value name: '%s'"
+msgstr "Érvénytelen felsorolási értéknév: '%s'"
+
+#: ../src/SettingsWindow.vala:116
+msgid "Label font:"
+msgstr "Címkék betűkészlete:"
+
+#: ../src/FinalTerm.vala:299
+#, c-format
+msgid "Launching %s failed: %s"
+msgstr "Nem sikerült a(z) %s indítása: %s"
+
+#: ../src/KeyBindings.vala:37
+#, c-format
+msgid "Loading key bindings file %s failed: %s"
+msgstr "Nem sikerült a(z) %s billentyű-hozzárendelési fájl megnyitása: %s"
+
+#: ../src/Settings.vala:151
+msgid "No Settings instance available yet"
+msgstr "Még nincs elérhető Settings példány"
+
+#: ../src/ScrollableListView.vala:165
+msgid "Object does not implement the ItemView interface"
+msgstr "Az objektum nem implementálja az ItemView interfészt"
+
+#: ../src/SettingsWindow.vala:129
+msgid "Opacity:"
+msgstr "Átlátszatlanság:"
+
+#: ../src/TerminalOutput.vala:337
+#, c-format
+msgid "Partially supported control sequence: '%s' (%s)"
+msgstr "Részlegesen támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../src/SettingsWindow.vala:26
+msgid "Preferences"
+msgstr "Beállítások"
+
+#: ../src/Terminal.vala:247
+#, c-format
+msgid "Reading unichar failed: %s"
+msgstr "Unichar olvasása sikertelen: %s"
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
+msgstr "Szöveg küldése sikertelen: %s"
+
+#: ../src/TerminalOutput.vala:341
+#, c-format
+msgid "Supported control sequence: '%s' (%s)"
+msgstr "Támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../src/SettingsWindow.vala:113
+msgid "Terminal font:"
+msgstr "Terminál betűkészlete:"
+
+#: ../src/SettingsWindow.vala:125
+msgid "Theme:"
+msgstr "Téma:"
+
+#: ../src/TerminalOutput.vala:329
+#, c-format
+msgid "Unrecognized control sequence: '%s' (%s)"
+msgstr "Ismeretlen vezérlőszekvencia: '%s' (%s)"
+
+#: ../src/TerminalOutput.vala:345
+msgid "Unrecognized interpretation status value"
+msgstr "Ismeretlen értelmezési állapot érték"
+
+#: ../src/FinalTerm.vala:303
+#, c-format
+msgid "Unsupported command: %s"
+msgstr "Nem támogatott parancs: %s"
+
+#: ../src/TerminalOutput.vala:333
+#, c-format
+msgid "Unsupported control sequence: '%s' (%s)"
+msgstr "Nem támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../src/FinalTerm.vala:110
+msgid "_About Final Term"
+msgstr "_Névjegy"
+
+#: ../src/FinalTerm.vala:106
+msgid "_Preferences"
+msgstr "_Beállítások"
+
+#: ../src/FinalTerm.vala:111
+msgid "_Quit"
+msgstr "_Kilépés"
+
+#: ../src/SettingsWindow.vala:46
+msgid "columns"
+msgstr "oszlop"
+
+#: ../src/Terminal.vala:230
+msgid "execvp failed"
+msgstr "sikertelen execvp hívás"
+
+#: ../src/FinalTerm.vala:136
+msgid "pre-alpha"
+msgstr "pre-alpha"
+
+#: ../src/TerminalOutput.vala:319
+msgid ""
+"print_interpretation_status should only be called on control sequence "
+"elements"
+msgstr "print_interpretation_status csak vezérlőszekvencia elemeken hívható"
+
+#: ../src/SettingsWindow.vala:48
+msgid "rows"
+msgstr "sor"
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr "Ne csak használd a rendszered — irányítsd!"
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr "Terminál"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr "Háttér átlátszatlanság"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr "Használandó színséma"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr "A terminál oszlopainak száma alapértelmezésben"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr "A terminál sorainak száma alapértelmezésben"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr "A menügombok címkéinek betűkészlete"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr "A terminál kimenetének betűkészlete"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+"Az egymás utáni kimenet renderelési ciklusok közti minimális időtartam "
+"milliszekundumban"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+"Az egymás utáni átméretezési ciklusok közti minimális időtartam "
+"milliszekundumban"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+"Útvonal a futtatandó parancsértelmezőhöz (MEGJEGYZÉS: jelenleg csak a bash "
+"támogatott)"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr "Használandó téma"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr "Sötét téma használata"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr ""
+"A TERM környzeti változó beállítandó értéke (MEGJEGYZÉS: ez befolyásolhatja "
+"a parancsértelmező viselkedését)"
