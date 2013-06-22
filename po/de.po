@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-04 21:17+0200\n"
-"PO-Revision-Date: 2013-06-04 21:30+0100\n"
+"POT-Creation-Date: 2013-06-22 12:28+0200\n"
+"PO-Revision-Date: 2013-06-22 12:30+0100\n"
 "Last-Translator: Philipp Emanuel Weidmann <pew@worldwidemann.com>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -43,6 +43,14 @@ msgstr ""
 #: ../src/FinalTerm.vala:131
 msgid " (Faenza icon, modified)"
 msgstr " (Faenza-Icon, angepasst)"
+
+#: ../src/FinalTerm.vala:143
+msgid " (German)"
+msgstr " (deutsch)"
+
+#: ../src/FinalTerm.vala:144
+msgid " (Hungarian)"
+msgstr " (ungarisch)"
 
 #: ../src/FinalTerm.vala:127
 msgid " (original author)"
@@ -87,7 +95,7 @@ msgstr "Versuch, einen Zeitmesser anzuhalten, der noch nicht gestartet wurde"
 msgid "Background opacity"
 msgstr "Hintergrundtransparenz"
 
-#: ../src/FinalTerm.vala:364
+#: ../src/FinalTerm.vala:367
 #, c-format
 msgid "Cannot access data directory: %s"
 msgstr "Zugriff auf Datenordner fehlgeschlagen: %s"
@@ -113,11 +121,11 @@ msgstr "Befehl ausgeführt: '%s'"
 msgid "Command finished"
 msgstr "Befehl abgeschlossen"
 
-#: ../src/TerminalOutput.vala:252
+#: ../src/TerminalOutput.vala:251
 msgid "Command mode entered"
 msgstr "Befehlsmodus aktiviert"
 
-#: ../src/TerminalOutput.vala:248
+#: ../src/TerminalOutput.vala:247
 msgid "Command start control sequence received while already in command mode"
 msgstr ""
 "Steuersequenz zum Aktivieren des Befehlsmodus empfangen, obwohl der "
@@ -196,7 +204,7 @@ msgstr "Fehler beim Parsen der JSON-Datei %s: %s"
 msgid "Failed to get %s files in %s: %s"
 msgstr "Fehler beim Ermitteln der %s-Dateien im Ordner %s: %s"
 
-#: ../src/FinalTerm.vala:313
+#: ../src/FinalTerm.vala:316
 msgid "Failed to initialize Clutter"
 msgstr "Fehler bei der Initialisierung von Clutter"
 
@@ -241,7 +249,7 @@ msgstr "Ungültiger Farbindex: %i"
 msgid "Invalid command specification: '%s'"
 msgstr "Ungültige Befehlsspezifikation: '%s'"
 
-#: ../src/TerminalOutput.vala:325
+#: ../src/TerminalOutput.vala:324
 #, c-format
 msgid "Invalid control sequence: '%s' (%s)"
 msgstr "Ungültige Steuersequenz: '%s' (%s)"
@@ -255,7 +263,7 @@ msgstr "Ungültiger Name für Aufzählungswert: '%s'"
 msgid "Label font:"
 msgstr "Schrift für Erläuterungen:"
 
-#: ../src/FinalTerm.vala:299
+#: ../src/FinalTerm.vala:302
 #, c-format
 msgid "Launching %s failed: %s"
 msgstr "Fehler beim Starten von %s: %s"
@@ -290,7 +298,7 @@ msgstr "Objekt implementiert die Schnittstelle ItemView nicht"
 msgid "Opacity:"
 msgstr "Transparenz:"
 
-#: ../src/TerminalOutput.vala:337
+#: ../src/TerminalOutput.vala:336
 #, c-format
 msgid "Partially supported control sequence: '%s' (%s)"
 msgstr "Teilweise unterstützte Steuersequenz: '%s' (%s)"
@@ -317,7 +325,7 @@ msgstr "Fehler beim Lesen von unichar: %s"
 msgid "Sending text failed: %s"
 msgstr "Fehler beim Senden von Text: %s"
 
-#: ../src/TerminalOutput.vala:341
+#: ../src/TerminalOutput.vala:340
 #, c-format
 msgid "Supported control sequence: '%s' (%s)"
 msgstr "Unterstützte Steuersequenz: '%s' (%s)"
@@ -338,21 +346,21 @@ msgstr "Thema"
 msgid "Theme:"
 msgstr "Thema:"
 
-#: ../src/TerminalOutput.vala:329
+#: ../src/TerminalOutput.vala:328
 #, c-format
 msgid "Unrecognized control sequence: '%s' (%s)"
 msgstr "Nicht erkannte Steuersequenz: '%s' (%s)"
 
-#: ../src/TerminalOutput.vala:345
+#: ../src/TerminalOutput.vala:344
 msgid "Unrecognized interpretation status value"
 msgstr "Wert für den Interpretationsstatus nicht erkannt"
 
-#: ../src/FinalTerm.vala:303
+#: ../src/FinalTerm.vala:306
 #, c-format
 msgid "Unsupported command: %s"
 msgstr "Nicht unterstützter Befehl: %s"
 
-#: ../src/TerminalOutput.vala:333
+#: ../src/TerminalOutput.vala:332
 #, c-format
 msgid "Unsupported control sequence: '%s' (%s)"
 msgstr "Nicht unterstützte Steuersequenz: '%s' (%s)"
@@ -393,7 +401,7 @@ msgstr "execvp fehlgeschlagen"
 msgid "pre-alpha"
 msgstr "pre-alpha"
 
-#: ../src/TerminalOutput.vala:319
+#: ../src/TerminalOutput.vala:318
 msgid ""
 "print_interpretation_status should only be called on control sequence "
 "elements"

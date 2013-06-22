@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-04 21:17+0200\n"
+"POT-Creation-Date: 2013-06-22 12:28+0200\n"
 "PO-Revision-Date: 2013-06-20 22:18+0200\n"
 "Last-Translator: Ferenc Erki <erkiferenc@gmail.com>\n"
 "Language-Team: Hungarian\n"
@@ -43,6 +43,14 @@ msgstr ""
 #: ../src/FinalTerm.vala:131
 msgid " (Faenza icon, modified)"
 msgstr " (módosított Faenza ikon)"
+
+#: ../src/FinalTerm.vala:143
+msgid " (German)"
+msgstr ""
+
+#: ../src/FinalTerm.vala:144
+msgid " (Hungarian)"
+msgstr ""
 
 #: ../src/FinalTerm.vala:127
 msgid " (original author)"
@@ -82,7 +90,11 @@ msgstr "Egy nem létező időmérő megállításának kísérlete"
 msgid "Attempting to stop a timer that has not been started"
 msgstr "Egy el nem indított időmérő megállításának kísérlete"
 
-#: ../src/FinalTerm.vala:364
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr "Háttér átlátszatlanság"
+
+#: ../src/FinalTerm.vala:367
 #, c-format
 msgid "Cannot access data directory: %s"
 msgstr "Nem sikerült az adatkönyvtár megnyitása: %s"
@@ -90,6 +102,10 @@ msgstr "Nem sikerült az adatkönyvtár megnyitása: %s"
 #: ../src/CharacterAttributes.vala:101
 msgid "Cannot parse stream element into character attributes"
 msgstr "Nem lehet a stream elemét karakterattribútumokká feldologzni"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr "Használandó színséma"
 
 #: ../src/SettingsWindow.vala:122
 msgid "Color scheme:"
@@ -104,11 +120,11 @@ msgstr "Parancs végrehajtva: '%s'"
 msgid "Command finished"
 msgstr "Parancs befejeződött"
 
-#: ../src/TerminalOutput.vala:252
+#: ../src/TerminalOutput.vala:251
 msgid "Command mode entered"
 msgstr "Végrehajtási mód aktiválva"
 
-#: ../src/TerminalOutput.vala:248
+#: ../src/TerminalOutput.vala:247
 msgid "Command start control sequence received while already in command mode"
 msgstr "Végrehajtási mód közben parancsindító vezérlőszekvencia érkezett"
 
@@ -137,6 +153,18 @@ msgstr "Sötét megjelenés:"
 #: ../src/SettingsWindow.vala:107
 msgid "Default dimensions:"
 msgstr "Alapértelmezett méret:"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr "A terminál oszlopainak száma alapértelmezésben"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr "A terminál sorainak száma alapértelmezésben"
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr "Ne csak használd a rendszered — irányítsd!"
 
 #: ../src/ColorScheme.vala:116
 #, c-format
@@ -173,7 +201,7 @@ msgstr "Hiba a(z) %s JSON file feldolgozása során: %s"
 msgid "Failed to get %s files in %s: %s"
 msgstr "Nem sikerült a(z) %s fájlok megnyitása a(z) %s könyvtárból: %s"
 
-#: ../src/FinalTerm.vala:313
+#: ../src/FinalTerm.vala:316
 msgid "Failed to initialize Clutter"
 msgstr "Nem sikerült a Clutter inicializálása"
 
@@ -191,6 +219,14 @@ msgstr "Nem sikerült a(z) %s szöveges menü definíciók betöltése: %s"
 #, c-format
 msgid "Failed to show notification: %s"
 msgstr "Nem sikerült megjeleníteni egy értesítést: %s"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr "A menügombok címkéinek betűkészlete"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr "A terminál kimenetének betűkészlete"
 
 #: ../src/Terminal.vala:191
 msgid "Fork failed"
@@ -210,7 +246,7 @@ msgstr "Érvénytelen színindex: %i"
 msgid "Invalid command specification: '%s'"
 msgstr "Érvénytelen parancsspecifikáció: '%s'"
 
-#: ../src/TerminalOutput.vala:325
+#: ../src/TerminalOutput.vala:324
 #, c-format
 msgid "Invalid control sequence: '%s' (%s)"
 msgstr "Érvénytelen vezérlőszekvencia: '%s' (%s)"
@@ -224,7 +260,7 @@ msgstr "Érvénytelen felsorolási értéknév: '%s'"
 msgid "Label font:"
 msgstr "Címkék betűkészlete:"
 
-#: ../src/FinalTerm.vala:299
+#: ../src/FinalTerm.vala:302
 #, c-format
 msgid "Launching %s failed: %s"
 msgstr "Nem sikerült a(z) %s indítása: %s"
@@ -233,6 +269,19 @@ msgstr "Nem sikerült a(z) %s indítása: %s"
 #, c-format
 msgid "Loading key bindings file %s failed: %s"
 msgstr "Nem sikerült a(z) %s billentyű-hozzárendelési fájl megnyitása: %s"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+"Az egymás utáni kimenet renderelési ciklusok közti minimális időtartam "
+"milliszekundumban"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+"Az egymás utáni átméretezési ciklusok közti minimális időtartam "
+"milliszekundumban"
 
 #: ../src/Settings.vala:151
 msgid "No Settings instance available yet"
@@ -246,10 +295,18 @@ msgstr "Az objektum nem implementálja az ItemView interfészt"
 msgid "Opacity:"
 msgstr "Átlátszatlanság:"
 
-#: ../src/TerminalOutput.vala:337
+#: ../src/TerminalOutput.vala:336
 #, c-format
 msgid "Partially supported control sequence: '%s' (%s)"
 msgstr "Részlegesen támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+"Útvonal a futtatandó parancsértelmezőhöz (MEGJEGYZÉS: jelenleg csak a bash "
+"támogatott)"
 
 #: ../src/SettingsWindow.vala:26
 msgid "Preferences"
@@ -265,37 +322,57 @@ msgstr "Unichar olvasása sikertelen: %s"
 msgid "Sending text failed: %s"
 msgstr "Szöveg küldése sikertelen: %s"
 
-#: ../src/TerminalOutput.vala:341
+#: ../src/TerminalOutput.vala:340
 #, c-format
 msgid "Supported control sequence: '%s' (%s)"
 msgstr "Támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr "Terminál"
 
 #: ../src/SettingsWindow.vala:113
 msgid "Terminal font:"
 msgstr "Terminál betűkészlete:"
 
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr "Használandó téma"
+
 #: ../src/SettingsWindow.vala:125
 msgid "Theme:"
 msgstr "Téma:"
 
-#: ../src/TerminalOutput.vala:329
+#: ../src/TerminalOutput.vala:328
 #, c-format
 msgid "Unrecognized control sequence: '%s' (%s)"
 msgstr "Ismeretlen vezérlőszekvencia: '%s' (%s)"
 
-#: ../src/TerminalOutput.vala:345
+#: ../src/TerminalOutput.vala:344
 msgid "Unrecognized interpretation status value"
 msgstr "Ismeretlen értelmezési állapot érték"
 
-#: ../src/FinalTerm.vala:303
+#: ../src/FinalTerm.vala:306
 #, c-format
 msgid "Unsupported command: %s"
 msgstr "Nem támogatott parancs: %s"
 
-#: ../src/TerminalOutput.vala:333
+#: ../src/TerminalOutput.vala:332
 #, c-format
 msgid "Unsupported control sequence: '%s' (%s)"
 msgstr "Nem támogatott vezérlőszekvencia: '%s' (%s)"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr "Sötét téma használata"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr ""
+"A TERM környzeti változó beállítandó értéke (MEGJEGYZÉS: ez befolyásolhatja "
+"a parancsértelmező viselkedését)"
 
 #: ../src/FinalTerm.vala:110
 msgid "_About Final Term"
@@ -321,7 +398,7 @@ msgstr "sikertelen execvp hívás"
 msgid "pre-alpha"
 msgstr "pre-alpha"
 
-#: ../src/TerminalOutput.vala:319
+#: ../src/TerminalOutput.vala:318
 msgid ""
 "print_interpretation_status should only be called on control sequence "
 "elements"
@@ -330,72 +407,3 @@ msgstr "print_interpretation_status csak vezérlőszekvencia elemeken hívható"
 #: ../src/SettingsWindow.vala:48
 msgid "rows"
 msgstr "sor"
-
-#: ../build/data/finalterm.desktop.in.h:2
-msgid "Don't just use your system — command it!"
-msgstr "Ne csak használd a rendszered — irányítsd!"
-
-#: ../build/data/finalterm.desktop.in.h:1
-msgid "Terminal"
-msgstr "Terminál"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
-msgid "Background opacity"
-msgstr "Háttér átlátszatlanság"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
-msgid "Color scheme to be used"
-msgstr "Használandó színséma"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
-msgid "Default number of columns in the terminal"
-msgstr "A terminál oszlopainak száma alapértelmezésben"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
-msgid "Default number of lines in the terminal"
-msgstr "A terminál sorainak száma alapértelmezésben"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
-msgid "Font used for menu button labels"
-msgstr "A menügombok címkéinek betűkészlete"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
-msgid "Font used for terminal output"
-msgstr "A terminál kimenetének betűkészlete"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
-msgid ""
-"Minimum time between successive output rendering cycles, in milliseconds"
-msgstr ""
-"Az egymás utáni kimenet renderelési ciklusok közti minimális időtartam "
-"milliszekundumban"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
-msgid "Minimum time between successive resizing cycles, in milliseconds"
-msgstr ""
-"Az egymás utáni átméretezési ciklusok közti minimális időtartam "
-"milliszekundumban"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
-msgid ""
-"Path to the shell executable which is to be run (NOTE: Only bash is "
-"currently supported)"
-msgstr ""
-"Útvonal a futtatandó parancsértelmezőhöz (MEGJEGYZÉS: jelenleg csak a bash "
-"támogatott)"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
-msgid "Theme to be used"
-msgstr "Használandó téma"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
-msgid "Use dark theme"
-msgstr "Sötét téma használata"
-
-#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
-msgid ""
-"Value that the TERM environment variable will be set to (NOTE: Changing this "
-"variable may affect shell behavior)"
-msgstr ""
-"A TERM környzeti változó beállítandó értéke (MEGJEGYZÉS: ez befolyásolhatja "
-"a parancsértelmező viselkedését)"

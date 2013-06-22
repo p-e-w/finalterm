@@ -139,6 +139,9 @@ public class FinalTerm : Gtk.Application {
 				"license-type", Gtk.License.GPL_3_0,
 				"authors", authors,
 				"artists", artists,
+				"translator-credits",
+					"Philipp Emanuel Weidmann <pew@worldwidemann.com>" + _(" (German)") + "\n" +
+					"Ferenc Erki <erkiferenc@gmail.com>" + _(" (Hungarian)"),
 				"website", "http://finalterm.org",
 				"website-label", "http://finalterm.org");
 	}
