@@ -43,7 +43,9 @@ public class Theme : Object {
 
 	public int cursor_minimum_opacity { get; set; }
 	public int cursor_maximum_opacity { get; set; }
-	public int cursor_animation_duration { get; set; }
+	public int cursor_blinking_interval { get; set; }
+
+	public int cursor_motion_speed { get; set; }
 
 	public Theme.load_from_file(string filename) {
 		var theme_file = new KeyFile();
@@ -76,7 +78,9 @@ public class Theme : Object {
 
 			cursor_minimum_opacity = theme_file.get_integer("Theme", "cursor-minimum-opacity");
 			cursor_maximum_opacity = theme_file.get_integer("Theme", "cursor-maximum-opacity");
-			cursor_animation_duration = theme_file.get_integer("Theme", "cursor-animation-duration");
+			cursor_blinking_interval = theme_file.get_integer("Theme", "cursor-blinking-interval");
+
+			cursor_motion_speed = theme_file.get_integer("Theme", "cursor-motion-speed");
 		} catch (Error e) { warning(_("Error in theme %s: %s"), filename, e.message); }
 	}
 

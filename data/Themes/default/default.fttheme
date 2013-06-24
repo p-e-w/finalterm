@@ -35,7 +35,11 @@ menu-button-arrow-color = #666666
 margin-left  = 5
 margin-right = 5
 
-# Behavior of cursor animation
-cursor-minimum-opacity    = 50
-cursor-maximum-opacity    = 255
-cursor-animation-duration = 800
+# Behavior of cursor blinking animation
+cursor-minimum-opacity   = 50
+cursor-maximum-opacity   = 255
+# Animation duration, in milliseconds
+cursor-blinking-interval = 800
+
+# Animation duration, in milliseconds
+cursor-motion-speed = 80

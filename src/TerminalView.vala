@@ -408,8 +408,13 @@ public class TerminalOutputView : Mx.ScrollView {
 		int cursor_x;
 		int cursor_y;
 		get_stage_position(cursor_position, out cursor_x, out cursor_y);
+
+		cursor.save_easing_state();
+		cursor.set_easing_mode(Clutter.AnimationMode.LINEAR);
+		cursor.set_easing_duration(Settings.get_default().theme.cursor_motion_speed);
 		cursor.x = cursor_x;
 		cursor.y = cursor_y;
+		cursor.restore_easing_state();
 
 		Metrics.stop_block_timer(Log.METHOD);
 	}
@@ -540,7 +545,7 @@ public class TerminalOutputView : Mx.ScrollView {
 				Settings.get_default().theme.cursor_maximum_opacity,
 				Settings.get_default().theme.cursor_minimum_opacity);
 		blinking_animation.set_interval(interval);
-		blinking_animation.duration = Settings.get_default().theme.cursor_animation_duration;
+		blinking_animation.duration = Settings.get_default().theme.cursor_blinking_interval;
 		cursor.remove_transition("blinking-animation");
 		cursor.add_transition("blinking-animation", blinking_animation);
 
