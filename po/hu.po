@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-22 12:28+0200\n"
-"PO-Revision-Date: 2013-06-20 22:18+0200\n"
+"PO-Revision-Date: 2013-06-24 22:11+0200\n"
 "Last-Translator: Ferenc Erki <erkiferenc@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "Language: hu\n"
@@ -46,11 +46,11 @@ msgstr " (módosított Faenza ikon)"
 
 #: ../src/FinalTerm.vala:143
 msgid " (German)"
-msgstr ""
+msgstr " (Német)"
 
 #: ../src/FinalTerm.vala:144
 msgid " (Hungarian)"
-msgstr ""
+msgstr " (Magyar)"
 
 #: ../src/FinalTerm.vala:127
 msgid " (original author)"
