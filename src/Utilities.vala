@@ -59,6 +59,18 @@ public class Utilities : Object {
 		return files;
 	}
 
+	public static int byte_index_to_character_index(string text, int byte_index) {
+		if (!text.valid_char(byte_index))
+			error(_("No character found at byte index %i"), byte_index);
+
+		for (int i = 0; i < text.char_count(); i++) {
+			if (text.index_of_nth_char(i) == byte_index)
+				return i;
+		}
+
+		assert_not_reached();
+	}
+
 	public static Clutter.Color get_rgb_color(int red, int green, int blue) {
 		// TODO: A Vala bug prevents using this (linker error):
 		//return Clutter.Color().init((uint8)red, (uint8)green, (uint8)blue, 255);

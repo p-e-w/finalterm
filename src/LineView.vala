@@ -93,16 +93,19 @@ public class LineView : Clutter.Actor {
 		float text_container_y;
 		text_container.get_transformed_position(out text_container_x, out text_container_y);
 
-		int index;
+		int byte_index;
 		int trailing;
 		if (text_container.get_layout().xy_to_index(
 				(int)(event.x - text_container_x) * Pango.SCALE,
 				(int)(event.y - text_container_y) * Pango.SCALE,
-				out index, out trailing)) {
+				out byte_index, out trailing)) {
+
+			var character_index = Utilities.byte_index_to_character_index(
+					output_line.get_text(), byte_index);
 
 			TerminalOutput.TextElement text_element;
 			int position;
-			output_line.get_text_element_from_index(index, out text_element, out position);
+			output_line.get_text_element_from_index(character_index, out text_element, out position);
 
 			if (text_element.attributes.text_menu != null) {
 				int character_x;
