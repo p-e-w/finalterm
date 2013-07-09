@@ -120,6 +120,11 @@ public class Settings : Object {
 		set { settings.set_string("shell-path", value); }
 	}
 
+	public string[] shell_arguments {
+		owned get { return settings.get_strv("shell-arguments"); }
+		set { settings.set_strv("shell-arguments", value); }
+	}
+
 	public string emulated_terminal {
 		owned get { return settings.get_string("emulated-terminal"); }
 		set { settings.set_string("emulated-terminal", value); }

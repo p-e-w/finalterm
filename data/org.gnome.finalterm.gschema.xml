@@ -46,6 +46,11 @@
 			<summary>Path to the shell executable which is to be run (NOTE: Only bash is currently supported)</summary>
 			<description></description>
 		</key>
+		<key type="as" name="shell-arguments">
+			<default>[]</default>
+			<summary>Options to pass to the shell executable</summary>
+			<description></description>
+		</key>
 		<key type="s" name="emulated-terminal">
 			<default>'xterm-256color'</default>
 			<summary>Value that the TERM environment variable will be set to (NOTE: Changing this variable may affect shell behavior)</summary>
