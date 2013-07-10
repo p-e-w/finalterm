@@ -222,9 +222,14 @@ public class Terminal : Object {
 	private void run_shell() {
 		Environment.set_variable("TERM", Settings.get_default().emulated_terminal, true);
 
+		// Add custom shell arguments
+		string[] arguments = { Settings.get_default().shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" };
+		foreach (var argument in Settings.get_default().shell_arguments) {
+			arguments += argument;
+		}
+
 		// Replace child process with shell process
-		Posix.execvp(Settings.get_default().shell_path,
-				{ Settings.get_default().shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" });
+		Posix.execvp(Settings.get_default().shell_path, arguments);
 
 		// If this line is reached, execvp() must have failed
 		critical(_("execvp failed"));
