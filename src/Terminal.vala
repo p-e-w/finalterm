@@ -222,8 +222,10 @@ public class Terminal : Object {
 	private void run_shell() {
 		Environment.set_variable("TERM", Settings.get_default().emulated_terminal, true);
 
+		string[] arguments = { Settings.get_default().shell_path, "--rcfile",
+				Config.PKGDATADIR + "/Startup/bash_startup", "-i" };
+
 		// Add custom shell arguments
-		string[] arguments = { Settings.get_default().shell_path, "--rcfile", Config.PKGDATADIR + "/Startup/bash_startup", "-i" };
 		foreach (var argument in Settings.get_default().shell_arguments) {
 			arguments += argument;
 		}
