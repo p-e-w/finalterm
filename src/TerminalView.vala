@@ -278,17 +278,6 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button.background_color = Settings.get_default().color_scheme.get_indexed_color(
 				text_menu.color, Settings.get_default().dark);
 
-		menu_button_label.text =
-				"<span font_desc=\"" + Settings.get_default().label_font_name + "\">" +
-				Markup.escape_text(text_menu.label) + ":  " +
-				"</span>" +
-				"<span font_desc=\"" + Settings.get_default().terminal_font_name + "\">" +
-				Markup.escape_text(text) +
-				"</span>" +
-				"<span foreground=\"" +
-				Utilities.get_parsable_color_string(Settings.get_default().theme.menu_button_arrow_color) +
-				"\">  ▼</span>";
-
 		int descriptor_width;
 		int descriptor_height;
 		Utilities.get_text_size(Settings.get_default().label_font, text_menu.label + ":  ",
@@ -300,6 +289,27 @@ public class TerminalOutputView : Mx.ScrollView {
 		// TODO: Get padding from style
 		menu_button.x = (int)line_view_x + x - 3 - descriptor_width;
 		menu_button.y = (int)line_view_y + y - 3;
+
+		// Don't let it draw offscreen.
+		string main_text = "<span font_desc=\"" + Settings.get_default().terminal_font_name + "\">" +
+				Markup.escape_text(text) +
+				"</span>";
+		string arrow = "<span foreground=\"" +
+				Utilities.get_parsable_color_string(Settings.get_default().theme.menu_button_arrow_color) +
+				"\">  ▼</span>";
+
+		if (menu_button.x <= 0) {
+			menu_button.x = (int)line_view_x + x;
+			string description = "<span font_desc=\"" + Settings.get_default().label_font_name + "\">" +
+					" [" + Markup.escape_text(text_menu.label) + "]" +
+					"</span>";
+			menu_button_label.text = main_text + description + arrow;
+		} else {
+			string description = "<span font_desc=\"" + Settings.get_default().label_font_name + "\">" +
+					Markup.escape_text(text_menu.label) + ":  " +
+					"</span>";
+			menu_button_label.text = description + main_text + arrow;
+		}
 
 		menu_button.visible = true;
 	}
