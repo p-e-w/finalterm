@@ -61,10 +61,5 @@
 			<summary>Minimum time between successive output rendering cycles, in milliseconds</summary>
 			<description></description>
 		</key>
-		<key type="i" name="resize-interval">
-			<default>10</default>
-			<summary>Minimum time between successive resizing cycles, in milliseconds</summary>
-			<description></description>
-		</key>
 	</schema>
 </schemalist>

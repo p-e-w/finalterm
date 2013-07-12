@@ -154,7 +154,6 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		line_container = new Mx.BoxLayout();
 		line_container.orientation = Mx.Orientation.VERTICAL;
-		line_container.allocation_changed.connect(on_line_container_allocation_changed);
 		add(line_container);
 
 		// Reposition cursor when line container is scrolled
@@ -197,6 +196,8 @@ public class TerminalOutputView : Mx.ScrollView {
 			get_stage().add(cursor);
 			get_stage().add(menu_button);
 		});
+
+		allocation_changed.connect(on_allocation_changed);
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
@@ -479,27 +480,11 @@ public class TerminalOutputView : Mx.ScrollView {
 		y = line_view_y + character_y;
 	}
 
-	private int get_visible_lines() {
-		// 45 pixels is the size of the margin used to hide
-		// the ScrollView "shadow" (see above)
-		return ((int)height - get_vertical_padding() - 45) /
-			   Settings.get_default().character_height;
-	}
-
-	private int get_visible_columns() {
-		if (line_container.width > Settings.get_default().theme.gutter_size) {
-			return ((int)width - get_horizontal_padding()) /
-				   Settings.get_default().character_width;
-		} else {
-			return 0;
-		}
-	}
-
 	public int get_horizontal_padding() {
 		return
-			// Account for scrollbar (if shown)
-			(int)(width - line_container.width) +
-			// Account for LineView padding
+			// Scrollbar width + padding (see style.css)
+			14 +
+			// LineView padding
 			Settings.get_default().theme.gutter_size +
 				Settings.get_default().theme.margin_left +
 				Settings.get_default().theme.margin_right;
@@ -509,17 +494,16 @@ public class TerminalOutputView : Mx.ScrollView {
 		return 0;
 	}
 
-	// Called when size (or position) of line container changes
-	private void on_line_container_allocation_changed(Clutter.ActorBox box, Clutter.AllocationFlags flags) {
-		// TODO: Add information about instance to key
-		Utilities.schedule_execution(resize_terminal, "resize", Settings.get_default().resize_interval);
-	}
+	private void on_allocation_changed(Clutter.ActorBox box, Clutter.AllocationFlags flags) {
+		// 45 pixels is the size of the margin used to hide
+		// the ScrollView "shadow" (see above)
+		int lines = ((int)box.get_height() - get_vertical_padding() - 45) /
+				Settings.get_default().character_height;
+		int columns = ((int)box.get_width() - get_horizontal_padding()) /
+				Settings.get_default().character_width;
 
-	private void resize_terminal() {
-		int lines   = get_visible_lines();
-		int columns = get_visible_columns();
-
-		if (lines == 0 || columns == 0)
+		if (lines <= 0 || columns <= 0)
+			// Invalid size
 			return;
 
 		if (terminal.lines == lines && terminal.columns == columns)
@@ -529,6 +513,7 @@ public class TerminalOutputView : Mx.ScrollView {
 		// Notify terminal of size change
 		terminal.lines   = lines;
 		terminal.columns = columns;
+		// TODO: Use Utilities.schedule_execution here?
 		terminal.update_size();
 	}
 

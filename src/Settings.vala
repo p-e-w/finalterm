@@ -135,11 +135,6 @@ public class Settings : Object {
 		set { settings.set_int("render-interval", value); }
 	}
 
-	public int resize_interval {
-		get { return settings.get_int("resize-interval"); }
-		set { settings.set_int("resize-interval", value); }
-	}
-
 	public static void load_from_schema(string schema_name) {
 		if (instance == null)
 			instance = new Settings();

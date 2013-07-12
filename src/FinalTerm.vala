@@ -401,7 +401,6 @@ public class FinalTerm : Gtk.Application {
 		// Restrict window resizing to multiples of character size
 		// TODO: Make this optional (user setting)
 		var geometry = Gdk.Geometry();
-		// TODO: Account for appearing / disappearing scrollbars
 		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
 		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
 		geometry.width_inc   = Settings.get_default().character_width;
