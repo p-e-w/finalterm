@@ -5,7 +5,7 @@ namespace Keybinder {
 	public delegate void Handler (string keystring, void *udata);
 
 	public void init();
-	public bool bind (string keystring, Handler hander, void *udata);
+	public bool bind (string keystring, Handler handler, void *udata);
 	public void unbind (string keystring, Handler handler);
 	public uint32 get_current_event_time ();
 }
