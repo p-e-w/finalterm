@@ -104,12 +104,12 @@ if (APPLE)
     gnulib
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/gnulib
     UPDATE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/gnulib/autogen.sh
-    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/gnulib/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}
-    PREFIX ${CMAKE_CURRENT_SOURCE_DIR}
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/gnulib/configure --prefix=${CMAKE_BINARY_DIR}
+    PREFIX ${CMAKE_BINARY_DIR}
     BUILD_COMMAND ${MAKE}
     BUILD_IN_SOURCE 1
   )
-  include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include/lib)
+  include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
   add_dependencies(finalterm gnulib)
 endif (APPLE)
 
