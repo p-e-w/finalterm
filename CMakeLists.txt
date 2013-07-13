@@ -97,6 +97,22 @@ configure_file(${CMAKE_SOURCE_DIR}/data/finalterm.1.in ${CMAKE_BINARY_DIR}/data/
 install(FILES ${CMAKE_BINARY_DIR}/data/finalterm.1 DESTINATION share/man/man1)
 
 add_executable(finalterm ${VALA_C})
+
+if (APPLE)
+  include(ExternalProject)
+  ExternalProject_Add(
+    gnulib
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/gnulib
+    UPDATE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/gnulib/autogen.sh
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/gnulib/configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}
+    PREFIX ${CMAKE_CURRENT_SOURCE_DIR}
+    BUILD_COMMAND ${MAKE}
+    BUILD_IN_SOURCE 1
+  )
+  include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include/lib)
+  add_dependencies(finalterm gnulib)
+endif (APPLE)
+
 target_link_libraries(finalterm m util)
 
 install(TARGETS finalterm RUNTIME DESTINATION bin)
