@@ -13,7 +13,8 @@ Copy name to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
 
 $$$SEPARATOR$$$ =
 
-Information (<tt><b>stat</b></tt>) = RUN_SHELL_COMMAND "stat '$$$1$$$'"
+Information (<tt><b>stat</b></tt>)     = RUN_SHELL_COMMAND "stat '$$$1$$$'"
+List contents (<tt><b>ls -lh</b></tt>) = RUN_SHELL_COMMAND "ls -lh '$$$1$$$'"
 
 $$$SEPARATOR$$$ =
 
