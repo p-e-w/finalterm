@@ -49,7 +49,14 @@ public class LineView : Clutter.Actor {
 		add(collapse_button);
 
 		text_container = new Clutter.Text();
-		text_container.x_expand = true;
+
+		// This should simply be
+		//   text_container.x_expand = true;
+		// but that causes compilation problems on platforms having
+		// outdated versions of Clutter or its Vala bindings
+		(layout_manager as Clutter.BoxLayout).set_expand(text_container, true);
+		(layout_manager as Clutter.BoxLayout).set_fill(text_container, true, false);
+
 		text_container.line_wrap = true;
 		text_container.line_wrap_mode = Pango.WrapMode.CHAR;
 
