@@ -44,6 +44,13 @@ public class FinalTerm : Gtk.Application {
 	public static Unity.LauncherEntry launcher;
 #endif
 
+	private static bool show_version = false;
+
+	private const OptionEntry[] options = {
+		{"version", 'v', 0, OptionArg.NONE, ref show_version, N_("Display version number"), null},
+		{null}
+	};
+
 	private const ActionEntry[] action_entries = {
 		{ "settings", settings_action },
 		{ "about", about_action },
@@ -314,8 +321,19 @@ public class FinalTerm : Gtk.Application {
 		Intl.textdomain(Config.GETTEXT_PACKAGE);
 		Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 
-		if (GtkClutter.init(ref args) != Clutter.InitError.SUCCESS) {
-			error(_("Failed to initialize Clutter"));
+		try {
+			if (GtkClutter.init_with_args(ref args, null, options, Config.GETTEXT_PACKAGE) != Clutter.InitError.SUCCESS) {
+				error(_("Failed to initialize Clutter"));
+			}
+		} catch (Error e) {
+			print("%s\n", e.message);
+			print(_("Run '%s --help' to see a full list of available command line options.\n"), args[0]);
+			return 1;
+		}
+
+		if (show_version) {
+			print ("Final Term %s\n", Config.VERSION);
+			return 0;
 		}
 
 		Keybinder.init();
