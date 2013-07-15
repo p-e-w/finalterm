@@ -7,3 +7,9 @@ Icon=final-term
 Terminal=false
 Type=Application
 Categories=GTK;Utility;TerminalEmulator;System;
+Actions=NewWindow;
+
+[Desktop Action NewWindow]
+Name=Open a New Window
+Exec=finalterm
+OnlyShowIn=Unity;
