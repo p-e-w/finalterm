@@ -10,14 +10,13 @@ set(PKGDATADIR "${DATADIR}/finalterm")
 set(VERSION 0.1)
 set(GETTEXT_PACKAGE "finalterm")
 set(LOCALE_DIR "${DATADIR}/locale")
-set(DOLLAR "$")
 set(VALAFLAGS "")
 if (NOT MINIMAL_FLAGS)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
 endif (NOT MINIMAL_FLAGS)
 
 configure_file(${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
-configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup)
+configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup @ONLY)
 
 set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0)
 
