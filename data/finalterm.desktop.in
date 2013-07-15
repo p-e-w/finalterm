@@ -10,6 +10,6 @@ Categories=GTK;Utility;TerminalEmulator;System;
 Actions=NewWindow;
 
 [Desktop Action NewWindow]
-Name=Open a New Window
+_Name=Open a New Window
 Exec=finalterm
 OnlyShowIn=Unity;
