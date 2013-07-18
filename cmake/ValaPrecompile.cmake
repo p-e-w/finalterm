@@ -180,6 +180,8 @@ macro(vala_precompile output)
         ${ARGS_OPTIONS} 
         ${in_files} 
         ${custom_vapi_arguments}
+    COMMAND
+      ${CMAKE_COMMAND} -E touch ${out_files}
     DEPENDS 
         ${in_files} 
         ${ARGS_CUSTOM_VAPIS}
