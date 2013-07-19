@@ -16,7 +16,6 @@ if (NOT MINIMAL_FLAGS)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
 endif (NOT MINIMAL_FLAGS)
 
-configure_file(${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
 configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup)
 
 set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0)
@@ -46,8 +45,10 @@ endif (NOTIFY_FOUND)
 
 pkg_check_modules(DEPS REQUIRED ${PKGS})
 add_definitions(${DEPS_CFLAGS})
+add_definitions(-DPKGDATADIR=\"${PKGDATADIR}\")
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 add_definitions(-DLOCALE_DIR=\"${LOCALE_DIR}\")
+add_definitions(-DVERSION=\"${VERSION}\")
 link_libraries(${DEPS_LIBRARIES})
 link_directories(${DEPS_LIBRARY_DIRS})
 
@@ -76,11 +77,11 @@ vala_precompile(VALA_C
 	src/Command.vala
 	src/Settings.vala
 	src/Metrics.vala
-	${CMAKE_BINARY_DIR}/src/Config.vala
 PACKAGES
 	${PKGS}
 	posix
-	linux 
+	linux
+	Config
 OPTIONS
 	-g
 	--vapidir=${CMAKE_CURRENT_SOURCE_DIR}/vapi/

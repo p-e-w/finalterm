@@ -20,9 +20,10 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+[CCode (cprefix = "", lower_case_cprefix = "")]
 namespace Config {
-	public const string PKGDATADIR = "@PKGDATADIR@";
-	public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
-	public const string LOCALE_DIR = "@LOCALE_DIR@";
-	public const string VERSION = "@VERSION@";
+	public const string PKGDATADIR;
+	public const string GETTEXT_PACKAGE;
+	public const string LOCALE_DIR;
+	public const string VERSION;
 }
