@@ -47,8 +47,8 @@ public class FinalTerm : Gtk.Application {
 	private static bool show_version = false;
 
 	private const OptionEntry[] options = {
-		{"version", 'v', 0, OptionArg.NONE, ref show_version, N_("Display version number"), null},
-		{null}
+		{ "version", 'v', 0, OptionArg.NONE, ref show_version, N_("Display version number"), null },
+		{ null }
 	};
 
 	private const ActionEntry[] action_entries = {
@@ -327,12 +327,12 @@ public class FinalTerm : Gtk.Application {
 			}
 		} catch (Error e) {
 			print("%s\n", e.message);
-			print(_("Run '%s --help' to see a full list of available command line options.\n"), args[0]);
+			print(_("Run '%s --help' to see a list of available command line options\n"), args[0]);
 			return 1;
 		}
 
 		if (show_version) {
-			print ("Final Term %s\n", Config.VERSION);
+			print("Final Term %s\n", Config.VERSION);
 			return 0;
 		}
 
