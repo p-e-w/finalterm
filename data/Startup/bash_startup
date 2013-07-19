@@ -16,10 +16,7 @@ function final_term_control_sequence() {
 		control_sequence="$control_sequence$argument;"
 	done
 	# TODO: Remove last semicolon
-	# this DOLLAR is required for the cmake configure_file
-	# when using a $ it'd try to replace the control_sequence
-	# with one of its own variables and thus remove it
-	control_sequence="${DOLLAR}{control_sequence}\a"
+	control_sequence="$control_sequence\a"
 
 	# TODO: Should "-ne" be added here?
 	echo "$control_sequence"
