@@ -334,6 +334,10 @@ msgstr ""
 msgid "rows"
 msgstr ""
 
+#: ../build/data/finalterm.desktop.in.h:3
+msgid "Open a New Window"
+msgstr ""
+
 #: ../build/data/finalterm.desktop.in.h:2
 msgid "Don't just use your system — command it!"
 msgstr ""
