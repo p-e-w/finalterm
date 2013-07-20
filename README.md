@@ -1,8 +1,10 @@
+**Final Term is in *heavy development* and neither stable nor feature complete!** You can follow Final Term's high level progress at [blog.finalterm.org](http://blog.finalterm.org). To discuss Final Term and get support, join *#finalterm* on [Freenode](http://freenode.net).
+
 # About Final Term
 
 Final Term is a new breed of terminal emulator.
 
-![Screenshot](http://finalterm.org/text-menu.png)
+![Screencast](http://finalterm.org/screencast.gif)
 
 It goes beyond mere emulation and understands what is happening inside the shell it is hosting. This allows it to offer features no other terminal can, including:
 
@@ -10,7 +12,7 @@ It goes beyond mere emulation and understands what is happening inside the shell
 * Smart command completion
 * GUI terminal controls
 
-For more information, screenshots and a demonstration video, visit [http://finalterm.org](http://finalterm.org).
+For more information, visit [http://finalterm.org](http://finalterm.org).
 
 # Installation
 
@@ -38,6 +40,8 @@ cmake ..
 make
 sudo make install
 ```
+
+If you want to install to a custom directory your `XDG_DATA_DIRS` environment variable has to point to the prefix with the file `glib-2.0/schemas/gschemas.compiled` in it.
 
 ## Instructions for Ubuntu
 
