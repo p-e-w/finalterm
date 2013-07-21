@@ -15,7 +15,7 @@ if (NOT MINIMAL_FLAGS)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb")
 endif (NOT MINIMAL_FLAGS)
 
-configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup ${CMAKE_BINARY_DIR}/Startup/bash_startup @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup.in ${CMAKE_BINARY_DIR}/Startup/bash_startup @ONLY)
 
 set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0)
 
