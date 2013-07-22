@@ -107,6 +107,10 @@ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
 
 There is an AUR for Final Term maintained by Arch Linux user kens: [https://aur.archlinux.org/packages/finalterm-git/](https://aur.archlinux.org/packages/finalterm-git/).
 
+## Instructions for Gentoo
+
+A live ebuild for Final Term is in Gentoo's Sunrise overlay. You can find [usage instructions here](http://overlays.gentoo.org/proj/sunrise).
+
 # Acknowledgments
 
 Final Term owes much of its existence to the awesomeness of [Vala](https://live.gnome.org/Vala) and [its documentation](http://valadoc.org), [Clutter](http://blogs.gnome.org/clutter/) and [Mx](https://github.com/clutter-project/mx), as well as to those projects authors' generous decision to release their amazing work as open source software.
