@@ -115,6 +115,7 @@ macro(vala_precompile output)
     endforeach(pkg ${ARGS_PACKAGES})
     set(in_files "")
     set(out_files "")
+    set(out_files_rel)
     set(${output} "")
     foreach(src ${ARGS_DEFAULT_ARGS})
         string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/ "" src ${src})
@@ -130,12 +131,15 @@ macro(vala_precompile output)
             get_filename_component(VALA_FILE_NAME ${src} NAME)
             set(out_file "${CMAKE_CURRENT_BINARY_DIR}/${VALA_FILE_NAME}")
             list(APPEND out_files "${CMAKE_CURRENT_BINARY_DIR}/${VALA_FILE_NAME}")
+            set(out_files_rel "${out_files_rel}, ${VALA_FILE_NAME}")
         else()
             set(out_file "${DIRECTORY}/${src}")
             list(APPEND out_files "${DIRECTORY}/${src}")
+            set(out_files_rel "${out_files_rel}, ${src}")
         endif()
         list(APPEND ${output} ${out_file})
     endforeach(src ${ARGS_DEFAULT_ARGS})
+    string(REGEX REPLACE "^, " "" out_files_rel "${out_files_rel}")
 
     set(custom_vapi_arguments "")
     if(ARGS_CUSTOM_VAPIS)
@@ -151,6 +155,7 @@ macro(vala_precompile output)
     set(vapi_arguments "")
     if(ARGS_GENERATE_VAPI)
         list(APPEND out_files "${DIRECTORY}/${ARGS_GENERATE_VAPI}.vapi")
+        set(out_files_rel "${out_files_rel}, ${ARGS_GENERATE_VAPI}.vapi")
         set(vapi_arguments "--internal-vapi=${ARGS_GENERATE_VAPI}.vapi")
 
         # Header and internal header is needed to generate internal vapi
@@ -162,12 +167,14 @@ macro(vala_precompile output)
     set(header_arguments "")
     if(ARGS_GENERATE_HEADER)
         list(APPEND out_files "${DIRECTORY}/${ARGS_GENERATE_HEADER}.h")
+        set(out_files_rel "${out_files_rel}, ${ARGS_GENERATE_HEADER}.h")
         list(APPEND out_files "${DIRECTORY}/${ARGS_GENERATE_HEADER}_internal.h")
+        set(out_files_rel "${out_files_rel}, ${ARGS_GENERATE_HEADER}_internal.h")
         list(APPEND header_arguments "--header=${DIRECTORY}/${ARGS_GENERATE_HEADER}.h")
         list(APPEND header_arguments "--internal-header=${DIRECTORY}/${ARGS_GENERATE_HEADER}_internal.h")
     endif(ARGS_GENERATE_HEADER)
 
-    add_custom_command(OUTPUT ${out_files} 
+    add_custom_command(OUTPUT "vala.stamp"
     COMMAND 
         ${VALA_EXECUTABLE} 
     ARGS 
@@ -181,9 +188,16 @@ macro(vala_precompile output)
         ${in_files} 
         ${custom_vapi_arguments}
     COMMAND
-      ${CMAKE_COMMAND} -E touch ${out_files}
+      ${CMAKE_COMMAND} -E touch "vala.stamp"
     DEPENDS 
         ${in_files} 
         ${ARGS_CUSTOM_VAPIS}
+    COMMENT
+        "Generating ${out_files_rel}"
+    )
+    add_custom_command(OUTPUT ${out_files}
+    DEPENDS
+      "vala.stamp"
+    COMMENT ""
     )
 endmacro(vala_precompile)
