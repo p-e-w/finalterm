@@ -103,3 +103,10 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Termlets DESTINATION share/fi
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/TextMenus DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Themes DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Icons/hicolor DESTINATION share/icons)
+
+add_custom_target(uninstall
+	COMMAND ${CMAKE_COMMAND} -D "GSETTINGS_COMPILE:BOOL=${GSETTINGS_COMPILE}"
+							-D "GSETTINGS_DIR:FILEPATH=${GSETTINGS_DIR}"
+							-D "_glib_comple_schemas:FILEPATH=${_glib_comple_schemas}"
+							-P "${CMAKE_SOURCE_DIR}/cmake/Uninstall.cmake"
+)

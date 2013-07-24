@@ -36,7 +36,11 @@ macro(add_schema SCHEMA_NAME)
     install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/${SCHEMA_NAME} DESTINATION ${GSETTINGS_DIR} OPTIONAL)
 
     if (GSETTINGS_COMPILE)
-        install (CODE "message (STATUS \"Compiling GSettings schemas\")")
-        install (CODE "execute_process (COMMAND ${_glib_comple_schemas} ${GSETTINGS_DIR})")
+        install (CODE "
+if(\"\$ENV{DESTDIR}\" STREQUAL \"\")
+    message (STATUS \"Compiling GSettings schemas\")
+    execute_process (COMMAND ${_glib_comple_schemas} ${GSETTINGS_DIR})
+endif()
+")
     endif ()
 endmacro()
