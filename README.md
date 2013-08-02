@@ -57,28 +57,14 @@ The PPA is synchronized with the GitHub repository and should always deliver the
 
 ## Instructions for Fedora
 
-_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8QkZ5UnRiSzhnTVU/edit) (and one for keybinder [here](https://docs.google.com/file/d/0B48uS582CBl8Wjg1ZVI0bXBrLUE/edit))._
+_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8QkZ5UnRiSzhnTVU/edit)._
 
 The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Fedora 18 system:
 
 ### Install prerequisites
 
 ```
-sudo yum install git cmake vala intltool libgee-devel gnome-common gtk-doc gtk3-devel libmx-devel clutter-gtk-devel libnotify-devel
-```
-
-### Install keybinder-3.0
-
-Note that the Fedora repositories only contain the package "keybinder", which is linked against GTK+ 2.
-
-```
-git clone https://github.com/engla/keybinder.git
-cd keybinder/
-git checkout keybinder-3.0
-./autogen.sh
-make
-sudo make install
-sudo ldconfig
+sudo yum install git cmake vala intltool libgee-devel gnome-common gtk-doc gtk3-devel keybinder3-devel libmx-devel clutter-gtk-devel libnotify-devel
 ```
 
 ### Install Final Term
@@ -91,16 +77,6 @@ cd build/
 cmake ..
 make
 sudo make install
-```
-
-### "package 'keybinder-3.0' not found"
-
-The keybinder library is installed in `/usr/local/lib/` rather than `/usr/lib/`. On many systems, pkg-config will not by default search for packages there and this error is the annoying result.
-
-To fix it, add `/usr/local/lib/pkgconfig/` to your pkg-config search path:
-
-```
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
 ```
 
 ## Instructions for Arch Linux
