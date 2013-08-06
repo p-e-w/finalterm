@@ -92,6 +92,11 @@ add_subdirectory (po)
 include(GSettings)
 add_schema ("data/org.gnome.finalterm.gschema.xml")
 
+include(Common)
+datestring(DATE "%B %Y")
+configure_file(${CMAKE_SOURCE_DIR}/data/finalterm.1.in ${CMAKE_BINARY_DIR}/data/finalterm.1)
+install(FILES ${CMAKE_BINARY_DIR}/data/finalterm.1 DESTINATION share/man/man1)
+
 add_executable(finalterm ${VALA_C})
 target_link_libraries(finalterm m util)
 
