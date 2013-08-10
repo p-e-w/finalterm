@@ -29,10 +29,18 @@
  */
 public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
+	private Terminal terminal;
+
 	public string terminal_title { get; set; default = "Final Term"; }
 
 	private CharacterAttributes current_attributes;
 
+	// Number of lines the virtual "screen" is shifted down
+	// with respect to the full terminal output
+	private int screen_offset = 0;
+
+	// The cursor's position within the full terminal output,
+	// not its position on the screen
 	public CursorPosition cursor_position = CursorPosition();
 
 	public struct CursorPosition {
@@ -58,11 +66,15 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public CursorPosition command_start_position;
 	public CursorPosition command_end_position;
 
-	public TerminalOutput() {
+	public TerminalOutput(Terminal terminal) {
+		this.terminal = terminal;
+
 		// Default attributes
 		current_attributes = new CharacterAttributes();
+
 		add_new_line();
 		move_cursor(0, 0);
+
 		text_updated.connect(on_text_updated);
 	}
 
@@ -103,12 +115,10 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.LINE_FEED:
 			case TerminalStream.StreamElement.ControlSequenceType.VERTICAL_TAB:
 				// This code causes a line feed or a new line operation
-				if (cursor_position.line == size - 1) {
+				if (cursor_position.line == size - 1)
 					add_new_line();
-				} else {
-					// TODO: Does LF always imply CR?
-					move_cursor(cursor_position.line + 1, 0);
-				}
+				// TODO: Does LF always imply CR?
+				move_cursor(cursor_position.line + 1, 0);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.BELL:
@@ -150,17 +160,54 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				switch (stream_element.get_numeric_parameter(0, 0)) {
 				case 0:
 					// Erase from the active position to the end of the screen, inclusive (default)
-					erase_range(cursor_position);
+					erase_range_screen(get_screen_position(cursor_position));
 					break;
 				case 1:
 					// Erase from start of the screen to the active position, inclusive
-					erase_range({0, 0}, cursor_position);
+					erase_range_screen({1, 1}, get_screen_position(cursor_position));
 					break;
 				case 2:
 					// Erase all of the display - all lines are erased, changed to single-width,
 					// and the cursor does not move
-					erase_range();
+					//erase_range_screen();
+
+					/*
+					 * THE SECRET OF MODERN TERMINAL SCROLLING
+					 *
+					 * The text terminal that xterm emulates (VT100) is based on a
+					 * single-screen model, i.e. output that is deleted from the screen
+					 * or scrolled above the first line disappears forever.
+					 * Today, users expect their graphical terminal emulators to
+					 * preserve past output and make it accessible by scrolling back up
+					 * even when that output is "deleted" with the "Erase in Display"
+					 * control sequence.
+					 *
+					 * The recipe for the proper behavior (which seems to be the one
+					 * followed by other graphical terminal emulators as well) is to
+					 * replace the action of the "Erase All" subcommand as specified
+					 * for VT100 (i.e. wipe the current screen) with the following:
+					 *
+					 * - Scroll the view down as many lines as are visible (used)
+					 *   on the current virtual screen
+					 * - Shift the virtual screen as many lines downward
+					 * - Move the cursor as many lines downward
+					 *
+					 * Actually, the behavior implemented by GNOME Terminal is slightly
+					 * different, but this recipe gives better results.
+					 */
+					// TODO: Handle the case where size < terminal.lines
+					//       (and merely adding visible_lines lines will not scroll down)
+					int visible_lines = size - screen_offset;
+
+					for (int i = 0; i < visible_lines; i++) {
+						// This also shifts the virtual screen as desired
+						add_new_line();
+					}
+
+					move_cursor(cursor_position.line + visible_lines, cursor_position.column);
+
 					break;
+
 				case 3:
 					// Erase Saved Lines (xterm)
 					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
@@ -202,7 +249,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_POSITION:
 				int line   = stream_element.get_numeric_parameter(0, 1);
 				int column = stream_element.get_numeric_parameter(1, 1);
-				move_cursor(line - 1, column - 1);
+				move_cursor_screen(line, column);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_ATTRIBUTES:
@@ -376,7 +423,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		//            This method is called when rendering the terminal
 		//            and sending the signal would trigger another render.
 		// Call on_text_updated instead to trigger other update logic.
-		// TODO: Revisit this! Some command updates are being signalled multiple times
+		// TODO: Revisit this! Some command updates are being signaled multiple times
 		on_text_updated(0);
 
 		printed_transient_text += text_left;
@@ -419,16 +466,29 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	private void add_new_line() {
 		add(new OutputLine());
-		move_cursor(size, 0);
+
+		if (size > terminal.lines)
+			screen_offset++;
+
+		line_added();
+	}
+
+	private CursorPosition get_screen_position(CursorPosition position) {
+		// Screen coordinates are 1-based (see http://vt100.net/docs/vt100-ug/chapter3.html)
+		return {position.line - screen_offset + 1, position.column + 1};
 	}
 
 	private void move_cursor(int line, int column) {
-		// TODO: This should move the cursor to the specified position ON THE SCREEN!(?)
 		// TODO: Should cursor be allowed to be positioned AFTER the final character?
 		cursor_position.line   = Utilities.bound_value(line, 0, size - 1);
 		cursor_position.column = Utilities.bound_value(column, 0, get(cursor_position.line).get_length());
 
 		cursor_position_changed(cursor_position);
+	}
+
+	private void move_cursor_screen(int line, int column) {
+		// TODO: Coordinates of (0, 0) should act like (1, 1) according to specification
+		move_cursor(line + screen_offset - 1, column - 1);
 	}
 
 	// Returns the text contained in the specified range
@@ -473,10 +533,22 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		erase_line_range(end_position.line, 0, end_position.column);
 	}
 
+	private void erase_range_screen(CursorPosition start_position = {1, 1},
+									CursorPosition end_position   = {terminal.lines, terminal.columns + 1}) {
+		erase_range({start_position.line + screen_offset - 1, start_position.column - 1},
+				{end_position.line + screen_offset - 1, end_position.column - 1});
+	}
+
 	private void erase_line_range(int line, int start_position = 0, int end_position = -1) {
+		// TODO: Use assertion instead
+		if (line < 0 || line >= size)
+			return;
+
 		get(line).erase_range(start_position, end_position);
 		text_updated(line);
 	}
+
+	public signal void line_added();
 
 	public signal void text_updated(int line_index);
 

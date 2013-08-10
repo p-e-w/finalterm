@@ -27,7 +27,7 @@ public class Terminal : Object {
 	public int columns { get; set; }
 
 	public TerminalStream terminal_stream { get; set; default = new TerminalStream(); }
-	public TerminalOutput terminal_output { get; set; default = new TerminalOutput(); }
+	public TerminalOutput terminal_output { get; set; }
 	public TerminalView terminal_view { get; set; }
 
 	private int command_file;
@@ -43,6 +43,9 @@ public class Terminal : Object {
 
 		terminal_stream.element_added.connect(on_stream_element_added);
 		terminal_stream.transient_text_updated.connect(on_stream_transient_text_updated);
+
+		terminal_output = new TerminalOutput(this);
+		terminal_output.line_added.connect(on_output_line_added);
 		terminal_output.text_updated.connect(on_output_text_updated);
 		terminal_output.command_updated.connect(on_output_command_updated);
 		terminal_output.command_executed.connect(on_output_command_executed);
@@ -98,6 +101,11 @@ public class Terminal : Object {
 
 	private void on_stream_transient_text_updated(string transient_text) {
 		terminal_output.parse_transient_text(transient_text);
+	}
+
+	private void on_output_line_added() {
+		terminal_view.terminal_output_view.add_line_views();
+		terminal_view.terminal_output_view.scroll_to_position();
 	}
 
 	private void on_output_text_updated(int line_index) {
@@ -156,9 +164,6 @@ public class Terminal : Object {
 #endif
 
 	private void on_output_cursor_position_changed(TerminalOutput.CursorPosition new_position) {
-		// TODO: This does not currently work because the line has yet to be rendered
-		//terminal_view.scroll_to_position(new_position.line, new_position.column);
-
 		// TODO: Add information about instance to key
 		Utilities.schedule_execution(terminal_view.terminal_output_view.render_terminal_output,
 				"render_terminal_output", Settings.get_default().render_interval);

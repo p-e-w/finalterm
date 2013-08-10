@@ -89,8 +89,11 @@ public class LineView : Clutter.Actor {
 		float character_x;
 		float character_y;
 		text_container.position_to_coords(character_index, out character_x, out character_y);
-		x = (int)(character_x + text_container.x);
-		y = (int)(character_y + text_container.y);
+
+		// NOTE: text_container.x/.y is unreliable here
+		var allocation_box = text_container.get_allocation_box();
+		x = (int)(character_x + allocation_box.get_x());
+		y = (int)(character_y + allocation_box.get_y());
 	}
 
 	private bool on_text_container_motion_event(Clutter.MotionEvent event) {

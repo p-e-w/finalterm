@@ -156,6 +156,9 @@ public class TerminalOutputView : Mx.ScrollView {
 		line_container.orientation = Mx.Orientation.VERTICAL;
 		add(line_container);
 
+		// Initial synchronization with model
+		add_line_views();
+
 		// Reposition cursor when line container is scrolled
 		// to make it scroll along with it
 		line_container.horizontal_adjustment.changed.connect(() => {
@@ -238,7 +241,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	// Expands the list of line views until it contains as many elements as the model
-	private void add_line_views() {
+	public void add_line_views() {
 		for (int i = line_views.size; i < terminal.terminal_output.size; i++) {
 			var line_view = new LineView(terminal.terminal_output[i]);
 			line_view.collapsed.connect(on_line_view_collapsed);
@@ -307,8 +310,6 @@ public class TerminalOutputView : Mx.ScrollView {
 
 	public void mark_line_as_updated(int line_index) {
 		updated_lines.add(line_index);
-		// TODO: Move this(?)
-		add_line_views();
 	}
 
 	public void render_terminal_output() {
@@ -327,8 +328,6 @@ public class TerminalOutputView : Mx.ScrollView {
 		}
 
 		updated_lines.clear();
-
-		scroll_to_position(terminal.terminal_output.cursor_position);
 
 		Metrics.stop_block_timer(Log.METHOD);
 	}
@@ -420,9 +419,15 @@ public class TerminalOutputView : Mx.ScrollView {
 		Metrics.stop_block_timer(Log.METHOD);
 	}
 
-	public void scroll_to_position(TerminalOutput.CursorPosition position) {
+	public void scroll_to_position(TerminalOutput.CursorPosition position = {-1, -1}) {
 		if (position.line >= line_views.size)
 			return;
+
+		if (position.line == -1 && position.column == -1) {
+			// Default: Scroll to last line
+			position.line   = line_views.size - 1;
+			position.column = 0;
+		}
 
 		// NOTE: line_views[position.line].get_geometry() does not work here
 		//       because the layout manager takes over positioning
