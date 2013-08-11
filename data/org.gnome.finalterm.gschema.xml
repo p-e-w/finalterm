@@ -27,16 +27,19 @@
 			<description></description>
 		</key>
 		<key type="d" name="opacity">
+			<range min="0" max="1"/>
 			<default>0.9</default>
 			<summary>Background opacity</summary>
 			<description></description>
 		</key>
 		<key type="i" name="terminal-lines">
+			<range min="1" max="2147483647"/>
 			<default>24</default>
 			<summary>Default number of lines in the terminal</summary>
 			<description></description>
 		</key>
 		<key type="i" name="terminal-columns">
+			<range min="1" max="2147483647"/>
 			<default>80</default>
 			<summary>Default number of columns in the terminal</summary>
 			<description></description>
@@ -57,6 +60,7 @@
 			<description></description>
 		</key>
 		<key type="i" name="render-interval">
+			<range min="1" max="2147483647"/>
 			<default>10</default>
 			<summary>Minimum time between successive output rendering cycles, in milliseconds</summary>
 			<description></description>
