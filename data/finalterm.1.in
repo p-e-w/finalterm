@@ -1,0 +1,33 @@
+.TH FINALTERM "1" "@DATE@" "Final Term @VERSION@" "Final Term manual"
+.SH NAME
+Final Term \- At last – a modern terminal emulator
+.SH DESCRIPTION
+.SS "Usage:"
+.IP
+finalterm [OPTION...]
+.SS "Help Options:"
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show help options
+.TP
+\fB\-\-help\-all\fR
+Show all help options
+.TP
+\fB\-\-help\-gtk\fR
+Show GTK+ Options
+.TP
+\fB\-\-help\-clutter\fR
+Show Clutter Options
+.SS "Application Options:"
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Display version number
+.TP
+\fB\-\-display\fR=\fIDISPLAY\fR
+X display to use
+.TP
+\fB\-\-clutter\-display\fR=\fIDISPLAY\fR
+X display to use
+.TP
+\fB\-\-screen\fR=\fISCREEN\fR
+X screen to use
