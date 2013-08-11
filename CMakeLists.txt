@@ -53,7 +53,7 @@ link_directories(${DEPS_LIBRARY_DIRS})
 
 find_package(Vala REQUIRED)
 include(ValaVersion)
-ensure_vala_version("0.16.0" MINIMUM)
+ensure_vala_version("0.21" MINIMUM)
 
 include(ValaPrecompile)
 vala_precompile(VALA_C
@@ -85,6 +85,8 @@ OPTIONS
 	-g
 	--vapidir=${CMAKE_CURRENT_SOURCE_DIR}/vapi/
 	${VALAFLAGS}
+	--target-glib=2.38
+	--gresources=${CMAKE_CURRENT_SOURCE_DIR}/src/resources/finalterm.gresource.xml
 )
 
 add_subdirectory (po)
@@ -92,7 +94,20 @@ add_subdirectory (po)
 include(GSettings)
 add_schema ("data/org.gnome.finalterm.gschema.xml")
 
-add_executable(finalterm ${VALA_C})
+find_program(GLIB_COMPILE_RESOURCES glib-compile-resources)
+execute_process(OUTPUT_VARIABLE gresources_deps
+	COMMAND ${GLIB_COMPILE_RESOURCES} --generate-dependencies --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}/src/resources ${CMAKE_CURRENT_SOURCE_DIR}/src/resources/finalterm.gresource.xml
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+string(REPLACE "\n" ";" gresources_deps ${gresources_deps})
+add_custom_command(OUTPUT finalterm-resource.c
+	COMMAND ${GLIB_COMPILE_RESOURCES} --target=finalterm-resource.c --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}/src/resources --generate-source ${CMAKE_CURRENT_SOURCE_DIR}/src/resources/finalterm.gresource.xml
+	DEPENDS ${gresources_deps}
+	COMMENT "Compile gresources."
+	VERBATIM
+)
+
+add_executable(finalterm ${VALA_C} finalterm-resource.c)
 target_link_libraries(finalterm m util)
 
 install(TARGETS finalterm RUNTIME DESTINATION bin)
