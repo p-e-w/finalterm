@@ -162,10 +162,10 @@ public class TerminalOutputView : Mx.ScrollView {
 		// Reposition cursor when line container is scrolled
 		// to make it scroll along with it
 		line_container.horizontal_adjustment.changed.connect(() => {
-			position_terminal_cursor();
+			position_terminal_cursor(false);
 		});
 		line_container.vertical_adjustment.changed.connect(() => {
-			position_terminal_cursor();
+			position_terminal_cursor(false);
 		});
 
 		cursor = new Mx.Label();
@@ -335,7 +335,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void render_terminal_cursor() {
 		Metrics.start_block_timer(Log.METHOD);
 
-		position_terminal_cursor();
+		position_terminal_cursor(true);
 
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
 
@@ -391,7 +391,7 @@ public class TerminalOutputView : Mx.ScrollView {
 		Metrics.stop_block_timer(Log.METHOD);
 	}
 
-	private void position_terminal_cursor() {
+	private void position_terminal_cursor(bool animate) {
 		Metrics.start_block_timer(Log.METHOD);
 
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
@@ -409,12 +409,17 @@ public class TerminalOutputView : Mx.ScrollView {
 		int cursor_y;
 		get_stage_position(cursor_position, out cursor_x, out cursor_y);
 
-		cursor.save_easing_state();
-		cursor.set_easing_mode(Clutter.AnimationMode.LINEAR);
-		cursor.set_easing_duration(Settings.get_default().theme.cursor_motion_speed);
+		if (animate) {
+			cursor.save_easing_state();
+			cursor.set_easing_mode(Clutter.AnimationMode.LINEAR);
+			cursor.set_easing_duration(Settings.get_default().theme.cursor_motion_speed);
+		}
+
 		cursor.x = cursor_x;
 		cursor.y = cursor_y;
-		cursor.restore_easing_state();
+
+		if (animate)
+			cursor.restore_easing_state();
 
 		Metrics.stop_block_timer(Log.METHOD);
 	}
