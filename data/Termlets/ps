@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ps $@ |
+ps "$@" |
 
 while IFS= read -r line; do
 	# Position of string "PID" in line
