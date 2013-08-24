@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ls_output=$(ls --color=always $@)
+ls_output=$(ls --color=always "$@")
 
 # TODO: Search for files in directory passed to ls rather than the current directory
 # TODO: Handle case where filename contains other filename
