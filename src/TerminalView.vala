@@ -179,9 +179,13 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button = new Mx.Button();
 		menu_button.is_toggle = true;
 		menu_button.style_class = "menu-button";
+		menu_button.enter_event.connect((event) => {
+			menu_button.opacity = 255;
+			return false;
+		});
 		menu_button.leave_event.connect((event) => {
 			if (!menu_button.toggled)
-				menu_button.visible = false;
+				menu_button.opacity = 0;
 			return false;
 		});
 		menu_button.clicked.connect(on_menu_button_clicked);
