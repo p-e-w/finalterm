@@ -1,0 +1,414 @@
+# Spanish translation for finalterm.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the finalterm package.
+# Adolfo Jayme Barrientos <fitoschido@ubuntu.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: finalterm 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-22 12:38+0200\n"
+"PO-Revision-Date: 2013-08-28 20:46-0600\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitoschido@ubuntu.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: Spanish\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: ../src/Metrics.vala:98
+#, c-format
+msgid "\tTotal time: %f"
+msgstr "\tTiempo total: %f"
+
+#: ../src/Metrics.vala:78
+msgid ""
+"\n"
+"BLOCK STATISTICS:"
+msgstr ""
+"\n"
+"BLOQUEAR ESTADÍSTICAS:"
+
+#: ../src/Metrics.vala:106
+#, c-format
+msgid ""
+"\n"
+"Grand total time: %f"
+msgstr ""
+"\n"
+"Tiempo total general: %f"
+
+#: ../src/FinalTerm.vala:131
+msgid " (Faenza icon, modified)"
+msgstr "(Icono de Faenza, modificado)"
+
+#: ../src/FinalTerm.vala:143
+msgid " (German)"
+msgstr "(alemán)"
+
+#: ../src/FinalTerm.vala:144
+msgid " (Hungarian)"
+msgstr "(húngaro)"
+
+#: ../src/FinalTerm.vala:127
+msgid " (original author)"
+msgstr "(autor original)"
+
+#: ../src/Metrics.vala:103
+msgid " [RUNNING]"
+msgstr "[EN EJECUCIÓN]"
+
+#: ../src/Metrics.vala:100
+#, c-format
+msgid ",\tCycles: %i"
+msgstr ",\tCiclos: %i"
+
+#: ../src/Metrics.vala:99
+#, c-format
+msgid ",\tMean time: %f"
+msgstr ",\tTiempo medio: %f"
+
+#: ../src/SettingsWindow.vala:111
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: ../src/FinalTerm.vala:137
+msgid "At last – a modern terminal emulator."
+msgstr "Por fin, un emulador de terminal moderno."
+
+#: ../src/Metrics.vala:44
+msgid "Attempting to restart a timer that has not been stopped"
+msgstr "Se ha intentado reiniciar un temporizador que no se ha detenido"
+
+#: ../src/Metrics.vala:61
+msgid "Attempting to stop a timer that does not exist"
+msgstr "Se ha intentado detener un temporizador que no existe"
+
+#: ../src/Metrics.vala:68
+msgid "Attempting to stop a timer that has not been started"
+msgstr "Se ha intentado detener un temporizador que no se ha iniciado"
+
+#: ../src/FinalTerm.vala:367
+#, c-format
+msgid "Cannot access data directory: %s"
+msgstr "No se puede acceder a la carpeta de datos: %s"
+
+#: ../src/CharacterAttributes.vala:101
+msgid "Cannot parse stream element into character attributes"
+msgstr ""
+"No se puede analizar el elemento de transmisión en atributos de carácter"
+
+#: ../src/SettingsWindow.vala:122
+msgid "Color scheme:"
+msgstr "Esquema de colores:"
+
+#: ../src/Terminal.vala:120
+#, c-format
+msgid "Command executed: '%s'"
+msgstr "Orden ejecutada: «%s»"
+
+#: ../src/Terminal.vala:151
+msgid "Command finished"
+msgstr "Orden finalizada"
+
+#: ../src/TerminalOutput.vala:251
+msgid "Command mode entered"
+msgstr "Se ha iniciado el modo de órdenes"
+
+#: ../src/TerminalOutput.vala:247
+msgid "Command start control sequence received while already in command mode"
+msgstr ""
+"Se ha recibido una secuencia de control de inicio de orden mientras ya se "
+"estaba en el modo de órdenes"
+
+#: ../src/Terminal.vala:112
+#, c-format
+msgid "Command updated: '%s'"
+msgstr "Orden actualizada: «%s»"
+
+#: ../src/Terminal.vala:239
+msgid "Connection broken"
+msgstr "Conexión interrumpida"
+
+#: ../src/FinalTerm.vala:138
+msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+msgstr "Copyright © 2013 de Philipp Emanuel Weidmann y colaboradores"
+
+#: ../src/Theme.vala:52
+#, c-format
+msgid "Could not load theme %s: %s"
+msgstr "Falló la carga del tema %s: %s"
+
+#: ../src/SettingsWindow.vala:119
+msgid "Dark look:"
+msgstr "Apariencia oscura:"
+
+#: ../src/SettingsWindow.vala:107
+msgid "Default dimensions:"
+msgstr "Dimensiones predeterminadas:"
+
+#: ../src/ColorScheme.vala:116
+#, c-format
+msgid "Error in color scheme %s: %s"
+msgstr "Error en el esquema de color %s: %s"
+
+#: ../src/KeyBindings.vala:69
+#, c-format
+msgid "Error in key bindings file %s: %s"
+msgstr "Error en el archivo de combinaciones de teclas %s: %s"
+
+#: ../src/TextMenu.vala:91
+#, c-format
+msgid "Error in text menu %s: %s"
+msgstr "Error en el menú de texto %s: %s"
+
+#: ../src/Theme.vala:80
+#, c-format
+msgid "Error in theme %s: %s"
+msgstr "Error en el tema %s: %s"
+
+#: ../src/Utilities.vala:132
+#, c-format
+msgid "Error while opening file '%s' for reading"
+msgstr "Error al abrir el archivo «%s» para su lectura"
+
+#: ../src/Utilities.vala:147
+#, c-format
+msgid "Error while parsing JSON file %s: %s"
+msgstr "Error al analizar el archivo JSON %s: %s"
+
+#: ../src/Utilities.vala:41
+#, c-format
+msgid "Failed to get %s files in %s: %s"
+msgstr "No se pudieron obtener %s archivos en %s: %s"
+
+#: ../src/FinalTerm.vala:316
+msgid "Failed to initialize Clutter"
+msgstr "Falló la inicialización de Clutter"
+
+#: ../src/ColorScheme.vala:75
+#, c-format
+msgid "Failed to load color scheme %s: %s"
+msgstr "Falló la carga del esquema de colores %s: %s"
+
+#: ../src/TextMenu.vala:46
+#, c-format
+msgid "Failed to load text menu definitions %s: %s"
+msgstr "No se pudieron cargar las definicionees de texto de menús %s: %s"
+
+#: ../src/Terminal.vala:154
+#, c-format
+msgid "Failed to show notification: %s"
+msgstr "No se pudo mostrar la notificación: %s"
+
+#: ../src/Terminal.vala:191
+msgid "Fork failed"
+msgstr "Falló «fork»"
+
+#: ../src/SettingsWindow.vala:105
+msgid "General"
+msgstr "General"
+
+#: ../src/ColorScheme.vala:135
+#, c-format
+msgid "Invalid color index: %i"
+msgstr "Índice de color no válido: %i"
+
+#: ../src/Command.vala:60
+#, c-format
+msgid "Invalid command specification: '%s'"
+msgstr "Especificación de orden no válida: «%s»"
+
+#: ../src/TerminalOutput.vala:324
+#, c-format
+msgid "Invalid control sequence: '%s' (%s)"
+msgstr "Secuencia de control no válida: «%s» (%s)"
+
+#: ../src/Utilities.vala:106
+#, c-format
+msgid "Invalid enum value name: '%s'"
+msgstr "Nombre de valor de enumeración no válido: «%s»"
+
+#: ../src/SettingsWindow.vala:116
+msgid "Label font:"
+msgstr "Tipo de letra de la etiqueta:"
+
+#: ../src/FinalTerm.vala:302
+#, c-format
+msgid "Launching %s failed: %s"
+msgstr "Falló la ejecución de %s: %s"
+
+#: ../src/KeyBindings.vala:37
+#, c-format
+msgid "Loading key bindings file %s failed: %s"
+msgstr "Falló la carga del archivo de combinaciones de teclas %s: %s"
+
+#: ../src/Settings.vala:151
+msgid "No Settings instance available yet"
+msgstr "Todavía no hay una instancia de configuración disponible"
+
+#: ../src/ScrollableListView.vala:165
+msgid "Object does not implement the ItemView interface"
+msgstr "El objeto no implemente la interfaz ItemView"
+
+#: ../src/SettingsWindow.vala:129
+msgid "Opacity:"
+msgstr "Opacidad:"
+
+#: ../src/TerminalOutput.vala:336
+#, c-format
+msgid "Partially supported control sequence: '%s' (%s)"
+msgstr "Secuencia de control admitida parcialmente: «%s» (%s)"
+
+#: ../src/SettingsWindow.vala:26
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: ../src/Terminal.vala:247
+#, c-format
+msgid "Reading unichar failed: %s"
+msgstr "Falló la lectura de unichar: %s"
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
+msgstr "Falló el envío del texto: %s"
+
+#: ../src/TerminalOutput.vala:340
+#, c-format
+msgid "Supported control sequence: '%s' (%s)"
+msgstr "Secuencia de control admitida: «%s» (%s)"
+
+#: ../src/SettingsWindow.vala:113
+msgid "Terminal font:"
+msgstr "Tipo de letra del terminal:"
+
+#: ../src/SettingsWindow.vala:125
+msgid "Theme:"
+msgstr "Tema:"
+
+#: ../src/TerminalOutput.vala:328
+#, c-format
+msgid "Unrecognized control sequence: '%s' (%s)"
+msgstr "Secuencia de control no reconocida: «%s» (%s)"
+
+#: ../src/TerminalOutput.vala:344
+msgid "Unrecognized interpretation status value"
+msgstr "Valor de interpretación de estado no reconocido"
+
+#: ../src/FinalTerm.vala:306
+#, c-format
+msgid "Unsupported command: %s"
+msgstr "Orden no admitida: %s"
+
+#: ../src/TerminalOutput.vala:332
+#, c-format
+msgid "Unsupported control sequence: '%s' (%s)"
+msgstr "Secuencia de control no admitida: «%s» (%s)"
+
+#: ../src/FinalTerm.vala:110
+msgid "_About Final Term"
+msgstr "_Acerca de Final Term"
+
+#: ../src/FinalTerm.vala:106
+msgid "_Preferences"
+msgstr "_Preferencias"
+
+#: ../src/FinalTerm.vala:111
+msgid "_Quit"
+msgstr "_Salir"
+
+#: ../src/SettingsWindow.vala:46
+msgid "columns"
+msgstr "columnas"
+
+#: ../src/Terminal.vala:230
+msgid "execvp failed"
+msgstr "falló execvp"
+
+#: ../src/FinalTerm.vala:136
+msgid "pre-alpha"
+msgstr "prealfa"
+
+#: ../src/TerminalOutput.vala:318
+msgid ""
+"print_interpretation_status should only be called on control sequence "
+"elements"
+msgstr ""
+"Solo debería llamar print_interpretation_status en elementos de secuencia de "
+"control"
+
+#: ../src/SettingsWindow.vala:48
+msgid "rows"
+msgstr "filas"
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr "No solo utilice su sistema: ¡dele órdenes!"
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr "Opacidad del fondo"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr "Esquema de colores a utilizar"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr "Número de columnas predeterminado en el terminal"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr "Número de líneas predeterminado en el terminal"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr "Tipo de letra utilizado para las etiquetas de botones de menús"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr "Tipo de letra utilizado para la salida del terminal"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+"Tiempo mínimo entre ciclos sucesivos de renderizado de salida, en "
+"milisegundos"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+"Tiempo mínimo entre ciclos sucesivos de redimensionado, en milisegundos"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+"Ruta al ejecutable del intérprete de órdenes a ejecutar (NOTA: por el "
+"momento solo se admite bash)"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr "Tema a utilizar"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr "Utilizar un tema oscuro"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr ""
+"Valor que recibirá la variable de entorno TERM (NOTA: cambiar esta variable "
+"puede afectar el comportamiento del intérprete de órdenes)"
