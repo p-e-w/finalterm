@@ -150,6 +150,7 @@ public class FinalTerm : Gtk.Application {
 				"authors", authors,
 				"artists", artists,
 				"translator-credits",
+					"Anderson Carlos Daniel Sanches <andycds@gmail.com>" + _(" (Brazilian Portuguese)") + "\n" +
 					"Philipp Emanuel Weidmann <pew@worldwidemann.com>" + _(" (German)") + "\n" +
 					"Ferenc Erki <erkiferenc@gmail.com>" + _(" (Hungarian)"),
 				"website", "http://finalterm.org",
