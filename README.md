@@ -1,5 +1,11 @@
 **Final Term is in *heavy development* and neither stable nor feature complete!** You can follow Final Term's high level progress at [blog.finalterm.org](http://blog.finalterm.org). To discuss Final Term and get support, join *#finalterm* on [Freenode](http://freenode.net).
 
+### A note for translators
+
+Like all other contributions, translations of Final Term into any language are welcome and greatly appreciated. **However, because of its superior capabilities for that task, we have decided to manage translation contributions through Launchpad's Rosetta at [https://translations.launchpad.net/finalterm/trunk/+pots/finalterm](https://translations.launchpad.net/finalterm/trunk/+pots/finalterm) rather than on GitHub, so please submit your work there instead of filing a pull request here.**
+
+Whenever an actual release of Final Term is packaged (which hasn't happened yet as the project is still in an unstable state), the translations on Launchpad will be merged and all translators will be credited in Final Term's about dialog.
+
 # About Final Term
 
 Final Term is a new breed of terminal emulator.
