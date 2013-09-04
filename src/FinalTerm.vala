@@ -200,6 +200,11 @@ public class FinalTerm : Gtk.Application {
 				autocompletion.select_next_command();
 				return true;
 
+			} else if (event.keyval == Gdk.Key.Right &&
+					   autocompletion.is_command_selected()) {
+				terminal.set_command(autocompletion.get_selected_command());
+				return true;
+
 			} else if (event.keyval == Gdk.Key.Return &&
 					   autocompletion.is_command_selected()) {
 				terminal.run_command(autocompletion.get_selected_command());
