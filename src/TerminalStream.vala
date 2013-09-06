@@ -138,9 +138,7 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 		switch (parse_state) {
 		case ParseState.TEXT:
-			//Metrics.start_block_timer("TerminalStream.parse_character (transient text updated)");
 			transient_text_updated(sequence_builder.str);
-			//Metrics.stop_block_timer("TerminalStream.parse_character (transient text updated)");
 			break;
 		case ParseState.CONTROL_CHARACTER:
 			break;
@@ -662,17 +660,11 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 		}
 
 		public StreamElement.from_text(string text) {
-			Metrics.start_block_timer(Log.METHOD);
-
 			stream_element_type = StreamElementType.TEXT;
 			this.text = text;
-
-			Metrics.stop_block_timer(Log.METHOD);
 		}
 
 		public StreamElement.from_control_sequence(string control_sequence) {
-			Metrics.start_block_timer(Log.METHOD);
-
 			stream_element_type = StreamElementType.CONTROL_SEQUENCE;
 			text = control_sequence;
 
@@ -681,10 +673,8 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 			var final_character = get_final_character(control_sequence);
 
-			if (!control_sequence_specifications.contains(final_character)) {
-				Metrics.stop_block_timer(Log.METHOD);
+			if (!control_sequence_specifications.contains(final_character))
 				return;
-			}
 
 			MatchInfo match_info;
 			foreach (var specification in control_sequence_specifications.get(final_character)) {
@@ -710,8 +700,6 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 					break;
 				}
 			}
-
-			Metrics.stop_block_timer(Log.METHOD);
 		}
 
 		// An unfortunate necessity because Regexes don't support

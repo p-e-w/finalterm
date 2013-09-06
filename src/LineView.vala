@@ -90,10 +90,15 @@ public class LineView : Clutter.Actor {
 		float character_y;
 		text_container.position_to_coords(character_index, out character_x, out character_y);
 
-		// NOTE: text_container.x/.y is unreliable here
-		var allocation_box = text_container.get_allocation_box();
-		x = (int)(character_x + allocation_box.get_x());
-		y = (int)(character_y + allocation_box.get_y());
+		// NOTE: Because this function is called in every rendering cycle,
+		//       it is highly performance critical.
+		//       Theoretically, only text_container.get_allocation_box()
+		//       is guaranteed to return an up-to-date result here; however,
+		//       get_allocation_box forces a relayout (see Clutter source code)
+		//       and is thus extremely slow, while text_container.allocation
+		//       appears to behave identically for this case.
+		x = (int)(character_x + text_container.allocation.get_x());
+		y = (int)(character_y + text_container.allocation.get_y());
 	}
 
 	private bool on_text_container_motion_event(Clutter.MotionEvent event) {
@@ -140,8 +145,6 @@ public class LineView : Clutter.Actor {
 			string text, TextMenu text_menu);
 
 	public void render_line() {
-		Metrics.start_block_timer(Log.METHOD);
-
 		// Create a local copy of the output line object so that
 		// manipulations for display purposes do not affect the model
 		output_line = new TerminalOutput.OutputLine.copy(original_output_line);
@@ -162,8 +165,6 @@ public class LineView : Clutter.Actor {
 				 Settings.get_default().theme.gutter_size);
 
 		text_container.set_markup(get_markup(output_line));
-
-		Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	private string get_markup(TerminalOutput.OutputLine output_line) {

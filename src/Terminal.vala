@@ -258,10 +258,7 @@ public class Terminal : Object {
 				command_channel.read_unichar(out character);
 			} catch (Error e) { warning(_("Reading unichar failed: %s"), e.message); }
 
-			// Measured from outside because parse_character has multiple return points
-			//Metrics.start_block_timer("TerminalStream.parse_character (outside)");
 			terminal_stream.parse_character(character);
-			//Metrics.stop_block_timer("TerminalStream.parse_character (outside)");
 
 			return true;
 		});

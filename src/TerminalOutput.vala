@@ -80,8 +80,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	// TODO: Rename to "interpret_stream_element"?
 	public void parse_stream_element(TerminalStream.StreamElement stream_element) {
-		//Metrics.start_block_timer(Log.METHOD);
-
 		switch (stream_element.stream_element_type) {
 		case TerminalStream.StreamElement.StreamElementType.TEXT:
 			//message(_("Text sequence received: '%s'"), stream_element.text);
@@ -347,8 +345,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 		transient_text = "";
 		printed_transient_text = "";
-
-		//Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	public enum InterpretationStatus {
@@ -394,21 +390,15 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	}
 
 	public void parse_transient_text(string transient_text) {
-		//Metrics.start_block_timer(Log.METHOD);
-
 		this.transient_text = transient_text;
 
 		// Send update signal here to trigger render but do not print text;
 		// the transient text will be printed just in time during render (performance)
 		// TODO: Revisit this!
 		text_updated(cursor_position.line);
-
-		//Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	public void print_transient_text() {
-		//Metrics.start_block_timer(Log.METHOD);
-
 		// Print only text that has not been printed yet
 		string text_left = transient_text.substring(
 				transient_text.index_of_nth_char(
@@ -427,8 +417,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		on_text_updated(0);
 
 		printed_transient_text += text_left;
-
-		//Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	public string get_command() {
@@ -449,14 +437,10 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	}
 
 	private void print_text(string text) {
-		//Metrics.start_block_timer(Log.METHOD);
-
 		var text_element = new TextElement(text, current_attributes);
 		get(cursor_position.line).insert_element(text_element, cursor_position.column, true);
 		// TODO: Handle double-width unicode characters
 		move_cursor(cursor_position.line, cursor_position.column + text_element.get_length());
-
-		//Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	private void on_text_updated(int line_index) {

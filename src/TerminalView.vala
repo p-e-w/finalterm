@@ -322,8 +322,6 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	private void render_terminal_text() {
-		Metrics.start_block_timer(Log.METHOD);
-
 		terminal.terminal_output.print_transient_text();
 
 		foreach (var i in updated_lines) {
@@ -332,13 +330,9 @@ public class TerminalOutputView : Mx.ScrollView {
 		}
 
 		updated_lines.clear();
-
-		Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	private void render_terminal_cursor() {
-		Metrics.start_block_timer(Log.METHOD);
-
 		position_terminal_cursor(true);
 
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
@@ -346,7 +340,6 @@ public class TerminalOutputView : Mx.ScrollView {
 		if (cursor_position.line >= line_views.size) {
 			// If the cursor cannot be rendered correctly, hide it
 			cursor.hide();
-			Metrics.stop_block_timer(Log.METHOD);
 			return;
 		}
 
@@ -391,19 +384,14 @@ public class TerminalOutputView : Mx.ScrollView {
 		// to match standard editor user experience
 		blinking_animation.direction = Clutter.TimelineDirection.FORWARD;
 		blinking_animation.rewind();
-
-		Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	private void position_terminal_cursor(bool animate) {
-		Metrics.start_block_timer(Log.METHOD);
-
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
 
 		if (cursor_position.line >= line_views.size) {
 			// If the cursor cannot be positioned correctly, hide it
 			cursor.hide();
-			Metrics.stop_block_timer(Log.METHOD);
 			return;
 		}
 
@@ -424,8 +412,6 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		if (animate)
 			cursor.restore_easing_state();
-
-		Metrics.stop_block_timer(Log.METHOD);
 	}
 
 	public void scroll_to_position(TerminalOutput.CursorPosition position = {-1, -1}) {
