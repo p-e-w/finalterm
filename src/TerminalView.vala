@@ -418,22 +418,27 @@ public class TerminalOutputView : Mx.ScrollView {
 		if (position.line >= line_views.size)
 			return;
 
+		var geometry = Clutter.Geometry();
+
 		if (position.line == -1 && position.column == -1) {
-			// Default: Scroll to last line
-			position.line   = line_views.size - 1;
-			position.column = 0;
+			// Default: Scroll to end
+			// Note that this is much faster than the code below
+			// because it avoids the expensive get_allocation_box
+			geometry.x      = 0;
+			geometry.y      = int.MAX;
+			geometry.width  = 0;
+			geometry.height = 0;
+		} else {
+			// NOTE: line_views[position.line].get_geometry() does not work here
+			//       because the layout manager takes over positioning
+			var allocation_box = line_views[position.line].get_allocation_box();
+			// TODO: This does not take the column into account
+			geometry.x      = (int)allocation_box.get_x();
+			geometry.y      = (int)allocation_box.get_y();
+			geometry.width  = (uint)allocation_box.get_width();
+			geometry.height = (uint)allocation_box.get_height();
 		}
 
-		// NOTE: line_views[position.line].get_geometry() does not work here
-		//       because the layout manager takes over positioning
-		var geometry = Clutter.Geometry();
-		var allocation_box = line_views[position.line].get_allocation_box();
-		geometry.x      = (int)allocation_box.get_x();
-		geometry.y      = (int)allocation_box.get_y();
-		geometry.width  = (uint)allocation_box.get_width();
-		geometry.height = (uint)allocation_box.get_height();
-
-		// TODO: This does not take the column into account
 		ensure_visible(geometry);
 	}
 

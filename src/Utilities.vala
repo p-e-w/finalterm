@@ -195,7 +195,8 @@ public class Utilities : Object {
 	// - function is guaranteed to be executed after at most interval milliseconds
 	// - If function is scheduled for execution again before it has been executed
 	//   (as identified by function_name), function will only be executed once
-	public static void schedule_execution(ScheduleFunction function, string function_name, uint interval) {
+	public static void schedule_execution(ScheduleFunction function, string function_name,
+				uint interval, int priority = Priority.DEFAULT) {
 		if (scheduled_functions.contains(function_name))
 			// function already scheduled for execution
 			return;
@@ -206,7 +207,7 @@ public class Utilities : Object {
 			scheduled_functions.remove(function_name);
 			function();
 			return false;
-		});
+		}, priority);
 	}
 
 }
