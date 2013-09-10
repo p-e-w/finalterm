@@ -555,22 +555,26 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 		public bool is_prompt_line { get; set; default = false; }
 
-		public OutputLine.copy(OutputLine output_line) {
-			is_prompt_line = output_line.is_prompt_line;
-
-			foreach (var text_element in output_line) {
-				add(new TextElement.copy(text_element));
+		// Returns a new OutputLine object reflecting
+		// matching text menu patterns if there are any
+		// and this object otherwise (the function is
+		// therefore guaranteed to never modify this object)
+		public OutputLine generate_text_menu_elements() {
+			var matching_pattern = false;
+			var text = get_text();
+			foreach (var pattern in FinalTerm.text_menus_by_pattern.keys) {
+				matching_pattern = (matching_pattern || pattern.match(text));
 			}
-		}
 
-		public void generate_text_menu_elements() {
-			OutputLine old_output_line = new OutputLine.copy(this);
+			if (!matching_pattern)
+				return this;
 
-			clear();
-
-			foreach (var text_element in old_output_line) {
-				add_all(text_element.get_text_menu_elements());
+			OutputLine output_line = new OutputLine();
+			output_line.is_prompt_line = is_prompt_line;
+			foreach (var text_element in this) {
+				output_line.add_all(text_element.get_text_menu_elements());
 			}
+			return output_line;
 		}
 
 		public void insert_element(TextElement text_element, int position, bool overwrite = false) {

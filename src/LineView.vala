@@ -145,10 +145,7 @@ public class LineView : Clutter.Actor {
 			string text, TextMenu text_menu);
 
 	public void render_line() {
-		// Create a local copy of the output line object so that
-		// manipulations for display purposes do not affect the model
-		output_line = new TerminalOutput.OutputLine.copy(original_output_line);
-		output_line.generate_text_menu_elements();
+		output_line = original_output_line.generate_text_menu_elements();
 
 		is_collapsible_start = output_line.is_prompt_line;
 		is_collapsible_end   = output_line.is_prompt_line;
