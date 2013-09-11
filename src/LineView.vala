@@ -25,7 +25,7 @@ public class LineView : Clutter.Actor {
 	private TerminalOutput.OutputLine original_output_line;
 	private TerminalOutput.OutputLine output_line;
 
-	private Mx.Button collapse_button;
+	private Mx.Button collapse_button = null;
 	private Clutter.Text text_container;
 
 	// If set to true, everything between this line
@@ -38,15 +38,6 @@ public class LineView : Clutter.Actor {
 		layout_manager = new Clutter.BoxLayout();
 
 		original_output_line = output_line;
-
-		collapse_button = new Mx.Button.with_label("▼");
-		collapse_button.is_toggle = true;
-		collapse_button.toggled = false;
-
-		collapse_button.style_class = "collapse-button";
-		collapse_button.clicked.connect(on_collapse_button_clicked);
-
-		add(collapse_button);
 
 		text_container = new Clutter.Text();
 
@@ -68,22 +59,6 @@ public class LineView : Clutter.Actor {
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
 	}
-
-	private void on_collapse_button_clicked() {
-		if (is_collapsible_start) {
-			if (collapse_button.toggled) {
-				collapse_button.set_label("▶");
-				collapsed(this);
-			} else {
-				collapse_button.set_label("▼");
-				expanded(this);
-			}
-		}
-	}
-
-	public signal void collapsed(LineView line_view);
-
-	public signal void expanded(LineView line_view);
 
 	public void get_character_coordinates(int character_index, out int x, out int y) {
 		float character_x;
@@ -141,16 +116,32 @@ public class LineView : Clutter.Actor {
 		return false;
 	}
 
-	public signal void text_menu_element_hovered(LineView line_view, int x, int y, int width, int height,
-			string text, TextMenu text_menu);
-
 	public void render_line() {
 		output_line = original_output_line.generate_text_menu_elements();
 
 		is_collapsible_start = output_line.is_prompt_line;
 		is_collapsible_end   = output_line.is_prompt_line;
 
-		collapse_button.visible = is_collapsible_start;
+		if (is_collapsible_start && collapse_button == null) {
+			// Collapse button has not been created yet
+			collapse_button = new Mx.Button.with_label("▼");
+			collapse_button.is_toggle = true;
+			collapse_button.toggled = false;
+
+			collapse_button.style_class = "collapse-button";
+			collapse_button.clicked.connect(on_collapse_button_clicked);
+
+			update_collapse_button();
+
+			// BoxLayout will arrange the LineView's children
+			// from left to right in their natural order, so the
+			// collapse button has to be inserted before the
+			// text container to be placed on the left
+			insert_child_at_index(collapse_button, 0);
+
+		} else if (collapse_button != null) {
+			collapse_button.visible = is_collapsible_start;
+		}
 
 		// If the collapse button is visible, the text container will
 		// already be pushed to the left, so we need to subtract that
@@ -162,6 +153,15 @@ public class LineView : Clutter.Actor {
 				 Settings.get_default().theme.gutter_size);
 
 		text_container.set_markup(get_markup(output_line));
+	}
+
+	private void update_collapse_button() {
+		collapse_button.style = Settings.get_default().theme.style;
+
+		collapse_button.margin_left = Settings.get_default().theme.collapse_button_x;
+		collapse_button.margin_top = Settings.get_default().theme.collapse_button_y;
+		collapse_button.width = Settings.get_default().theme.collapse_button_width;
+		collapse_button.height = Settings.get_default().theme.collapse_button_height;
 	}
 
 	private string get_markup(TerminalOutput.OutputLine output_line) {
@@ -187,16 +187,12 @@ public class LineView : Clutter.Actor {
 	}
 
 	private void on_settings_changed(string? key) {
-		text_container.color = Settings.get_default().foreground_color;
-
-		collapse_button.style = Settings.get_default().theme.style;
-
-		collapse_button.margin_left = Settings.get_default().theme.collapse_button_x;
-		collapse_button.margin_top = Settings.get_default().theme.collapse_button_y;
-		collapse_button.width = Settings.get_default().theme.collapse_button_width;
-		collapse_button.height = Settings.get_default().theme.collapse_button_height;
+		if (collapse_button != null)
+			update_collapse_button();
 
 		text_container.margin_right = Settings.get_default().theme.margin_right;
+
+		text_container.color = Settings.get_default().foreground_color;
 
 		// TODO: Clutter bug? The following sometimes does not work:
 		//text_container.font_description = Settings.get_default().terminal_font;
@@ -204,5 +200,24 @@ public class LineView : Clutter.Actor {
 
 		render_line();
 	}
+
+	private void on_collapse_button_clicked() {
+		if (is_collapsible_start) {
+			if (collapse_button.toggled) {
+				collapse_button.set_label("▶");
+				collapsed(this);
+			} else {
+				collapse_button.set_label("▼");
+				expanded(this);
+			}
+		}
+	}
+
+	public signal void text_menu_element_hovered(LineView line_view, int x, int y, int width, int height,
+			string text, TextMenu text_menu);
+
+	public signal void collapsed(LineView line_view);
+
+	public signal void expanded(LineView line_view);
 
 }
