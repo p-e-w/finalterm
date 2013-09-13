@@ -138,6 +138,12 @@ public class Settings : Object {
 		set { settings.set_int("render-interval", value); }
 	}
 
+	private bool _case_sensitive_autocompletion;
+	public bool case_sensitive_autocompletion {
+		get { return _case_sensitive_autocompletion; }
+		set { settings.set_boolean("case-sensitive-autocompletion", value); }
+	}
+
 	private void update_cache() {
 		_dark = settings.get_boolean("dark");
 
@@ -169,6 +175,8 @@ public class Settings : Object {
 		_emulated_terminal = settings.get_string("emulated-terminal");
 
 		_render_interval = settings.get_int("render-interval");
+
+		_case_sensitive_autocompletion = settings.get_boolean("case-sensitive-autocompletion");
 	}
 
 	public static void load_from_schema(string schema_name) {

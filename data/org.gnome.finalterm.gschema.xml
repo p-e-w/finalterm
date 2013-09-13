@@ -65,5 +65,10 @@
 			<summary>Minimum time between successive output rendering cycles, in milliseconds</summary>
 			<description></description>
 		</key>
+		<key type="b" name="case-sensitive-autocompletion">
+			<default>false</default>
+			<summary>Case-sensitive autocompletion</summary>
+			<description></description>
+		</key>
 	</schema>
 </schemalist>

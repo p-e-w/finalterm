@@ -66,7 +66,11 @@ public class Autocompletion : Object {
 
 	// Ensures that only entries containing the current command are shown
 	private bool filter_function(AutocompletionEntry item) {
-		return item.text.contains(current_command);
+		if (Settings.get_default().case_sensitive_autocompletion) {
+			return item.text.contains(current_command);
+		} else {
+			return item.text.casefold().contains(current_command.casefold());
+		}
 	}
 
 	// Ranks entries so that the most relevant ones are shown first
@@ -163,7 +167,11 @@ public class Autocompletion : Object {
 		scrollable_list_view.set_filter_function(filter_function);
 		scrollable_list_view.set_sort_function(sort_function);
 
-		AutocompletionEntryView.highlight_text = command;
+		try {
+			AutocompletionEntryView.highlight_pattern = new Regex(Regex.escape_string(command),
+					RegexCompileFlags.CASELESS | RegexCompileFlags.OPTIMIZE);
+		} catch (Error e) { error(_("Highlight regex compilation error: %s"), e.message); }
+
 		for (int i = 0; i < scrollable_list_view.get_number_of_items(); i++) {
 			scrollable_list_view.update_item(i);
 		}
@@ -225,7 +233,7 @@ public class Autocompletion : Object {
 	private class AutocompletionEntryView : Mx.Label, ItemView {
 
 		public static int selected_index { get; set; }
-		public static string highlight_text { get; set; }
+		public static Regex highlight_pattern { get; set; }
 
 		public AutocompletionEntry entry { get; set; }
 
@@ -261,12 +269,14 @@ public class Autocompletion : Object {
 
 			string markup;
 
-			if (highlight_text == null) {
+			if (highlight_pattern == null) {
 				markup = Markup.escape_text(entry.text);
 			} else {
 				// Highlight text in entry:
 				// Step 1: Place markers around text to be highlighted
-				markup = entry.text.replace(highlight_text, "{$$$}" + highlight_text + "{/$$$}");
+				try {
+					markup = highlight_pattern.replace(entry.text, -1, 0, "{$$$}\\0{/$$$}");
+				} catch (Error e) { error(_("Highlight regex error: %s"), e.message); }
 				// Step 2: Replace reserved characters with markup entities
 				markup = Markup.escape_text(markup);
 				// Step 3: Replace markers with highlighting markup tags
