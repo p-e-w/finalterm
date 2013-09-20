@@ -132,7 +132,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private Terminal terminal;
 	private GtkClutter.Embed clutter_embed;
 
-	private Mx.BoxLayout line_container;
+	private LineContainer line_container;
 
 	private Mx.Label cursor;
 	private Clutter.PropertyTransition blinking_animation;
@@ -142,18 +142,13 @@ public class TerminalOutputView : Mx.ScrollView {
 	private string menu_button_text;
 	private TextMenu text_menu;
 
-	private Gee.List<LineView> line_views = new Gee.ArrayList<LineView>();
-
 	private Gee.Set<int> updated_lines = new Gee.HashSet<int>();
 
 	public TerminalOutputView(Terminal terminal, GtkClutter.Embed clutter_embed) {
 		this.terminal = terminal;
 		this.clutter_embed = clutter_embed;
 
-		// TODO: Set scrolling adjustments (increment should equal character size)
-
-		line_container = new Mx.BoxLayout();
-		line_container.orientation = Mx.Orientation.VERTICAL;
+		line_container = new LineContainer();
 		add(line_container);
 
 		// Initial synchronization with model
@@ -246,31 +241,33 @@ public class TerminalOutputView : Mx.ScrollView {
 
 	// Expands the list of line views until it contains as many elements as the model
 	public void add_line_views() {
-		for (int i = line_views.size; i < terminal.terminal_output.size; i++) {
+		for (int i = line_container.get_line_count(); i < terminal.terminal_output.size; i++) {
 			var line_view = new LineView(terminal.terminal_output[i]);
 			line_view.collapsed.connect(on_line_view_collapsed);
 			line_view.expanded.connect(on_line_view_expanded);
 			line_view.text_menu_element_hovered.connect(on_line_view_text_menu_element_hovered);
-			line_views.add(line_view);
-			line_container.add(line_view);
+
+			line_container.add_line_view(line_view);
 		}
 	}
 
 	private void on_line_view_collapsed(LineView line_view) {
-		for (int i = line_views.index_of(line_view) + 1; i < line_views.size; i++) {
-			if (line_views[i].is_collapsible_end)
+		for (int i = line_container.get_line_view_index(line_view) + 1;
+				i < line_container.get_line_count(); i++) {
+			if (line_container.get_line_view(i).is_collapsible_end)
 				break;
 
-			line_views[i].visible = false;
+			line_container.get_line_view(i).visible = false;
 		}
 	}
 
 	private void on_line_view_expanded(LineView line_view) {
-		for (int i = line_views.index_of(line_view) + 1; i < line_views.size; i++) {
-			if (line_views[i].is_collapsible_end)
+		for (int i = line_container.get_line_view_index(line_view) + 1;
+				i < line_container.get_line_count(); i++) {
+			if (line_container.get_line_view(i).is_collapsible_end)
 				break;
 
-			line_views[i].visible = true;
+			line_container.get_line_view(i).visible = true;
 		}
 	}
 
@@ -326,7 +323,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		foreach (var i in updated_lines) {
 			terminal.terminal_output[i].optimize();
-			line_views[i].render_line();
+			line_container.get_line_view(i).render_line();
 		}
 
 		updated_lines.clear();
@@ -337,7 +334,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
 
-		if (cursor_position.line >= line_views.size) {
+		if (cursor_position.line >= line_container.get_line_count()) {
 			// If the cursor cannot be rendered correctly, hide it
 			cursor.hide();
 			return;
@@ -389,7 +386,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void position_terminal_cursor(bool animate) {
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
 
-		if (cursor_position.line >= line_views.size) {
+		if (cursor_position.line >= line_container.get_line_count()) {
 			// If the cursor cannot be positioned correctly, hide it
 			cursor.hide();
 			return;
@@ -415,7 +412,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	public void scroll_to_position(TerminalOutput.CursorPosition position = {-1, -1}) {
-		if (position.line >= line_views.size)
+		if (position.line >= line_container.get_line_count())
 			return;
 
 		var geometry = Clutter.Geometry();
@@ -429,9 +426,10 @@ public class TerminalOutputView : Mx.ScrollView {
 			geometry.width  = 0;
 			geometry.height = 0;
 		} else {
-			// NOTE: line_views[position.line].get_geometry() does not work here
+			// NOTE: line_container.get_line_view(position.line).get_geometry() does not work here
 			//       because the layout manager takes over positioning
-			var allocation_box = line_views[position.line].get_allocation_box();
+			// TODO: Is that still true?
+			var allocation_box = line_container.get_line_view(position.line).get_allocation_box();
 			// TODO: This does not take the column into account
 			geometry.x      = (int)allocation_box.get_x();
 			geometry.y      = (int)allocation_box.get_y();
@@ -443,11 +441,11 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	private void get_position_coordinates(TerminalOutput.CursorPosition position, out int x, out int y) {
-		line_views[position.line].get_character_coordinates(position.column, out x, out y);
+		line_container.get_line_view(position.line).get_character_coordinates(position.column, out x, out y);
 	}
 
 	private void get_stage_position(TerminalOutput.CursorPosition position, out int? x, out int? y) {
-		if (position.line >= line_views.size) {
+		if (position.line >= line_container.get_line_count()) {
 			x = null;
 			y = null;
 			return;
@@ -455,7 +453,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		float line_view_x;
 		float line_view_y;
-		line_views[position.line].get_transformed_position(out line_view_x, out line_view_y);
+		line_container.get_line_view(position.line).get_transformed_position(out line_view_x, out line_view_y);
 
 		int character_x;
 		int character_y;
@@ -466,7 +464,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	public void get_screen_position(TerminalOutput.CursorPosition position, out int? x, out int? y) {
-		if (position.line >= line_views.size) {
+		if (position.line >= line_container.get_line_count()) {
 			x = null;
 			y = null;
 			return;
@@ -474,7 +472,7 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		int line_view_x;
 		int line_view_y;
-		Utilities.get_actor_screen_position(clutter_embed, line_views[position.line],
+		Utilities.get_actor_screen_position(clutter_embed, line_container.get_line_view(position.line),
 				out line_view_x, out line_view_y);
 
 		int character_x;
@@ -524,13 +522,13 @@ public class TerminalOutputView : Mx.ScrollView {
 
 	private void on_settings_changed(string? key) {
 		style = Settings.get_default().theme.style;
-		line_container.style = Settings.get_default().theme.style;
 		menu_button.style = Settings.get_default().theme.style;
 		menu_button_label.style = Settings.get_default().theme.style;
 
 		cursor.width  = Settings.get_default().character_width;
 		cursor.height = Settings.get_default().character_height;
 
+		// TODO: This animation forces constant (expensive) repainting of line_container
 		var interval = new Clutter.Interval.with_values(typeof(int),
 				Settings.get_default().theme.cursor_maximum_opacity,
 				Settings.get_default().theme.cursor_minimum_opacity);
@@ -540,6 +538,143 @@ public class TerminalOutputView : Mx.ScrollView {
 		cursor.add_transition("blinking-animation", blinking_animation);
 
 		render_terminal_cursor();
+	}
+
+}
+
+
+// A stack-layouting container similar in concept to Mx.BoxLayout,
+// but with vastly higher performance
+public class LineContainer : Clutter.Actor, Mx.Scrollable {
+
+	private Gee.List<LineView> line_views = new Gee.ArrayList<LineView>();
+
+	// PERFORMANCE: This data structure allows for efficient determination
+	//              of which children are inside the scrolled area, making it
+	//              possible to paint only those children that are visible to the user
+	private Gee.SortedMap<int, Clutter.Actor> y_index = new Gee.TreeMap<int, Clutter.Actor>();
+
+	public Mx.Adjustment horizontal_adjustment { owned get; set; default = new Mx.Adjustment(); }
+
+	public Mx.Adjustment vertical_adjustment { owned get; set; default = new Mx.Adjustment(); }
+
+	public void get_adjustments(out unowned Mx.Adjustment? hadjustment, out unowned Mx.Adjustment? vadjustment) {
+		// TODO: This works, and takes care of all the owned/unowned difficulties,
+		//       but is a hack nonetheless (Vala seems to implicitly create these variables)
+		hadjustment = _horizontal_adjustment;
+		vadjustment = _vertical_adjustment;
+	}
+
+	public void set_adjustments(Mx.Adjustment hadjustment, Mx.Adjustment vadjustment) {
+		horizontal_adjustment = hadjustment;
+		vertical_adjustment = vadjustment;
+	}
+
+	public void add_line_view(LineView line_view) {
+		line_views.add(line_view);
+
+		// PERFORMANCE: This appends line_view in constant time, while add_child
+		//              takes linear (or even superlinear?) time, depending on the number
+		//              of children already present in the LineContainer
+		//              (cf. https://mail.gnome.org/archives/clutter-list/2013-September/msg00005.html)
+		insert_child_at_index(line_view, -1);
+	}
+
+	public LineView get_line_view(int index) {
+		return line_views[index];
+	}
+
+	public int get_line_view_index(LineView line_view) {
+		return line_views.index_of(line_view);
+	}
+
+	public int get_line_count() {
+		return line_views.size;
+	}
+
+	protected override void allocate(Clutter.ActorBox box, Clutter.AllocationFlags flags) {
+		base.allocate(box, flags);
+
+		var child_box = Clutter.ActorBox();
+		child_box.x1 = box.x1;
+		child_box.x2 = box.x2;
+
+		float y_offset = 0;
+		float child_height;
+
+		y_index.clear();
+
+		// Simple vertical stacking layout
+		foreach (var line_view in line_views) {
+			if (!line_view.visible)
+				continue;
+
+			// Index child with its vertical offset
+			y_index.set((int)y_offset, line_view);
+
+			line_view.get_preferred_height(child_box.get_width(), null, out child_height);
+
+			child_box.y1 = y_offset;
+			child_box.y2 = child_box.y1 + child_height;
+
+			line_view.allocate(child_box, flags);
+
+			y_offset = child_box.y2;
+		}
+
+		// The 15 additional pixels of scrolling space are required
+		// to compensate for the margin used to hide the ScrollView
+		// "shadow" (see above)
+		vertical_adjustment.upper = y_offset + 15;
+		vertical_adjustment.page_size = box.get_height();
+		vertical_adjustment.step_increment = child_box.get_height();
+		// Ensure that page_increment is an integer multiple of step_increment
+		vertical_adjustment.page_increment =
+				((int)(vertical_adjustment.page_size /
+				       vertical_adjustment.step_increment)) *
+				vertical_adjustment.step_increment;
+	}
+
+	// Many of the ideas in the following functions are taken from
+	// https://github.com/clutter-project/mx/blob/master/mx/mx-box-layout.c
+	protected override void apply_transform(ref Clutter.Matrix matrix) {
+		base.apply_transform(ref matrix);
+
+		// Translate the actor so that the scrolled area is visible
+		matrix.translate(-(float)horizontal_adjustment.value, -(float)vertical_adjustment.value, 0);
+	}
+
+	protected override bool get_paint_volume(Clutter.PaintVolume volume) {
+		if (!volume.set_from_allocation(this))
+			return false;
+
+		// Restrict painting to the scrolled area
+		var origin = volume.get_origin();
+		origin.x += (float)horizontal_adjustment.value;
+		origin.y += (float)vertical_adjustment.value;
+		volume.set_origin(origin);
+
+		return true;
+	}
+
+	protected override void paint() {
+		do_paint();
+	}
+
+	protected override void pick(Clutter.Color color) {
+		do_paint();
+	}
+
+	private void do_paint() {
+		// Paint only the children inside the scrolled area
+		int y_start = (int)vertical_adjustment.value;
+		int y_end   = y_start + (int)allocation.get_height();
+
+		var children_to_paint = y_index.sub_map(y_start, y_end).values;
+
+		foreach (var child in children_to_paint) {
+			child.paint();
+		}
 	}
 
 }
