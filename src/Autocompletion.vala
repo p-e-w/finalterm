@@ -102,6 +102,9 @@ public class Autocompletion : Object {
 	}
 
 	public void add_command(string command) {
+		if (command == "")
+			return;
+
 		bool entry_found = false;
 		foreach (var entry in entries) {
 			if (entry.text == command) {
