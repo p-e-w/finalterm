@@ -119,6 +119,13 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				move_cursor(cursor_position.line + 1, 0);
 				break;
 
+			case TerminalStream.StreamElement.ControlSequenceType.HORIZONTAL_TAB:
+				// Move the cursor to the next tab stop, or to the right margin
+				// if no further tab stops are present on the line
+				print_text("\t");
+				text_updated(cursor_position.line);
+				break;
+
 			case TerminalStream.StreamElement.ControlSequenceType.BELL:
 				// TODO: Beep on the terminal window rather than the default display
 				Gdk.beep();
@@ -439,7 +446,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private void print_text(string text) {
 		var text_element = new TextElement(text, current_attributes);
 		get(cursor_position.line).insert_element(text_element, cursor_position.column, true);
-		// TODO: Handle double-width unicode characters
+		// TODO: Handle double-width unicode characters and tabs
 		move_cursor(cursor_position.line, cursor_position.column + text_element.get_length());
 	}
 
