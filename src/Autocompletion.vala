@@ -102,23 +102,20 @@ public class Autocompletion : Object {
 	}
 
 	public void add_command(string command) {
-		bool entry_found = false;
 		foreach (var entry in entries) {
 			if (entry.text == command) {
 				entry.uses++;
 				entry.last_used = (int)Time.local(time_t()).mktime();
-				entry_found = true;
-				break;
+				return;
 			}
 		}
 
-		if (!entry_found) {
-			var entry = new AutocompletionEntry();
-			entry.text = command;
-			entry.uses = 1;
-			entry.last_used = (int)Time.local(time_t()).mktime();
-			entries.add(entry);
-		}
+		// Command not found in entry list
+		var entry = new AutocompletionEntry();
+		entry.text = command;
+		entry.uses = 1;
+		entry.last_used = (int)Time.local(time_t()).mktime();
+		entries.add(entry);
 	}
 
 	public bool is_command_selected() {
@@ -156,11 +153,6 @@ public class Autocompletion : Object {
 	}
 
 	public void show_popup(string command) {
-		if (command.length == 0) {
-			hide_popup();
-			return;
-		}
-
 		this.current_command = command;
 
 		// Force refilter + resort

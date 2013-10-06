@@ -126,15 +126,23 @@ public class Terminal : Object {
 	private void on_output_command_updated(string command) {
 		message(_("Command updated: '%s'"), command);
 
-		// TODO: This should be scheduled to avoid congestion
-		FinalTerm.autocompletion.show_popup(command);
-		update_autocompletion_position();
+		var stripped_command = command.strip();
+		if (stripped_command == "") {
+			FinalTerm.autocompletion.hide_popup();
+		} else {
+			// TODO: This should be scheduled to avoid congestion
+			FinalTerm.autocompletion.show_popup(stripped_command);
+			update_autocompletion_position();
+		}
 	}
 
 	private void on_output_command_executed(string command) {
 		message(_("Command executed: '%s'"), command);
 		FinalTerm.autocompletion.hide_popup();
-		FinalTerm.autocompletion.add_command(command.strip());
+
+		var stripped_command = command.strip();
+		if (stripped_command != "")
+			FinalTerm.autocompletion.add_command(stripped_command);
 	}
 
 	private void on_output_title_updated(string new_title) {
