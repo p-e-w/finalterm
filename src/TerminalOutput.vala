@@ -37,7 +37,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	// Number of lines the virtual "screen" is shifted down
 	// with respect to the full terminal output
-	private int screen_offset = 0;
+	public int screen_offset { get; set; }
 
 	// The cursor's position within the full terminal output,
 	// not its position on the screen
@@ -72,6 +72,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		// Default attributes
 		current_attributes = new CharacterAttributes();
 
+		screen_offset = 0;
 		add_new_line();
 		move_cursor(0, 0);
 
@@ -113,8 +114,12 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.LINE_FEED:
 			case TerminalStream.StreamElement.ControlSequenceType.VERTICAL_TAB:
 				// This code causes a line feed or a new line operation
-				if (cursor_position.line == size - 1)
+				if (cursor_position.line == size - 1) {
+					if (size - screen_offset >= terminal.lines)
+						// Screen about to overflow => shift screen downward
+						screen_offset++;
 					add_new_line();
+				}
 				// TODO: Does LF always imply CR?
 				move_cursor(cursor_position.line + 1, 0);
 				break;
@@ -200,12 +205,10 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					 * Actually, the behavior implemented by GNOME Terminal is slightly
 					 * different, but this recipe gives better results.
 					 */
-					// TODO: Handle the case where size < terminal.lines
-					//       (and merely adding visible_lines lines will not scroll down)
 					int visible_lines = size - screen_offset;
 
 					for (int i = 0; i < visible_lines; i++) {
-						// This also shifts the virtual screen as desired
+						screen_offset++;
 						add_new_line();
 					}
 
@@ -457,9 +460,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	private void add_new_line() {
 		add(new OutputLine());
-
-		if (size > terminal.lines)
-			screen_offset++;
 
 		line_added();
 	}

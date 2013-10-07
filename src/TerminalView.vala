@@ -249,6 +249,10 @@ public class TerminalOutputView : Mx.ScrollView {
 
 			line_container.add_line_view(line_view);
 		}
+
+		// Note that this suffices to ensure scrolling space is always in sync with the model,
+		// because line_added is invoked after each adjustment to screen_offset in TerminalOutput
+		adjust_scrolling_space();
 	}
 
 	private void on_line_view_collapsed(LineView line_view) {
@@ -411,6 +415,14 @@ public class TerminalOutputView : Mx.ScrollView {
 			cursor.restore_easing_state();
 	}
 
+	private void adjust_scrolling_space() {
+		int additional_lines = terminal.terminal_output.screen_offset +
+				terminal.lines - terminal.terminal_output.size;
+		double scrolling_space = additional_lines * Settings.get_default().character_height;
+
+		line_container.set_scrolling_space(scrolling_space);
+	}
+
 	public void scroll_to_position(TerminalOutput.CursorPosition position = {-1, -1}) {
 		if (position.line >= line_container.get_line_count())
 			return;
@@ -518,6 +530,8 @@ public class TerminalOutputView : Mx.ScrollView {
 		terminal.columns = columns;
 		// TODO: Use Utilities.schedule_execution here?
 		terminal.update_size();
+
+		adjust_scrolling_space();
 	}
 
 	private void on_settings_changed(string? key) {
@@ -568,6 +582,13 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 	public void set_adjustments(Mx.Adjustment hadjustment, Mx.Adjustment vadjustment) {
 		horizontal_adjustment = hadjustment;
 		vertical_adjustment = vadjustment;
+	}
+
+	private double scrolling_space = 0;
+
+	public void set_scrolling_space(double scrolling_space) {
+		vertical_adjustment.upper += (scrolling_space - this.scrolling_space);
+		this.scrolling_space = scrolling_space;
 	}
 
 	public void add_line_view(LineView line_view) {
@@ -625,9 +646,9 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 		// The 15 additional pixels of scrolling space are required
 		// to compensate for the margin used to hide the ScrollView
 		// "shadow" (see above)
-		vertical_adjustment.upper = y_offset + 15;
+		vertical_adjustment.upper = y_offset + 15 + scrolling_space;
 		vertical_adjustment.page_size = box.get_height();
-		vertical_adjustment.step_increment = child_box.get_height();
+		vertical_adjustment.step_increment = Settings.get_default().character_height;
 		// Ensure that page_increment is an integer multiple of step_increment
 		vertical_adjustment.page_increment =
 				((int)(vertical_adjustment.page_size /
