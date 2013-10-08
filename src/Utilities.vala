@@ -99,17 +99,6 @@ public class Utilities : Object {
 		layout.get_pixel_size(out width, out height);
 	}
 
-	// TODO: Rename to "clamp" (cf. unichar)?
-	public static int bound_value(int value, int minimum, int maximum) {
-		if (value < minimum) {
-			return minimum;
-		} else if (value > maximum) {
-			return maximum;
-		} else {
-			return value;
-		}
-	}
-
 	public static T get_enum_value_from_name<T>(Type type, string name) {
 		EnumClass enum_class = (EnumClass)type.class_ref();
 		unowned EnumValue? enum_value = enum_class.get_value_by_name(name);

@@ -73,7 +73,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		current_attributes = new CharacterAttributes();
 
 		screen_offset = 0;
-		add_new_line();
 		move_cursor(0, 0);
 
 		text_updated.connect(on_text_updated);
@@ -114,12 +113,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.LINE_FEED:
 			case TerminalStream.StreamElement.ControlSequenceType.VERTICAL_TAB:
 				// This code causes a line feed or a new line operation
-				if (cursor_position.line == size - 1) {
-					if (size - screen_offset >= terminal.lines)
-						// Screen about to overflow => shift screen downward
-						screen_offset++;
-					add_new_line();
-				}
 				// TODO: Does LF always imply CR?
 				move_cursor(cursor_position.line + 1, 0);
 				break;
@@ -206,12 +199,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					 * different, but this recipe gives better results.
 					 */
 					int visible_lines = size - screen_offset;
-
-					for (int i = 0; i < visible_lines; i++) {
-						screen_offset++;
-						add_new_line();
-					}
-
+					screen_offset += visible_lines;
 					move_cursor(cursor_position.line + visible_lines, cursor_position.column);
 
 					break;
@@ -458,21 +446,38 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			command_updated(get_command());
 	}
 
-	private void add_new_line() {
-		add(new OutputLine());
-
-		line_added();
-	}
-
 	private CursorPosition get_screen_position(CursorPosition position) {
 		// Screen coordinates are 1-based (see http://vt100.net/docs/vt100-ug/chapter3.html)
 		return {position.line - screen_offset + 1, position.column + 1};
 	}
 
 	private void move_cursor(int line, int column) {
-		// TODO: Should cursor be allowed to be positioned AFTER the final character?
-		cursor_position.line   = Utilities.bound_value(line, 0, size - 1);
-		cursor_position.column = Utilities.bound_value(column, 0, get(cursor_position.line).get_length());
+		// TODO: Use uint as a parameter type to ensure positivity here
+		cursor_position.line   = int.max(line, 0);
+		cursor_position.column = int.max(column, 0);
+
+		// Ensure that the virtual screen contains the cursor
+		screen_offset = int.max(screen_offset, cursor_position.line - terminal.lines + 1);
+
+		// Add enough lines to make the line index valid
+		int lines_to_add = cursor_position.line - size + 1;
+		if (lines_to_add > 0) {
+			for (int i = 0; i < lines_to_add; i++)
+				add(new OutputLine());
+
+			line_added();
+		}
+
+		// Add enough whitespace to make the column index valid
+		int columns_to_add = cursor_position.column - get(cursor_position.line).get_length();
+		if (columns_to_add > 0) {
+			var text_builder = new StringBuilder();
+			for (int i = 0; i < columns_to_add; i++)
+				text_builder.append(" ");
+
+			var text_element = new TextElement(text_builder.str, current_attributes);
+			get(cursor_position.line).add(text_element);
+		}
 
 		cursor_position_changed(cursor_position);
 	}
