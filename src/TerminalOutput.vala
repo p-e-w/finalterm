@@ -244,6 +244,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 						Utilities.repeat_string(" ", stream_element.get_numeric_parameter(0, 1)),
 						current_attributes);
 				get(cursor_position.line).insert_element(text_element, cursor_position.column, true);
+				text_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.DELETE_CHARACTERS:
@@ -472,6 +473,10 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		return {position.line - screen_offset + 1, position.column + 1};
 	}
 
+	private CursorPosition get_absolute_position(CursorPosition position) {
+		return {position.line + screen_offset - 1, position.column - 1};
+	}
+
 	private void move_cursor(int line, int column) {
 		// TODO: Use uint as a parameter type to ensure positivity here
 		cursor_position.line   = int.max(line, 0);
@@ -531,8 +536,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		return text_builder.str;
 	}
 
-	private void erase_range(CursorPosition start_position = {0, 0},
-							 CursorPosition end_position   = {size - 1, get(size - 1).get_length()}) {
+	private void erase_range(CursorPosition start_position, CursorPosition end_position) {
 		if (start_position.line == end_position.line) {
 			erase_line_range(start_position.line, start_position.column, end_position.column);
 			return;
@@ -550,15 +554,21 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	private void erase_range_screen(CursorPosition start_position = {1, 1},
 									CursorPosition end_position   = {terminal.lines, terminal.columns + 1}) {
-		erase_range({start_position.line + screen_offset - 1, start_position.column - 1},
-				{end_position.line + screen_offset - 1, end_position.column - 1});
+		var absolute_start_position = get_absolute_position(start_position);
+		var absolute_end_position   = get_absolute_position(end_position);
+
+		// Constrain positions to permissible range
+		absolute_start_position.line = int.min(absolute_start_position.line, size - 1);
+		absolute_start_position.column = int.min(absolute_start_position.column,
+				get(absolute_start_position.line).get_length());
+		absolute_end_position.line = int.min(absolute_end_position.line, size - 1);
+		absolute_end_position.column = int.min(absolute_end_position.column,
+				get(absolute_end_position.line).get_length());
+
+		erase_range(absolute_start_position, absolute_end_position);
 	}
 
 	private void erase_line_range(int line, int start_position = 0, int end_position = -1) {
-		// TODO: Use assertion instead
-		if (line < 0 || line >= size)
-			return;
-
 		get(line).erase_range(start_position, end_position);
 		text_updated(line);
 	}
