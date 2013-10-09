@@ -142,12 +142,14 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_DOWN:
+			case TerminalStream.StreamElement.ControlSequenceType.LINE_POSITION_RELATIVE:
 				// The CUD sequence moves the active position downward without altering the column position.
 				// The number of lines moved is determined by the parameter (default: 1)
 				move_cursor(cursor_position.line + stream_element.get_numeric_parameter(0, 1), cursor_position.column);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_FORWARD:
+			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_POSITION_RELATIVE:
 				// The CUF sequence moves the active position to the right.
 				// The distance moved is determined by the parameter (default: 1)
 				move_cursor(cursor_position.line, cursor_position.column + stream_element.get_numeric_parameter(0, 1));
@@ -236,6 +238,14 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				}
 				break;
 
+			case TerminalStream.StreamElement.ControlSequenceType.ERASE_CHARACTERS:
+				// "Erase" means "clear" in this case (i.e. fill with whitespace)
+				var text_element = new TextElement(
+						Utilities.repeat_string(" ", stream_element.get_numeric_parameter(0, 1)),
+						current_attributes);
+				get(cursor_position.line).insert_element(text_element, cursor_position.column, true);
+				break;
+
 			case TerminalStream.StreamElement.ControlSequenceType.DELETE_CHARACTERS:
 				// This control function deletes one or more characters from the cursor position to the right
 				erase_line_range(cursor_position.line, cursor_position.column,
@@ -246,6 +256,17 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				int line   = stream_element.get_numeric_parameter(0, 1);
 				int column = stream_element.get_numeric_parameter(1, 1);
 				move_cursor_screen(line, column);
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.LINE_POSITION_ABSOLUTE:
+				move_cursor_screen(stream_element.get_numeric_parameter(0, 1),
+						get_screen_position(cursor_position).column);
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_CHARACTER_ABSOLUTE:
+			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_POSITION_ABSOLUTE:
+				move_cursor_screen(get_screen_position(cursor_position).line,
+						stream_element.get_numeric_parameter(0, 1));
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_ATTRIBUTES:
@@ -471,11 +492,9 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		// Add enough whitespace to make the column index valid
 		int columns_to_add = cursor_position.column - get(cursor_position.line).get_length();
 		if (columns_to_add > 0) {
-			var text_builder = new StringBuilder();
-			for (int i = 0; i < columns_to_add; i++)
-				text_builder.append(" ");
-
-			var text_element = new TextElement(text_builder.str, current_attributes);
+			var text_element = new TextElement(
+					Utilities.repeat_string(" ", columns_to_add),
+					current_attributes);
 			get(cursor_position.line).add(text_element);
 		}
 

@@ -71,6 +71,14 @@ public class Utilities : Object {
 		assert_not_reached();
 	}
 
+	public static string repeat_string(string text, int count) {
+		var text_builder = new StringBuilder();
+		for (int i = 0; i < count; i++)
+			text_builder.append(text);
+
+		return text_builder.str;
+	}
+
 	public static Clutter.Color get_rgb_color(int red, int green, int blue) {
 		// TODO: A Vala bug prevents using this (linker error):
 		//return Clutter.Color().init((uint8)red, (uint8)green, (uint8)blue, 255);
