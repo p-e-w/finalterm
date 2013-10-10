@@ -34,11 +34,8 @@ public class FinalTerm : Gtk.Application {
 
 	private Gtk.Window main_window;
 
-	private Clutter.Stage stage;
-	private GtkClutter.Embed clutter_embed;
-
-	private Terminal terminal;
-	private TerminalView terminal_view;
+	private Gee.Set<TerminalWidget> terminal_widgets = new Gee.HashSet<TerminalWidget>();
+	private TerminalWidget active_terminal_widget;
 
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
@@ -66,30 +63,26 @@ public class FinalTerm : Gtk.Application {
 		launcher = Unity.LauncherEntry.get_for_desktop_id("finalterm.desktop");
 #endif
 
-		terminal = new Terminal();
-		terminal.title_updated.connect(on_terminal_title_updated);
-		terminal.shell_terminated.connect(on_terminal_shell_terminated);
-
 		main_window = new Gtk.ApplicationWindow(this);
 		main_window.title = "Final Term";
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
-
-		clutter_embed = new GtkClutter.Embed();
-		// TODO: Send configure event once to ensure correct wrapping + rendering?
-		clutter_embed.configure_event.connect(on_configure_event);
-		clutter_embed.show();
-		main_window.add(clutter_embed);
-
-		stage = (Clutter.Stage)clutter_embed.get_stage();
-
-		terminal_view = new TerminalView(terminal, clutter_embed);
-		terminal.terminal_view = terminal_view;
-		stage.add(terminal_view);
-
 		// Enable background transparency
 		main_window.set_visual(main_window.screen.get_rgba_visual());
-		stage.use_alpha = true;
+
+		var terminal_widget = new TerminalWidget();
+		terminal_widget.title_updated.connect((new_title) => {
+			main_window.title = new_title;
+		});
+		terminal_widget.closed.connect(() => {
+			quit();
+		});
+
+		terminal_widget.show();
+		main_window.add(terminal_widget);
+
+		terminal_widgets.add(terminal_widget);
+		active_terminal_widget = terminal_widget;
 
 		main_window.key_press_event.connect(on_key_press_event);
 	}
@@ -161,34 +154,11 @@ public class FinalTerm : Gtk.Application {
 		quit();
 	}
 
-	private void on_terminal_title_updated(string new_title) {
-		main_window.title = new_title;
-	}
-
-	private void on_terminal_shell_terminated() {
-		quit();
-	}
-
-	// Called when size or position of window changes
-	private bool on_configure_event(Gdk.EventConfigure event) {
-		// TODO: Use "expand" properties to achieve this?
-		terminal_view.width  = event.width;
-		terminal_view.height = event.height;
-
-		// Reposition autocompletion popup when window is moved or resized
-		// to make it "stick" to the prompt line
-		if (terminal.is_autocompletion_active()) {
-			terminal.update_autocompletion_position();
-		}
-
-		return false;
-	}
-
 	private bool on_key_press_event(Gdk.EventKey event) {
 		//message(_("Application key: %s (%s)"), Gdk.keyval_name(event.keyval), event.str);
 
 		// Handle non-configurable keys (for command completion)
-		if (terminal.is_autocompletion_active()) {
+		if (autocompletion.is_popup_visible()) {
 			if (event.keyval == Gdk.Key.Up &&
 				autocompletion.is_command_selected()) {
 				// The "Up" key only triggers command selection
@@ -203,12 +173,12 @@ public class FinalTerm : Gtk.Application {
 
 			} else if (event.keyval == Gdk.Key.Right &&
 					   autocompletion.is_command_selected()) {
-				terminal.set_command(autocompletion.get_selected_command());
+				active_terminal_widget.set_shell_command(autocompletion.get_selected_command());
 				return true;
 
 			} else if (event.keyval == Gdk.Key.Return &&
 					   autocompletion.is_command_selected()) {
-				terminal.run_command(autocompletion.get_selected_command());
+				active_terminal_widget.run_shell_command(autocompletion.get_selected_command());
 				return true;
 
 			} else if (event.keyval == Gdk.Key.Escape) {
@@ -229,7 +199,7 @@ public class FinalTerm : Gtk.Application {
 		if (event.length == 0)
 			return false;
 
-		terminal.send_text(event.str);
+		active_terminal_widget.send_text_to_shell(event.str);
 		return true;
 	}
 
@@ -237,24 +207,24 @@ public class FinalTerm : Gtk.Application {
 		switch (command.command) {
 		case Command.CommandType.SEND_TO_SHELL:
 			foreach (var parameter in command.parameters) {
-				terminal.send_text(parameter);
+				active_terminal_widget.send_text_to_shell(parameter);
 			}
 			return;
 
 		case Command.CommandType.CLEAR_SHELL_COMMAND:
-			terminal.clear_command();
+			active_terminal_widget.clear_shell_command();
 			return;
 
 		case Command.CommandType.SET_SHELL_COMMAND:
 			if (command.parameters.is_empty)
 				return;
-			terminal.set_command(command.parameters.get(0));
+			active_terminal_widget.set_shell_command(command.parameters.get(0));
 			return;
 
 		case Command.CommandType.RUN_SHELL_COMMAND:
 			if (command.parameters.is_empty)
 				return;
-			terminal.run_command(command.parameters.get(0));
+			active_terminal_widget.run_shell_command(command.parameters.get(0));
 			return;
 
 		case Command.CommandType.TOGGLE_VISIBLE:
@@ -289,6 +259,7 @@ public class FinalTerm : Gtk.Application {
 				main_window.decorated = false;
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
+				// TODO: Account for vertical padding
 				main_window.resize(main_window.screen.get_width(),
 						15 * Settings.get_default().character_height);
 				// TODO: Always on top(?)
@@ -414,20 +385,14 @@ public class FinalTerm : Gtk.Application {
 		return result;
 	}
 
-	private void set_background(Clutter.Color color, double opacity) {
-		color.alpha = (uint8)(opacity * 255.0);
-		stage.background_color = color;
-	}
-
 	private void on_settings_changed(string? key) {
-		set_background(Settings.get_default().background_color, Settings.get_default().opacity);
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = Settings.get_default().dark;
 
 		// Restrict window resizing to multiples of character size
 		// TODO: Make this optional (user setting)
 		var geometry = Gdk.Geometry();
-		geometry.base_width  = terminal_view.terminal_output_view.get_horizontal_padding();
-		geometry.base_height = terminal_view.terminal_output_view.get_vertical_padding();
+		geometry.base_width  = active_terminal_widget.get_horizontal_padding();
+		geometry.base_height = active_terminal_widget.get_vertical_padding();
 		geometry.width_inc   = Settings.get_default().character_width;
 		geometry.height_inc  = Settings.get_default().character_height;
 		// TODO: Move values into constants / settings
@@ -438,10 +403,12 @@ public class FinalTerm : Gtk.Application {
 
 		// TODO: This should be resize_to_geometry, but that doesn't work
 		main_window.resize(
-			terminal_view.terminal_output_view.get_horizontal_padding() +
-				(terminal.columns * Settings.get_default().character_width),
-			terminal_view.terminal_output_view.get_vertical_padding() +
-				(terminal.lines * Settings.get_default().character_height));
+				active_terminal_widget.get_horizontal_padding() +
+					(active_terminal_widget.get_terminal_columns() *
+					 Settings.get_default().character_width),
+				active_terminal_widget.get_vertical_padding() +
+					(active_terminal_widget.get_terminal_lines() *
+					 Settings.get_default().character_height));
 	}
 
 }

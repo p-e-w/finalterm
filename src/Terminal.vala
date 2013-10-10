@@ -63,10 +63,6 @@ public class Terminal : Object {
 		Settings.get_default().changed.connect(on_settings_changed);
 	}
 
-	public bool is_autocompletion_active() {
-		return terminal_output.command_mode && FinalTerm.autocompletion.is_popup_visible();
-	}
-
 	public void update_autocompletion_position() {
 		int x;
 		int y;
@@ -280,7 +276,8 @@ public class Terminal : Object {
 	}
 
 	private void on_settings_changed(string? key) {
-		if (is_autocompletion_active())
+		// TODO: This breaks if multiple terminal widgets are used
+		if (FinalTerm.autocompletion.is_popup_visible())
 			update_autocompletion_position();
 	}
 

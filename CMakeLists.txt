@@ -64,6 +64,7 @@ vala_precompile(VALA_C
 	src/CharacterAttributes.vala
 	src/TerminalView.vala
 	src/LineView.vala
+	src/TerminalWidget.vala
 	src/Autocompletion.vala
 	src/NotifyingList.vala
 	src/ScrollableListView.vala
