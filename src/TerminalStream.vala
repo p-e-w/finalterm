@@ -22,13 +22,9 @@
 
 /*
  * Processes and stores raw terminal output, parsing control sequences
- *
- * The list elements of this class are immutable:
- * Once a stream element gets added, it doesn't change.
- * This reflects the fact that the raw output streamed
- * to the terminal only grows, but is not modified.
  */
-public class TerminalStream : Gee.ArrayList<StreamElement> {
+// TODO: Rename to "TerminalParser"
+public class TerminalStream : Object {
 
 	private ParseState parse_state = ParseState.TEXT;
 
@@ -176,23 +172,21 @@ public class TerminalStream : Gee.ArrayList<StreamElement> {
 
 		switch (parse_state) {
 		case ParseState.TEXT:
-			add(new StreamElement.from_text(sequence_builder.str));
+			element_completed(new StreamElement.from_text(sequence_builder.str));
 			break;
 		case ParseState.CONTROL_CHARACTER:
 		case ParseState.ESCAPE_SEQUENCE:
 		case ParseState.DCS_SEQUENCE:
 		case ParseState.CSI_SEQUENCE:
 		case ParseState.OSC_SEQUENCE:
-			add(new StreamElement.from_control_sequence(sequence_builder.str));
+			element_completed(new StreamElement.from_control_sequence(sequence_builder.str));
 			break;
 		}
 
 		sequence_builder.erase();
-
-		element_added(get(size - 1));
 	}
 
-	public signal void element_added(StreamElement stream_element);
+	public signal void element_completed(StreamElement stream_element);
 
 	public signal void transient_text_updated(string transient_text);
 

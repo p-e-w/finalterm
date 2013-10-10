@@ -41,7 +41,7 @@ public class Terminal : Object {
 		lines = Settings.get_default().terminal_lines;
 		columns = Settings.get_default().terminal_columns;
 
-		terminal_stream.element_added.connect(on_stream_element_added);
+		terminal_stream.element_completed.connect(on_stream_element_completed);
 		terminal_stream.transient_text_updated.connect(on_stream_transient_text_updated);
 
 		terminal_output = new TerminalOutput(this);
@@ -91,7 +91,7 @@ public class Terminal : Object {
 		send_text("\n");
 	}
 
-	private void on_stream_element_added(TerminalStream.StreamElement stream_element) {
+	private void on_stream_element_completed(TerminalStream.StreamElement stream_element) {
 		terminal_output.parse_stream_element(stream_element);
 	}
 
