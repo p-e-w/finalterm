@@ -12,4 +12,3 @@ Actions=NewWindow;
 [Desktop Action NewWindow]
 _Name=Open a New Window
 Exec=finalterm
-OnlyShowIn=Unity;
