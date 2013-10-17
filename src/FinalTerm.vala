@@ -34,8 +34,7 @@ public class FinalTerm : Gtk.Application {
 
 	private Gtk.Window main_window;
 
-	private Gee.Set<TerminalWidget> terminal_widgets = new Gee.HashSet<TerminalWidget>();
-	private TerminalWidget active_terminal_widget;
+	private TerminalWidget active_terminal_widget = null;
 
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
@@ -64,25 +63,39 @@ public class FinalTerm : Gtk.Application {
 #endif
 
 		main_window = new Gtk.ApplicationWindow(this);
-		main_window.title = "Final Term";
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 		// Enable background transparency
 		main_window.set_visual(main_window.screen.get_rgba_visual());
 
-		var terminal_widget = new TerminalWidget();
-		terminal_widget.title_updated.connect((new_title) => {
-			main_window.title = new_title;
+		var nesting_container = new NestingContainer(() => {
+			var terminal_widget = new TerminalWidget();
+
+			if (active_terminal_widget == null) {
+				terminal_widget.is_active = true;
+				active_terminal_widget = terminal_widget;
+			} else {
+				terminal_widget.is_active = false;
+			}
+
+			terminal_widget.notify["is-active"].connect(() => {
+				if (terminal_widget.is_active)
+					active_terminal_widget = terminal_widget;
+			});
+
+			return terminal_widget;
 		});
-		terminal_widget.closed.connect(() => {
+
+		main_window.title = nesting_container.title;
+		nesting_container.notify["title"].connect(() => {
+			main_window.title = nesting_container.title;
+		});
+
+		nesting_container.close.connect(() => {
 			quit();
 		});
 
-		terminal_widget.show();
-		main_window.add(terminal_widget);
-
-		terminal_widgets.add(terminal_widget);
-		active_terminal_widget = terminal_widget;
+		main_window.add(nesting_container);
 
 		main_window.key_press_event.connect(on_key_press_event);
 	}
@@ -387,28 +400,6 @@ public class FinalTerm : Gtk.Application {
 
 	private void on_settings_changed(string? key) {
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = Settings.get_default().dark;
-
-		// Restrict window resizing to multiples of character size
-		// TODO: Make this optional (user setting)
-		var geometry = Gdk.Geometry();
-		geometry.base_width  = active_terminal_widget.get_horizontal_padding();
-		geometry.base_height = active_terminal_widget.get_vertical_padding();
-		geometry.width_inc   = Settings.get_default().character_width;
-		geometry.height_inc  = Settings.get_default().character_height;
-		// TODO: Move values into constants / settings
-		geometry.min_width   = geometry.base_width + (20 * geometry.width_inc);
-		geometry.min_height  = geometry.base_height + (5 * geometry.height_inc);
-		main_window.get_window().set_geometry_hints(geometry,
-				Gdk.WindowHints.BASE_SIZE | Gdk.WindowHints.RESIZE_INC | Gdk.WindowHints.MIN_SIZE);
-
-		// TODO: This should be resize_to_geometry, but that doesn't work
-		main_window.resize(
-				active_terminal_widget.get_horizontal_padding() +
-					(active_terminal_widget.get_terminal_columns() *
-					 Settings.get_default().character_width),
-				active_terminal_widget.get_vertical_padding() +
-					(active_terminal_widget.get_terminal_lines() *
-					 Settings.get_default().character_height));
 	}
 
 }

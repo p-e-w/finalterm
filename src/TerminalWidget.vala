@@ -20,23 +20,34 @@
  * along with Final Term.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class TerminalWidget : GtkClutter.Embed {
+public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
+
+	public bool is_active { get; set; }
+
+	public string title { get; set; }
 
 	private Clutter.Stage stage;
 
 	private Terminal terminal;
 	private TerminalView terminal_view;
 
+	// This has to be a field rather than a local variable
+	// because it gets destroyed immediately otherwise
+	private Gtk.Menu context_menu;
+
 	public TerminalWidget() {
 		stage = (Clutter.Stage)get_stage();
 		stage.use_alpha = true;
 
 		terminal = new Terminal();
-		terminal.title_updated.connect((new_title) => {
-			title_updated(new_title);
+
+		title = terminal.terminal_output.terminal_title;
+		terminal.terminal_output.notify["terminal-title"].connect(() => {
+			title = terminal.terminal_output.terminal_title;
 		});
+
 		terminal.shell_terminated.connect(() => {
-			closed();
+			close();
 		});
 
 		terminal_view = new TerminalView(terminal, this);
@@ -44,10 +55,34 @@ public class TerminalWidget : GtkClutter.Embed {
 
 		stage.add(terminal_view);
 
+		var inactive_effect = new Clutter.BrightnessContrastEffect();
+		inactive_effect.set_brightness(-0.2f);
+
+		notify["is-active"].connect(() => {
+			if (is_active) {
+				stage.remove_effect(inactive_effect);
+			} else {
+				stage.add_effect(inactive_effect);
+			}
+
+			terminal_view.terminal_output_view.is_active = is_active;
+		});
+
 		configure_event.connect(on_configure_event);
+		button_press_event.connect(on_button_press_event);
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
+	}
+
+	protected override void get_preferred_width(out int minimum_width, out int natural_width) {
+		natural_width = terminal_view.terminal_output_view.get_horizontal_padding() +
+				(terminal.columns * Settings.get_default().character_width);
+	}
+
+	protected override void get_preferred_height(out int minimum_height, out int natural_height) {
+		natural_height = terminal_view.terminal_output_view.get_vertical_padding() +
+				(terminal.lines * Settings.get_default().character_height);
 	}
 
 	public void clear_shell_command() {
@@ -66,22 +101,6 @@ public class TerminalWidget : GtkClutter.Embed {
 		terminal.send_text(text);
 	}
 
-	public int get_terminal_lines() {
-		return terminal.lines;
-	}
-
-	public int get_terminal_columns() {
-		return terminal.columns;
-	}
-
-	public int get_horizontal_padding() {
-		return terminal_view.terminal_output_view.get_horizontal_padding();
-	}
-
-	public int get_vertical_padding() {
-		return terminal_view.terminal_output_view.get_vertical_padding();
-	}
-
 	private bool on_configure_event(Gdk.EventConfigure event) {
 		// TODO: Use "expand" properties to achieve this?
 		terminal_view.width  = event.width;
@@ -96,15 +115,62 @@ public class TerminalWidget : GtkClutter.Embed {
 		return false;
 	}
 
+	private bool on_button_press_event(Gdk.EventButton event) {
+		if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == 1) {
+			// Left mouse button pressed
+			is_active = true;
+			return true;
+		} else if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == 3) {
+			// Right mouse button pressed
+			get_context_menu().popup(null, null, null, event.button, event.time);
+			return true;
+		}
+
+		return false;
+	}
+
+	private Gtk.Menu get_context_menu() {
+		context_menu = new Gtk.Menu();
+
+		Gtk.MenuItem menu_item;
+
+		menu_item = new Gtk.MenuItem.with_label(_("New Tab"));
+		menu_item.activate.connect(() => {
+			add_tab();
+		});
+		context_menu.append(menu_item);
+
+		context_menu.append(new Gtk.SeparatorMenuItem());
+
+		menu_item = new Gtk.MenuItem.with_label(_("Split Horizontally"));
+		menu_item.activate.connect(() => {
+			split(Gtk.Orientation.HORIZONTAL);
+		});
+		context_menu.append(menu_item);
+
+		menu_item = new Gtk.MenuItem.with_label(_("Split Vertically"));
+		menu_item.activate.connect(() => {
+			split(Gtk.Orientation.VERTICAL);
+		});
+		context_menu.append(menu_item);
+
+		context_menu.append(new Gtk.SeparatorMenuItem());
+
+		menu_item = new Gtk.MenuItem.with_label(_("Close"));
+		menu_item.activate.connect(() => {
+			close();
+		});
+		context_menu.append(menu_item);
+
+		context_menu.show_all();
+
+		return context_menu;
+	}
+
 	private void on_settings_changed(string? key) {
 		var background_color = Settings.get_default().background_color;
 		background_color.alpha = (uint8)(Settings.get_default().opacity * 255.0);
 		stage.background_color = background_color;
 	}
-
-	// TODO: Rename to "title_changed"?
-	public signal void title_updated(string new_title);
-
-	public signal void closed();
 
 }

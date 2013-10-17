@@ -129,6 +129,8 @@ public class TerminalView : Mx.BoxLayout {
 // TODO: Reimplement this on top of ScrollableListView
 public class TerminalOutputView : Mx.ScrollView {
 
+	public bool is_active { get; set; }
+
 	private Terminal terminal;
 	private GtkClutter.Embed clutter_embed;
 
@@ -200,6 +202,14 @@ public class TerminalOutputView : Mx.ScrollView {
 		});
 
 		allocation_changed.connect(on_allocation_changed);
+
+		notify["is-active"].connect(() => {
+			if (is_active) {
+				render_terminal_cursor();
+			} else {
+				cursor.hide();
+			}
+		});
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
@@ -334,18 +344,10 @@ public class TerminalOutputView : Mx.ScrollView {
 	}
 
 	private void render_terminal_cursor() {
-		position_terminal_cursor(true);
+		if (!position_terminal_cursor(true))
+			return;
 
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
-
-		if (cursor_position.line >= line_container.get_line_count()) {
-			// If the cursor cannot be rendered correctly, hide it
-			cursor.hide();
-			return;
-		}
-
-		cursor.show();
-
 		var character_elements = terminal.terminal_output[cursor_position.line].explode();
 
 		string cursor_character;
@@ -387,13 +389,12 @@ public class TerminalOutputView : Mx.ScrollView {
 		blinking_animation.rewind();
 	}
 
-	private void position_terminal_cursor(bool animate) {
+	private bool position_terminal_cursor(bool animate) {
 		TerminalOutput.CursorPosition cursor_position = terminal.terminal_output.cursor_position;
 
-		if (cursor_position.line >= line_container.get_line_count()) {
-			// If the cursor cannot be positioned correctly, hide it
+		if (!is_active || cursor_position.line >= line_container.get_line_count()) {
 			cursor.hide();
-			return;
+			return false;
 		}
 
 		cursor.show();
@@ -413,6 +414,8 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		if (animate)
 			cursor.restore_easing_state();
+
+		return true;
 	}
 
 	private void adjust_scrolling_space() {

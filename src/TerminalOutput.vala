@@ -284,14 +284,12 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				case 0:
 					// Change Icon Name and Window Title
 					terminal_title = stream_element.get_text_parameter(1, "Final Term");
-					title_updated(terminal_title);
 					// TODO: Change icon name(?)
 					print_interpretation_status(stream_element, InterpretationStatus.PARTIALLY_SUPPORTED);
 					break;
 				case 2:
 					// Change Window Title
 					terminal_title = stream_element.get_text_parameter(1, "Final Term");
-					title_updated(terminal_title);
 					break;
 				default:
 					print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
@@ -582,8 +580,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public signal void command_executed(string command);
 
 	public signal void command_finished(string command);
-
-	public signal void title_updated(string new_title);
 
 	public signal void progress_updated(int percentage, string operation);
 

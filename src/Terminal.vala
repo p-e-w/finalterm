@@ -52,7 +52,6 @@ public class Terminal : Object {
 #if HAS_NOTIFY
 		terminal_output.command_finished.connect(on_output_command_finished);
 #endif
-		terminal_output.title_updated.connect(on_output_title_updated);
 		terminal_output.progress_updated.connect(on_output_progress_updated);
 		terminal_output.progress_finished.connect(on_output_progress_finished);
 		terminal_output.cursor_position_changed.connect(on_output_cursor_position_changed);
@@ -141,10 +140,6 @@ public class Terminal : Object {
 			FinalTerm.autocompletion.add_command(stripped_command);
 	}
 
-	private void on_output_title_updated(string new_title) {
-		title_updated(new_title);
-	}
-
 	private void on_output_progress_updated(int percentage, string operation) {
 #if HAS_UNITY
 		FinalTerm.launcher.progress_visible = true;
@@ -228,6 +223,9 @@ public class Terminal : Object {
 				while ((child_pid = Posix.waitpid(-1, null, Posix.WNOHANG)) != -1) {
 					var this_terminal = terminals_by_pid.get((int)child_pid);
 					this_terminal.shell_terminated();
+					// TODO: If allowed to run, this loop turns into an infinite loop
+					//       when multiple terminals are used. INVESTIGATE FURTHER!
+					break;
 				}
 			});
 
@@ -280,9 +278,6 @@ public class Terminal : Object {
 		if (FinalTerm.autocompletion.is_popup_visible())
 			update_autocompletion_position();
 	}
-
-	// TODO: Rename to "title_changed"?
-	public signal void title_updated(string new_title);
 
 	public signal void shell_terminated();
 
