@@ -63,7 +63,7 @@ The PPA is synchronized with the GitHub repository and should always deliver the
 
 ## Instructions for Fedora
 
-_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8QkZ5UnRiSzhnTVU/edit)._
+_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8eFJScTlzOE4xbVU/edit)._
 
 The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Fedora 18 system:
 
