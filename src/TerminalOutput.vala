@@ -64,7 +64,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public bool command_mode = false;
 	public CursorPosition command_start_position;
-	public CursorPosition command_end_position;
 
 	public TerminalOutput(Terminal terminal) {
 		this.terminal = terminal;
@@ -297,7 +296,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				}
 				break;
 
-			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROMPT_START:
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROMPT:
 				get(cursor_position.line).is_prompt_line = true;
 				if (last_command != null) {
 					command_finished(last_command);
@@ -306,28 +305,18 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_START:
-				if (command_mode) {
+				if (command_mode)
+					// TODO: This can happen with malformed multi-line commands
 					warning(_("Command start control sequence received while already in command mode"));
-				} else {
-					command_mode = true;
-					command_start_position = cursor_position;
-					message(_("Command mode entered"));
-				}
+				command_mode = true;
+				command_start_position = cursor_position;
+				message(_("Command mode entered"));
 				break;
 
-			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_END:
-				if (command_mode) {
-					command_mode = false;
-					// TODO: This breaks if cursor is moved backward using arrow keys
-					command_end_position = cursor_position;
-					last_command = get_command();
-					command_executed(last_command);
-				} else {
-					// Commented out because this is actually a common occurrence and
-					// makes the output very verbose
-					// TODO: Investigate further when exactly this occurs
-					//warning(_("Command end control sequence received while not in command mode"));
-				}
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_EXECUTED:
+				command_mode = false;
+				last_command = stream_element.get_text_parameter(0, "");
+				command_executed(last_command);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_TEXT_MENU_START:
@@ -438,17 +427,9 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	}
 
 	public string get_command() {
-		CursorPosition end_position;
-		if (command_mode) {
-			// TODO: This breaks if cursor is moved backward using arrow keys
-			end_position = cursor_position;
-		} else {
-			end_position = command_end_position;
-		}
-
 		// TODO: Revisit this check (condition should never fail)
-		if (command_start_position.compare(end_position) < 0) {
-			return get_range(command_start_position, end_position);
+		if (command_start_position.compare(cursor_position) < 0) {
+			return get_range(command_start_position, cursor_position);
 		} else {
 			return "";
 		}

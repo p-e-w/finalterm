@@ -339,9 +339,9 @@ public class TerminalStream : Object {
 
 			SET_TEXT_PARAMETERS,
 
-			FTCS_PROMPT_START,
+			FTCS_PROMPT,
 			FTCS_COMMAND_START,
-			FTCS_COMMAND_END,
+			FTCS_COMMAND_EXECUTED,
 			FTCS_TEXT_MENU_START,
 			FTCS_TEXT_MENU_END,
 			FTCS_PROGRESS
@@ -534,9 +534,9 @@ public class TerminalStream : Object {
 					PARAMETER_LIST_PATTERN);
 
 			// Final Term control sequences (note that these are actually OSC sequences)
-			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROMPT_START, "A");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROMPT, "A");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_START, "B");
-			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_END, "C");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_EXECUTED, "C");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_START, "D");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_END, "E");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROGRESS, "F");
