@@ -46,7 +46,7 @@ public class Terminal : Object {
 
 		terminal_output = new TerminalOutput(this);
 		terminal_output.line_added.connect(on_output_line_added);
-		terminal_output.text_updated.connect(on_output_text_updated);
+		terminal_output.line_updated.connect(on_output_line_updated);
 		terminal_output.command_updated.connect(on_output_command_updated);
 		terminal_output.command_executed.connect(on_output_command_executed);
 #if HAS_NOTIFY
@@ -110,7 +110,7 @@ public class Terminal : Object {
 		}, "scroll_to_position", 0, Priority.DEFAULT_IDLE);
 	}
 
-	private void on_output_text_updated(int line_index) {
+	private void on_output_line_updated(int line_index) {
 		terminal_view.terminal_output_view.mark_line_as_updated(line_index);
 
 		// TODO: Add information about instance to key
@@ -158,11 +158,13 @@ public class Terminal : Object {
 	}
 
 #if HAS_NOTIFY
-	private void on_output_command_finished(string command) {
+	private void on_output_command_finished(string command, int return_code) {
 		if (terminal_view.window_has_focus())
 			return;
 
-		var notification = new Notify.Notification(_("Command finished"), command, "final-term");
+		var message = _("Command finished") + ((return_code == 0) ? "" :
+				" (" + _("return code") + ": " + return_code.to_string() + ")");
+		var notification = new Notify.Notification(message, command, "final-term");
 		try {
 			notification.show();
 		} catch (Error e) { warning(_("Failed to show notification: %s"), e.message); }

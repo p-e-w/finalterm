@@ -34,16 +34,19 @@ MxButton.collapse-button {
   border-image: none;
 }
 MxButton.collapse-button:hover {
-  padding: 0;
-  font-size: 12;
   color: #ffffffcc;
-  border-image: none;
 }
 MxButton.collapse-button:active {
-  padding: 0;
-  font-size: 12;
   color: #ffffffff;
-  border-image: none;
+}
+MxButton.collapse-button:error {
+  color: #ff000099;
+}
+MxButton.collapse-button:error:hover {
+  color: #ff0000cc;
+}
+MxButton.collapse-button:error:active {
+  color: #ff0000ff;
 }
 
 MxScrollView {

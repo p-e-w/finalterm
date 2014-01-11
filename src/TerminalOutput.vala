@@ -74,7 +74,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		screen_offset = 0;
 		move_cursor(0, 0);
 
-		text_updated.connect(on_text_updated);
+		line_updated.connect(on_line_updated);
 	}
 
 	// TODO: Rename to "interpret_stream_element"?
@@ -92,7 +92,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				break;
 
 			print_text(text_left);
-			text_updated(cursor_position.line);
+			line_updated(cursor_position.line);
 			break;
 
 		case TerminalStream.StreamElement.StreamElementType.CONTROL_SEQUENCE:
@@ -120,7 +120,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				// Move the cursor to the next tab stop, or to the right margin
 				// if no further tab stops are present on the line
 				print_text("\t");
-				text_updated(cursor_position.line);
+				line_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.BELL:
@@ -243,7 +243,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 						Utilities.repeat_string(" ", stream_element.get_numeric_parameter(0, 1)),
 						current_attributes);
 				get(cursor_position.line).insert_element(text_element, cursor_position.column, true);
-				text_updated(cursor_position.line);
+				line_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.DELETE_CHARACTERS:
@@ -298,10 +298,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_PROMPT:
 				get(cursor_position.line).is_prompt_line = true;
-				if (last_command != null) {
-					command_finished(last_command);
-					progress_finished();
-				}
+				line_updated(cursor_position.line);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_START:
@@ -317,6 +314,25 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				command_mode = false;
 				last_command = stream_element.get_text_parameter(0, "");
 				command_executed(last_command);
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_FINISHED:
+				var return_code = stream_element.get_numeric_parameter(0, 0);
+
+				if (last_command != null) {
+					command_finished(last_command, return_code);
+					progress_finished();
+
+					// Set return code in corresponding prompt line
+					for (int i = size - 1; i >= 0; i--) {
+						if (get(i).is_prompt_line) {
+							get(i).return_code = return_code;
+							line_updated(i);
+							break;
+						}
+					}
+				}
+
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_TEXT_MENU_START:
@@ -402,7 +418,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		// Send update signal here to trigger render but do not print text;
 		// the transient text will be printed just in time during render (performance)
 		// TODO: Revisit this!
-		text_updated(cursor_position.line);
+		line_updated(cursor_position.line);
 	}
 
 	public void print_transient_text() {
@@ -419,9 +435,9 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		// IMPORTANT: Do NOT send update signal here!
 		//            This method is called when rendering the terminal
 		//            and sending the signal would trigger another render.
-		// Call on_text_updated instead to trigger other update logic.
+		// Call on_line_updated instead to trigger other update logic.
 		// TODO: Revisit this! Some command updates are being signaled multiple times
-		on_text_updated(0);
+		on_line_updated(0);
 
 		printed_transient_text += text_left;
 	}
@@ -442,7 +458,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		move_cursor(cursor_position.line, cursor_position.column + text_element.get_length());
 	}
 
-	private void on_text_updated(int line_index) {
+	private void on_line_updated(int line_index) {
 		if (command_mode)
 			command_updated(get_command());
 	}
@@ -549,18 +565,18 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	private void erase_line_range(int line, int start_position = 0, int end_position = -1) {
 		get(line).erase_range(start_position, end_position);
-		text_updated(line);
+		line_updated(line);
 	}
 
 	public signal void line_added();
 
-	public signal void text_updated(int line_index);
+	public signal void line_updated(int line_index);
 
 	public signal void command_updated(string command);
 
 	public signal void command_executed(string command);
 
-	public signal void command_finished(string command);
+	public signal void command_finished(string command, int return_code);
 
 	public signal void progress_updated(int percentage, string operation);
 
@@ -572,6 +588,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public class OutputLine : Gee.ArrayList<TextElement> {
 
 		public bool is_prompt_line { get; set; default = false; }
+		public int return_code { get; set; default = 0; }
 
 		// Returns a new OutputLine object reflecting
 		// matching text menu patterns if there are any
@@ -589,6 +606,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			OutputLine output_line = new OutputLine();
 			output_line.is_prompt_line = is_prompt_line;
+			output_line.return_code = return_code;
 			foreach (var text_element in this) {
 				output_line.add_all(text_element.get_text_menu_elements());
 			}

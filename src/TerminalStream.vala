@@ -342,6 +342,7 @@ public class TerminalStream : Object {
 			FTCS_PROMPT,
 			FTCS_COMMAND_START,
 			FTCS_COMMAND_EXECUTED,
+			FTCS_COMMAND_FINISHED,
 			FTCS_TEXT_MENU_START,
 			FTCS_TEXT_MENU_END,
 			FTCS_PROGRESS
@@ -537,9 +538,10 @@ public class TerminalStream : Object {
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROMPT, "A");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_START, "B");
 			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_EXECUTED, "C");
-			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_START, "D");
-			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_END, "E");
-			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROGRESS, "F");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_COMMAND_FINISHED, "D");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_START, "E");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_TEXT_MENU_END, "F");
+			add_final_term_sequence_pattern(ControlSequenceType.FTCS_PROGRESS, "G");
 
 			// xterm implements no PM functions
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html

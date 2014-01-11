@@ -143,6 +143,16 @@ public class LineView : Clutter.Actor {
 			collapse_button.visible = is_collapsible_start;
 		}
 
+		if (output_line.is_prompt_line) {
+			if (output_line.return_code == 0) {
+				collapse_button.style_pseudo_class_remove("error");
+				collapse_button.tooltip_text = null;
+			} else {
+				collapse_button.style_pseudo_class_add("error");
+				collapse_button.tooltip_text = _("Return code") + ": " + output_line.return_code.to_string();
+			}
+		}
+
 		// If the collapse button is visible, the text container will
 		// already be pushed to the left, so we need to subtract that
 		text_container.margin_left = Settings.get_default().theme.margin_left +
