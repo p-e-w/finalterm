@@ -9,19 +9,19 @@ color = 2
 
 [Menu]
 
-Copy name to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
+Copy name to clipboard = COPY_TO_CLIPBOARD "%1"
 
 $$$SEPARATOR$$$ =
 
-Information (<tt><b>stat</b></tt>)     = RUN_SHELL_COMMAND "stat '$$$1$$$'"
-List contents (<tt><b>ls -lh</b></tt>) = RUN_SHELL_COMMAND "ls -lh '$$$1$$$'"
+Information (<tt><b>stat</b></tt>)     = RUN_SHELL_COMMAND "stat '%1'"
+List contents (<tt><b>ls -lh</b></tt>) = RUN_SHELL_COMMAND "ls -lh '%1'"
 
 $$$SEPARATOR$$$ =
 
-Change to (<tt><b>cd</b></tt>) = RUN_SHELL_COMMAND "cd '$$$1$$$'"
+Change to (<tt><b>cd</b></tt>) = RUN_SHELL_COMMAND "cd '%1'"
 
 $$$SEPARATOR$$$ =
 
-Move (<tt><b>mv</b></tt>)      = SET_SHELL_COMMAND "mv '$$$1$$$'"
-Copy (<tt><b>cp -r</b></tt>)   = SET_SHELL_COMMAND "cp -r '$$$1$$$'"
-Delete (<tt><b>rm -r</b></tt>) = SET_SHELL_COMMAND "rm -r '$$$1$$$'"
+Move (<tt><b>mv</b></tt>)      = SET_SHELL_COMMAND "mv '%1'"
+Copy (<tt><b>cp -r</b></tt>)   = SET_SHELL_COMMAND "cp -r '%1'"
+Delete (<tt><b>rm -r</b></tt>) = SET_SHELL_COMMAND "rm -r '%1'"

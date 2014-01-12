@@ -23,6 +23,7 @@
 public class Command : Object {
 
 	public enum CommandType {
+		QUIT_PROGRAM,
 		SEND_TO_SHELL,
 		CLEAR_SHELL_COMMAND,
 		SET_SHELL_COMMAND,
@@ -30,6 +31,10 @@ public class Command : Object {
 		TOGGLE_VISIBLE,
 		TOGGLE_FULLSCREEN,
 		TOGGLE_DROPDOWN,
+		ADD_TAB,
+		SPLIT,
+		CLOSE,
+		LOG,
 		PRINT_METRICS,
 		COPY_TO_CLIPBOARD,
 		OPEN_URL
@@ -39,6 +44,7 @@ public class Command : Object {
 	public Gee.List<string> parameters { get; set; }
 
 	private static Regex command_pattern;
+	private static Regex placeholder_pattern;
 
 	public delegate void CommandExecuteFunction(Command command);
 
@@ -51,6 +57,7 @@ public class Command : Object {
 			command_pattern = new Regex(
 				"(\\w+)(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?(?:\\s+\"(.*?)\")?",
 				RegexCompileFlags.OPTIMIZE | RegexCompileFlags.DOTALL);
+			placeholder_pattern = new Regex("%\\d", RegexCompileFlags.OPTIMIZE);
 		} catch (Error e) { error(e.message); }
 	}
 
@@ -87,19 +94,37 @@ public class Command : Object {
 			substitute_command.command = command;
 			substitute_command.parameters = new Gee.ArrayList<string>();
 
-			// Replace placeholder "$$$i$$$" with placeholder_substitutes[i - 1]
-			// in all parameters
 			foreach (var parameter in parameters) {
 				var substitute_parameter = parameter;
+
+				// Replace placeholder "%i" with placeholder_substitutes[i - 1]
 				for (int i = 0; i < placeholder_substitutes.size; i++) {
 					substitute_parameter = substitute_parameter.replace(
-							"$$$" + (i + 1).to_string() + "$$$",
+							"%" + (i + 1).to_string(),
 							placeholder_substitutes.get(i));
 				}
+
+				// Remove remaining placeholders
+				substitute_parameter = placeholder_pattern.replace(substitute_parameter, -1, 0, "");
+
 				substitute_command.parameters.add(substitute_parameter);
 			}
 
 			substitute_command.execute();
+		}
+	}
+
+	public int get_numeric_parameter(int index, int default_value) {
+		return int.parse(get_text_parameter(index, default_value.to_string()));
+	}
+
+	public string get_text_parameter(int index, string default_value) {
+		if (parameters.size <= index) {
+			// No parameter with specified index exists
+			return default_value;
+		} else {
+			var parameter = parameters.get(index);
+			return (parameter == "") ? default_value : parameter;
 		}
 	}
 

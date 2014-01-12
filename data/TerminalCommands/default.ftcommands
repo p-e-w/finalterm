@@ -1,0 +1,23 @@
+# Final Term default terminal commands
+#
+# Entries take the form
+#   NAME = COMMAND; COMMAND; ...
+# NAME will be prefixed with "," automatically.
+# The commands on the right hand side are executed sequentially.
+# Command line argument $i is substituted for the placeholder %i.
+#
+# NOTE: The CLEAR_SHELL_COMMAND, SET_SHELL_COMMAND and RUN_SHELL_COMMAND
+#       commands will not work as expected when used here, since they
+#       are executed immediately, i.e. before the shell prompt is shown.
+
+quit = QUIT_PROGRAM
+
+log = LOG "%1"
+
+hide = TOGGLE_VISIBLE
+full = TOGGLE_FULLSCREEN
+
+tab    = ADD_TAB "%1"
+splith = SPLIT "HORIZONTALLY"
+splitv = SPLIT "VERTICALLY"
+close  = CLOSE

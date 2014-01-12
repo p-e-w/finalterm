@@ -276,8 +276,13 @@ public class Autocompletion : Object {
 				markup = markup.replace("{/$$$}", "</b>");
 			}
 
+			// Color terminal commands differently
+			var text_color = (entry.text.substring(0, 1) == ",") ?
+					Settings.get_default().color_scheme.get_indexed_color(5, !Settings.get_default().dark) :
+					Settings.get_default().background_color;
+
 			text = "<span foreground='" +
-					Utilities.get_parsable_color_string(Settings.get_default().background_color) +
+					Utilities.get_parsable_color_string(text_color) +
 					"' font_desc='" +
 					Settings.get_default().terminal_font_name + "'>" + markup + "</span>";
 		}

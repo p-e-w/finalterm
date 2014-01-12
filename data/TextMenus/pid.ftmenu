@@ -9,21 +9,21 @@ color = 4
 
 [Menu]
 
-Copy PID to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
+Copy PID to clipboard = COPY_TO_CLIPBOARD "%1"
 
 $$$SEPARATOR$$$ =
 
-Information (<tt><b>ps -lf</b></tt>) = RUN_SHELL_COMMAND "ps -lf $$$1$$$"
+Information (<tt><b>ps -lf</b></tt>) = RUN_SHELL_COMMAND "ps -lf %1"
 
 $$$SEPARATOR$$$ =
 
-Terminate (<tt><b>kill</b></tt>)          = RUN_SHELL_COMMAND "kill $$$1$$$"
-Force terminate (<tt><b>kill -9</b></tt>) = RUN_SHELL_COMMAND "kill -9 $$$1$$$"
+Terminate (<tt><b>kill</b></tt>)          = RUN_SHELL_COMMAND "kill %1"
+Force terminate (<tt><b>kill -9</b></tt>) = RUN_SHELL_COMMAND "kill -9 %1"
 
 $$$SEPARATOR$$$ =
 
-Set niceness to 20 (<tt><b>renice -n 20</b></tt>)   = RUN_SHELL_COMMAND "renice -n 20 -p $$$1$$$"
-Set niceness to 10 (<tt><b>renice -n 10</b></tt>)   = RUN_SHELL_COMMAND "renice -n 10 -p $$$1$$$"
-Set niceness to 0 (<tt><b>renice -n 0</b></tt>)     = RUN_SHELL_COMMAND "renice -n 0 -p $$$1$$$"
-Set niceness to -10 (<tt><b>renice -n -10</b></tt>) = RUN_SHELL_COMMAND "renice -n -10 -p $$$1$$$"
-Set niceness to -20 (<tt><b>renice -n -20</b></tt>) = RUN_SHELL_COMMAND "renice -n -20 -p $$$1$$$"
+Set niceness to 20 (<tt><b>renice -n 20</b></tt>)   = RUN_SHELL_COMMAND "renice -n 20 -p %1"
+Set niceness to 10 (<tt><b>renice -n 10</b></tt>)   = RUN_SHELL_COMMAND "renice -n 10 -p %1"
+Set niceness to 0 (<tt><b>renice -n 0</b></tt>)     = RUN_SHELL_COMMAND "renice -n 0 -p %1"
+Set niceness to -10 (<tt><b>renice -n -10</b></tt>) = RUN_SHELL_COMMAND "renice -n -10 -p %1"
+Set niceness to -20 (<tt><b>renice -n -20</b></tt>) = RUN_SHELL_COMMAND "renice -n -20 -p %1"

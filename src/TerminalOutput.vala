@@ -355,6 +355,35 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				}
 				break;
 
+			case TerminalStream.StreamElement.ControlSequenceType.FTCS_EXECUTE_COMMANDS:
+				var commands = new Gee.ArrayList<Command>();
+				var arguments = new Gee.ArrayList<string>();
+
+				var is_argument = false;
+				foreach (var parameter in stream_element.control_sequence_parameters) {
+					// The "#" character acts as a separator between commands and arguments
+					if (parameter == "#" && !is_argument) {
+						is_argument = true;
+						continue;
+					}
+
+					parameter = parameter.strip();
+
+					if (parameter != "") {
+						if (is_argument) {
+							arguments.add(parameter);
+						} else {
+							commands.add(new Command.from_command_specification(parameter));
+						}
+					}
+				}
+
+				foreach (var command in commands) {
+					command.execute(arguments);
+				}
+
+				break;
+
 			case TerminalStream.StreamElement.ControlSequenceType.UNKNOWN:
 				print_interpretation_status(stream_element, InterpretationStatus.UNRECOGNIZED);
 				break;

@@ -219,6 +219,10 @@ public class FinalTerm : Gtk.Application {
 
 	private void execute_command(Command command) {
 		switch (command.command) {
+		case Command.CommandType.QUIT_PROGRAM:
+			quit();
+			return;
+
 		case Command.CommandType.SEND_TO_SHELL:
 			foreach (var parameter in command.parameters) {
 				active_terminal_widget.send_text_to_shell(parameter);
@@ -281,6 +285,42 @@ public class FinalTerm : Gtk.Application {
 			} else {
 				main_window.hide();
 				main_window.decorated = true;
+			}
+			return;
+
+		case Command.CommandType.ADD_TAB:
+			if (active_terminal_widget != null) {
+				for (int i = 0; i < command.get_numeric_parameter(0, 1); i++)
+					active_terminal_widget.add_tab();
+			}
+			return;
+
+		case Command.CommandType.SPLIT:
+			if (active_terminal_widget != null) {
+				var orientation = command.get_text_parameter(0, "HORIZONTALLY");
+				switch (orientation) {
+				case "HORIZONTALLY":
+					active_terminal_widget.split(Gtk.Orientation.HORIZONTAL);
+					break;
+				case "VERTICALLY":
+					active_terminal_widget.split(Gtk.Orientation.VERTICAL);
+					break;
+				default:
+					warning(_("Unsupported split orientation: %s"), orientation);
+					break;
+				}
+			}
+			return;
+
+		case Command.CommandType.CLOSE:
+			if (active_terminal_widget != null) {
+				active_terminal_widget.close();
+			}
+			return;
+
+		case Command.CommandType.LOG:
+			foreach (var parameter in command.parameters) {
+				message(_("Log entry: '%s'"), parameter);
 			}
 			return;
 

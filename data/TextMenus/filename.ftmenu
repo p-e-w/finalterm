@@ -9,24 +9,24 @@ color = 3
 
 [Menu]
 
-Copy name to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
+Copy name to clipboard = COPY_TO_CLIPBOARD "%1"
 
 $$$SEPARATOR$$$ =
 
-Information (<tt><b>stat</b></tt>) = RUN_SHELL_COMMAND "stat '$$$1$$$'"
+Information (<tt><b>stat</b></tt>) = RUN_SHELL_COMMAND "stat '%1'"
 
 $$$SEPARATOR$$$ =
 
-Move (<tt><b>mv</b></tt>)   = SET_SHELL_COMMAND "mv '$$$1$$$'"
-Copy (<tt><b>cp</b></tt>)   = SET_SHELL_COMMAND "cp '$$$1$$$'"
-Delete (<tt><b>rm</b></tt>) = SET_SHELL_COMMAND "rm '$$$1$$$'"
+Move (<tt><b>mv</b></tt>)   = SET_SHELL_COMMAND "mv '%1'"
+Copy (<tt><b>cp</b></tt>)   = SET_SHELL_COMMAND "cp '%1'"
+Delete (<tt><b>rm</b></tt>) = SET_SHELL_COMMAND "rm '%1'"
 
 $$$SEPARATOR$$$ =
 
-View with <tt><b>cat</b></tt>  = RUN_SHELL_COMMAND "cat '$$$1$$$'"
-View with <tt><b>less</b></tt> = RUN_SHELL_COMMAND "less '$$$1$$$'"
+View with <tt><b>cat</b></tt>  = RUN_SHELL_COMMAND "cat '%1'"
+View with <tt><b>less</b></tt> = RUN_SHELL_COMMAND "less '%1'"
 
 $$$SEPARATOR$$$ =
 
-Edit with <tt><b>vi</b></tt>   = RUN_SHELL_COMMAND "vi '$$$1$$$'"
-Edit with <tt><b>nano</b></tt> = RUN_SHELL_COMMAND "nano '$$$1$$$'"
+Edit with <tt><b>vi</b></tt>   = RUN_SHELL_COMMAND "vi '%1'"
+Edit with <tt><b>nano</b></tt> = RUN_SHELL_COMMAND "nano '%1'"

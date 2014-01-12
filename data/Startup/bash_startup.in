@@ -55,6 +55,42 @@ preexec_install
 PS1=$PS1$(final_term_control_sequence 'B')
 
 
+# Logic for terminal commands
+
+function trim() {
+	echo "$1" | sed -e 's/^ *//g' -e 's/ *$//g'
+}
+
+function send_commands() {
+	send_control_sequence "$(final_term_control_sequence 'H' "$1" '#' "${@:2}")"
+}
+
+pushd "@PKGDATADIR@/TerminalCommands" > /dev/null
+while IFS= read -r line; do
+	stripped_line=$(trim "$line")
+
+	if [ -n "$stripped_line" ]; then
+		# Non-empty line
+		if [ "${stripped_line:0:1}" != "#" ]; then
+			# Non-comment line
+			# Split on "=" character
+			old_IFS=$IFS
+			IFS='='
+			line_parts=($stripped_line)
+			IFS=$old_IFS
+
+			name=$(trim "${line_parts[0]}")
+			commands=$(trim "${line_parts[1]}")
+			# Escape double quotes used for command arguments
+			commands=$(echo "$commands" | sed 's/"/\\"/g')
+
+			alias ",$name"="send_commands \"$commands\""
+		fi
+	fi
+done <*.ftcommands
+popd > /dev/null
+
+
 # Termlet-related logic
 
 function text_menu_start() {

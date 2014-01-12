@@ -11,5 +11,5 @@ color = 6
 
 [Menu]
 
-Copy URL to clipboard = COPY_TO_CLIPBOARD "$$$1$$$"
-Open URL in browser   = OPEN_URL "$$$1$$$"
+Copy URL to clipboard = COPY_TO_CLIPBOARD "%1"
+Open URL in browser   = OPEN_URL "%1"
