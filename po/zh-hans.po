@@ -1,0 +1,404 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Tong Hui <tonghuix@gmail.com>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: finalterm 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-22 12:38+0200\n"
+"PO-Revision-Date: 2014-01-17 01:34+0800\n"
+"Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
+"Language-Team: Tong Hui <tonghuix@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh-Hans\n"
+
+#: ../src/Metrics.vala:98
+#, c-format
+msgid "\tTotal time: %f"
+msgstr "\t总时间：%f"
+
+#: ../src/Metrics.vala:78
+msgid ""
+"\n"
+"BLOCK STATISTICS:"
+msgstr ""
+"\n"
+"块统计:"
+
+#: ../src/Metrics.vala:106
+#, c-format
+msgid ""
+"\n"
+"Grand total time: %f"
+msgstr "\n"
+"全局总时间：%f"
+
+#: ../src/FinalTerm.vala:131
+msgid " (Faenza icon, modified)"
+msgstr "（Faenza 图标，已修改）"
+
+#: ../src/FinalTerm.vala:143
+msgid " (German)"
+msgstr "（德语）"
+
+#: ../src/FinalTerm.vala:144
+msgid " (Hungarian)"
+msgstr "（匈牙利语）"
+
+#: ../src/FinalTerm.vala:127
+msgid " (original author)"
+msgstr "（原作者）"
+
+#: ../src/Metrics.vala:103
+msgid " [RUNNING]"
+msgstr "[运行中]"
+
+#: ../src/Metrics.vala:100
+#, c-format
+msgid ",\tCycles: %i"
+msgstr ",\t循环次数：%i"
+
+#: ../src/Metrics.vala:99
+#, c-format
+msgid ",\tMean time: %f"
+msgstr ",\t间隔时间：%f"
+
+#: ../src/SettingsWindow.vala:111
+msgid "Appearance"
+msgstr "外观"
+
+#: ../src/FinalTerm.vala:137
+msgid "At last – a modern terminal emulator."
+msgstr "最终——一个现代虚拟终端"
+
+#: ../src/Metrics.vala:44
+msgid "Attempting to restart a timer that has not been stopped"
+msgstr "正在尝试重启未停止的定时器"
+
+#: ../src/Metrics.vala:61
+msgid "Attempting to stop a timer that does not exist"
+msgstr "正在尝试停止不存在的定时器"
+
+#: ../src/Metrics.vala:68
+msgid "Attempting to stop a timer that has not been started"
+msgstr "正在尝试停止未启动的定时器"
+
+#: ../src/FinalTerm.vala:367
+#, c-format
+msgid "Cannot access data directory: %s"
+msgstr "不能访问数据目录：%s"
+
+#: ../src/CharacterAttributes.vala:101
+msgid "Cannot parse stream element into character attributes"
+msgstr "不能将流元素解析成字符属性"
+
+#: ../src/SettingsWindow.vala:122
+msgid "Color scheme:"
+msgstr "颜色主题："
+
+#: ../src/Terminal.vala:120
+#, c-format
+msgid "Command executed: '%s'"
+msgstr "已执行的命令：“%s”"
+
+#: ../src/Terminal.vala:151
+msgid "Command finished"
+msgstr "命令已完成"
+
+#: ../src/TerminalOutput.vala:251
+msgid "Command mode entered"
+msgstr "已进入命令模式"
+
+#: ../src/TerminalOutput.vala:247
+msgid "Command start control sequence received while already in command mode"
+msgstr "一旦已经处于命令模式，命令启动已收到的控制序列"
+
+#: ../src/Terminal.vala:112
+#, c-format
+msgid "Command updated: '%s'"
+msgstr "命令已更新：“%s”"
+
+#: ../src/Terminal.vala:239
+msgid "Connection broken"
+msgstr "连接中断"
+
+#: ../src/FinalTerm.vala:138
+msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+msgstr "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+
+#: ../src/Theme.vala:52
+#, c-format
+msgid "Could not load theme %s: %s"
+msgstr "不能载入主题 %s：%s"
+
+#: ../src/SettingsWindow.vala:119
+msgid "Dark look:"
+msgstr "暗黑主题："
+
+#: ../src/SettingsWindow.vala:107
+msgid "Default dimensions:"
+msgstr "默认尺寸："
+
+#: ../src/ColorScheme.vala:116
+#, c-format
+msgid "Error in color scheme %s: %s"
+msgstr "颜色主题错误 %s：%s"
+
+#: ../src/KeyBindings.vala:69
+#, c-format
+msgid "Error in key bindings file %s: %s"
+msgstr "快捷键绑定文件错误 %s：%s"
+
+#: ../src/TextMenu.vala:91
+#, c-format
+msgid "Error in text menu %s: %s"
+msgstr "文本菜单错误 %s：%s"
+
+#: ../src/Theme.vala:80
+#, c-format
+msgid "Error in theme %s: %s"
+msgstr "主题错误 %s：%s"
+
+#: ../src/Utilities.vala:132
+#, c-format
+msgid "Error while opening file '%s' for reading"
+msgstr "打开文件“%s”错误"
+
+#: ../src/Utilities.vala:147
+#, c-format
+msgid "Error while parsing JSON file %s: %s"
+msgstr "解析 JSON 文件错误 %s：%s"
+
+#: ../src/Utilities.vala:41
+#, c-format
+msgid "Failed to get %s files in %s: %s"
+msgstr "不能获取 %s 文件，通过 %s：%s"
+
+#: ../src/FinalTerm.vala:316
+msgid "Failed to initialize Clutter"
+msgstr "不能初始化 Clutter"
+
+#: ../src/ColorScheme.vala:75
+#, c-format
+msgid "Failed to load color scheme %s: %s"
+msgstr "不能载入颜色主题 %s：%s"
+
+#: ../src/TextMenu.vala:46
+#, c-format
+msgid "Failed to load text menu definitions %s: %s"
+msgstr "不能载入菜单定义 %s：%s"
+
+#: ../src/Terminal.vala:154
+#, c-format
+msgid "Failed to show notification: %s"
+msgstr "不能显示通知：%s"
+
+#: ../src/Terminal.vala:191
+msgid "Fork failed"
+msgstr "派生失败"
+
+#: ../src/SettingsWindow.vala:105
+msgid "General"
+msgstr "通用"
+
+#: ../src/ColorScheme.vala:135
+#, c-format
+msgid "Invalid color index: %i"
+msgstr "无效颜色索引：%i"
+
+#: ../src/Command.vala:60
+#, c-format
+msgid "Invalid command specification: '%s'"
+msgstr "无效命令规范：“%s”"
+
+#: ../src/TerminalOutput.vala:324
+#, c-format
+msgid "Invalid control sequence: '%s' (%s)"
+msgstr "无效的控制序列：“%s”（%s）"
+
+#: ../src/Utilities.vala:106
+#, c-format
+msgid "Invalid enum value name: '%s'"
+msgstr "无效的枚举值名称：“%s”"
+
+#: ../src/SettingsWindow.vala:116
+msgid "Label font:"
+msgstr "标签字体："
+
+#: ../src/FinalTerm.vala:302
+#, c-format
+msgid "Launching %s failed: %s"
+msgstr "启动 %s 失败：%s"
+
+#: ../src/KeyBindings.vala:37
+#, c-format
+msgid "Loading key bindings file %s failed: %s"
+msgstr "载入按键绑定文件 %s 失败：%s"
+
+#: ../src/Settings.vala:151
+msgid "No Settings instance available yet"
+msgstr "尚无可用的设置实例"
+
+#: ../src/ScrollableListView.vala:165
+msgid "Object does not implement the ItemView interface"
+msgstr "对象没有实现 ItemView 接口"
+
+#: ../src/SettingsWindow.vala:129
+msgid "Opacity:"
+msgstr "不透明度："
+
+#: ../src/TerminalOutput.vala:336
+#, c-format
+msgid "Partially supported control sequence: '%s' (%s)"
+msgstr "部分支持的控制序列：“%s”（%s）"
+
+#: ../src/SettingsWindow.vala:26
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../src/Terminal.vala:247
+#, c-format
+msgid "Reading unichar failed: %s"
+msgstr "读取 unichar 失败：%s"
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
+msgstr "发送字符失败：%s"
+
+#: ../src/TerminalOutput.vala:340
+#, c-format
+msgid "Supported control sequence: '%s' (%s)"
+msgstr "支持的控制序列：“%s”（%s）"
+
+#: ../src/SettingsWindow.vala:113
+msgid "Terminal font:"
+msgstr "终端字体："
+
+#: ../src/SettingsWindow.vala:125
+msgid "Theme:"
+msgstr "主题："
+
+#: ../src/TerminalOutput.vala:328
+#, c-format
+msgid "Unrecognized control sequence: '%s' (%s)"
+msgstr "未识别的控制序列：“%s”（%s）"
+
+#: ../src/TerminalOutput.vala:344
+msgid "Unrecognized interpretation status value"
+msgstr "未识别的解释器状态值"
+
+#: ../src/FinalTerm.vala:306
+#, c-format
+msgid "Unsupported command: %s"
+msgstr "不支持的命令：%s"
+
+#: ../src/TerminalOutput.vala:332
+#, c-format
+msgid "Unsupported control sequence: '%s' (%s)"
+msgstr "不支持的控制序列：“%s”（%s）"
+
+#: ../src/FinalTerm.vala:110
+msgid "_About Final Term"
+msgstr "关于 Final Term(_A)"
+
+#: ../src/FinalTerm.vala:106
+msgid "_Preferences"
+msgstr "首选项(_P)"
+
+#: ../src/FinalTerm.vala:111
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+#: ../src/SettingsWindow.vala:46
+msgid "columns"
+msgstr "栏数"
+
+#: ../src/Terminal.vala:230
+msgid "execvp failed"
+msgstr "execvp 失败"
+
+#: ../src/FinalTerm.vala:136
+msgid "pre-alpha"
+msgstr "准预览版本"
+
+#: ../src/TerminalOutput.vala:318
+msgid ""
+"print_interpretation_status should only be called on control sequence "
+"elements"
+msgstr "print_interpretation_status 只能由控制序列元素调用"
+
+#: ../src/SettingsWindow.vala:48
+msgid "rows"
+msgstr "行数"
+
+#: ../build/data/finalterm.desktop.in.h:3
+msgid "Open a New Window"
+msgstr "打开新窗口"
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr "不仅仅用你的系统 —— 用命令控制它！"
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr "终端"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr "背景不透明度"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr "要启用的颜色主题"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr "终端中的默认栏数"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr "终端中的默认行数"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr "菜单按钮标签字体"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr "终端输出字体"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr "成功输出渲染循环的最小时间，以毫秒计"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr "成功改变大小的循环的最小时间，以毫秒计"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr "运行 Shell 的执行路径（注意：目前仅支持 bash）"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr "要使用的主题"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr "使用暗黑主题"
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr "要设置的 TERM 环境变量的值（注意：改变此值将会影响 shell 的行为）"
