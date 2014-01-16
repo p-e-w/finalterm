@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: finalterm 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-22 12:38+0200\n"
-"PO-Revision-Date: 2014-01-17 01:25+0800\n"
+"PO-Revision-Date: 2014-01-17 01:34+0800\n"
 "Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
 "Language-Team: Tong Hui <tonghuix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,11 +36,12 @@ msgstr ""
 msgid ""
 "\n"
 "Grand total time: %f"
-msgstr "\n全局总时间：%f"
+msgstr "\n"
+"全局总时间：%f"
 
 #: ../src/FinalTerm.vala:131
 msgid " (Faenza icon, modified)"
-msgstr "(Faenza 图标，已修改）"
+msgstr "（Faenza 图标，已修改）"
 
 #: ../src/FinalTerm.vala:143
 msgid " (German)"
@@ -66,7 +67,7 @@ msgstr ",\t循环次数：%i"
 #: ../src/Metrics.vala:99
 #, c-format
 msgid ",\tMean time: %f"
-msgstr ",\\t间隔时间：%f"
+msgstr ",\t间隔时间：%f"
 
 #: ../src/SettingsWindow.vala:111
 msgid "Appearance"
@@ -317,7 +318,7 @@ msgstr "退出(_Q)"
 
 #: ../src/SettingsWindow.vala:46
 msgid "columns"
-msgstr "行数"
+msgstr "栏数"
 
 #: ../src/Terminal.vala:230
 msgid "execvp failed"
@@ -335,7 +336,7 @@ msgstr "print_interpretation_status 只能由控制序列元素调用"
 
 #: ../src/SettingsWindow.vala:48
 msgid "rows"
-msgstr "列数"
+msgstr "行数"
 
 #: ../build/data/finalterm.desktop.in.h:3
 msgid "Open a New Window"
@@ -355,7 +356,7 @@ msgstr "背景不透明度"
 
 #: ../build/data/org.gnome.finalterm.gschema.xml.h:3
 msgid "Color scheme to be used"
-msgstr "已启用的颜色主题"
+msgstr "要启用的颜色主题"
 
 #: ../build/data/org.gnome.finalterm.gschema.xml.h:8
 msgid "Default number of columns in the terminal"
@@ -400,4 +401,4 @@ msgstr "使用暗黑主题"
 msgid ""
 "Value that the TERM environment variable will be set to (NOTE: Changing this "
 "variable may affect shell behavior)"
-msgstr "要设置的 TERM 环境变量的值（主题：改变此值将会影响 shell 的行为）"
+msgstr "要设置的 TERM 环境变量的值（注意：改变此值将会影响 shell 的行为）"
