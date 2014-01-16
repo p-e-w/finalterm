@@ -1,0 +1,403 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Tong Hui <tonghuix@gmail.com>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: finalterm 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-22 12:38+0200\n"
+"PO-Revision-Date: 2014-01-17 00:54+0800\n"
+"Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
+"Language-Team: Tong Hui <tonghuix@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: zh-Hans\n"
+
+#: ../src/Metrics.vala:98
+#, c-format
+msgid "\tTotal time: %f"
+msgstr "\t总时间：%f"
+
+#: ../src/Metrics.vala:78
+msgid ""
+"\n"
+"BLOCK STATISTICS:"
+msgstr ""
+"\n"
+"块统计:"
+
+#: ../src/Metrics.vala:106
+#, c-format
+msgid ""
+"\n"
+"Grand total time: %f"
+msgstr "\n全局总时间：%f"
+
+#: ../src/FinalTerm.vala:131
+msgid " (Faenza icon, modified)"
+msgstr "(Faenza 图标，已修改）"
+
+#: ../src/FinalTerm.vala:143
+msgid " (German)"
+msgstr "（德语）"
+
+#: ../src/FinalTerm.vala:144
+msgid " (Hungarian)"
+msgstr "（匈牙利语）"
+
+#: ../src/FinalTerm.vala:127
+msgid " (original author)"
+msgstr "（原作者）"
+
+#: ../src/Metrics.vala:103
+msgid " [RUNNING]"
+msgstr "[运行中]"
+
+#: ../src/Metrics.vala:100
+#, c-format
+msgid ",\tCycles: %i"
+msgstr ",\t循环次数：%i"
+
+#: ../src/Metrics.vala:99
+#, c-format
+msgid ",\tMean time: %f"
+msgstr ",\\t间隔时间：%f"
+
+#: ../src/SettingsWindow.vala:111
+msgid "Appearance"
+msgstr ""
+
+#: ../src/FinalTerm.vala:137
+msgid "At last – a modern terminal emulator."
+msgstr ""
+
+#: ../src/Metrics.vala:44
+msgid "Attempting to restart a timer that has not been stopped"
+msgstr ""
+
+#: ../src/Metrics.vala:61
+msgid "Attempting to stop a timer that does not exist"
+msgstr ""
+
+#: ../src/Metrics.vala:68
+msgid "Attempting to stop a timer that has not been started"
+msgstr ""
+
+#: ../src/FinalTerm.vala:367
+#, c-format
+msgid "Cannot access data directory: %s"
+msgstr ""
+
+#: ../src/CharacterAttributes.vala:101
+msgid "Cannot parse stream element into character attributes"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:122
+msgid "Color scheme:"
+msgstr ""
+
+#: ../src/Terminal.vala:120
+#, c-format
+msgid "Command executed: '%s'"
+msgstr ""
+
+#: ../src/Terminal.vala:151
+msgid "Command finished"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:251
+msgid "Command mode entered"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:247
+msgid "Command start control sequence received while already in command mode"
+msgstr ""
+
+#: ../src/Terminal.vala:112
+#, c-format
+msgid "Command updated: '%s'"
+msgstr ""
+
+#: ../src/Terminal.vala:239
+msgid "Connection broken"
+msgstr ""
+
+#: ../src/FinalTerm.vala:138
+msgid "Copyright © 2013 Philipp Emanuel Weidmann & contributors"
+msgstr ""
+
+#: ../src/Theme.vala:52
+#, c-format
+msgid "Could not load theme %s: %s"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:119
+msgid "Dark look:"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:107
+msgid "Default dimensions:"
+msgstr ""
+
+#: ../src/ColorScheme.vala:116
+#, c-format
+msgid "Error in color scheme %s: %s"
+msgstr ""
+
+#: ../src/KeyBindings.vala:69
+#, c-format
+msgid "Error in key bindings file %s: %s"
+msgstr ""
+
+#: ../src/TextMenu.vala:91
+#, c-format
+msgid "Error in text menu %s: %s"
+msgstr ""
+
+#: ../src/Theme.vala:80
+#, c-format
+msgid "Error in theme %s: %s"
+msgstr ""
+
+#: ../src/Utilities.vala:132
+#, c-format
+msgid "Error while opening file '%s' for reading"
+msgstr ""
+
+#: ../src/Utilities.vala:147
+#, c-format
+msgid "Error while parsing JSON file %s: %s"
+msgstr ""
+
+#: ../src/Utilities.vala:41
+#, c-format
+msgid "Failed to get %s files in %s: %s"
+msgstr ""
+
+#: ../src/FinalTerm.vala:316
+msgid "Failed to initialize Clutter"
+msgstr ""
+
+#: ../src/ColorScheme.vala:75
+#, c-format
+msgid "Failed to load color scheme %s: %s"
+msgstr ""
+
+#: ../src/TextMenu.vala:46
+#, c-format
+msgid "Failed to load text menu definitions %s: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:154
+#, c-format
+msgid "Failed to show notification: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:191
+msgid "Fork failed"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:105
+msgid "General"
+msgstr ""
+
+#: ../src/ColorScheme.vala:135
+#, c-format
+msgid "Invalid color index: %i"
+msgstr ""
+
+#: ../src/Command.vala:60
+#, c-format
+msgid "Invalid command specification: '%s'"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:324
+#, c-format
+msgid "Invalid control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/Utilities.vala:106
+#, c-format
+msgid "Invalid enum value name: '%s'"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:116
+msgid "Label font:"
+msgstr ""
+
+#: ../src/FinalTerm.vala:302
+#, c-format
+msgid "Launching %s failed: %s"
+msgstr ""
+
+#: ../src/KeyBindings.vala:37
+#, c-format
+msgid "Loading key bindings file %s failed: %s"
+msgstr ""
+
+#: ../src/Settings.vala:151
+msgid "No Settings instance available yet"
+msgstr ""
+
+#: ../src/ScrollableListView.vala:165
+msgid "Object does not implement the ItemView interface"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:129
+msgid "Opacity:"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:336
+#, c-format
+msgid "Partially supported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:26
+msgid "Preferences"
+msgstr ""
+
+#: ../src/Terminal.vala:247
+#, c-format
+msgid "Reading unichar failed: %s"
+msgstr ""
+
+#: ../src/Terminal.vala:172
+#, c-format
+msgid "Sending text failed: %s"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:340
+#, c-format
+msgid "Supported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:113
+msgid "Terminal font:"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:125
+msgid "Theme:"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:328
+#, c-format
+msgid "Unrecognized control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:344
+msgid "Unrecognized interpretation status value"
+msgstr ""
+
+#: ../src/FinalTerm.vala:306
+#, c-format
+msgid "Unsupported command: %s"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:332
+#, c-format
+msgid "Unsupported control sequence: '%s' (%s)"
+msgstr ""
+
+#: ../src/FinalTerm.vala:110
+msgid "_About Final Term"
+msgstr ""
+
+#: ../src/FinalTerm.vala:106
+msgid "_Preferences"
+msgstr ""
+
+#: ../src/FinalTerm.vala:111
+msgid "_Quit"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:46
+msgid "columns"
+msgstr ""
+
+#: ../src/Terminal.vala:230
+msgid "execvp failed"
+msgstr ""
+
+#: ../src/FinalTerm.vala:136
+msgid "pre-alpha"
+msgstr ""
+
+#: ../src/TerminalOutput.vala:318
+msgid ""
+"print_interpretation_status should only be called on control sequence "
+"elements"
+msgstr ""
+
+#: ../src/SettingsWindow.vala:48
+msgid "rows"
+msgstr ""
+
+#: ../build/data/finalterm.desktop.in.h:3
+msgid "Open a New Window"
+msgstr ""
+
+#: ../build/data/finalterm.desktop.in.h:2
+msgid "Don't just use your system — command it!"
+msgstr ""
+
+#: ../build/data/finalterm.desktop.in.h:1
+msgid "Terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:6
+msgid "Background opacity"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:3
+msgid "Color scheme to be used"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:8
+msgid "Default number of columns in the terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:7
+msgid "Default number of lines in the terminal"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:2
+msgid "Font used for menu button labels"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:1
+msgid "Font used for terminal output"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:11
+msgid ""
+"Minimum time between successive output rendering cycles, in milliseconds"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:12
+msgid "Minimum time between successive resizing cycles, in milliseconds"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:9
+msgid ""
+"Path to the shell executable which is to be run (NOTE: Only bash is "
+"currently supported)"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:4
+msgid "Theme to be used"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:5
+msgid "Use dark theme"
+msgstr ""
+
+#: ../build/data/org.gnome.finalterm.gschema.xml.h:10
+msgid ""
+"Value that the TERM environment variable will be set to (NOTE: Changing this "
+"variable may affect shell behavior)"
+msgstr ""
