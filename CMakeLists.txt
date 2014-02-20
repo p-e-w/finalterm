@@ -17,7 +17,7 @@ endif (NOT MINIMAL_FLAGS)
 
 configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup.in ${CMAKE_BINARY_DIR}/Startup/bash_startup @ONLY)
 
-set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0)
+set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0 gee-0.8)
 
 find_package(PkgConfig)
 
@@ -27,10 +27,7 @@ if (UNITY_FOUND)
 	set(VALAFLAGS ${VALAFLAGS}
 		--define=HAS_UNITY)
 	set(PKGS ${PKGS}
-		gee-1.0 unity)
-else (UNITY_FOUND)
-	set(PKGS ${PKGS}
-		gee-0.8)
+		unity)
 endif (UNITY_FOUND)
 
 # see if we got libnotify
