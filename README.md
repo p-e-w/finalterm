@@ -105,7 +105,7 @@ Final Term's application icon is a modified version of the terminal icon from th
 
 # License
 
-Copyright © 2013 Philipp Emanuel Weidmann (<pew@worldwidemann.com>)
+Copyright © 2013–2014 Philipp Emanuel Weidmann (<pew@worldwidemann.com>)
 
 Final Term is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

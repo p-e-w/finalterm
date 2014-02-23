@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 Philipp Emanuel Weidmann <pew@worldwidemann.com>
+ * Copyright © 2013–2014 Philipp Emanuel Weidmann <pew@worldwidemann.com>
  *
  * Nemo vir est qui mundum non reddat meliorem.
  *
@@ -145,6 +145,7 @@ public class FinalTerm : Gtk.Application {
 				"Abderrahim Kitouni <a.kitouni@gmail.com>",
 				"Tomasz Święcicki <tomislater@gmail.com>",
 				"Steven Oliver <oliver.steven@gmail.com>",
+				"Guilhem Lettron <guilhem.lettron@optiflows.com>",
 				null };
 		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
@@ -153,7 +154,7 @@ public class FinalTerm : Gtk.Application {
 				"logo-icon-name", "final-term",
 				"version", _("pre-alpha"),
 				"comments", _("At last – a modern terminal emulator."),
-				"copyright", _("Copyright © 2013 Philipp Emanuel Weidmann & contributors"),
+				"copyright", _("Copyright © 2013–2014 Philipp Emanuel Weidmann & contributors"),
 				"license-type", Gtk.License.GPL_3_0,
 				"authors", authors,
 				"artists", artists,
