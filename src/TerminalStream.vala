@@ -62,7 +62,6 @@ public class TerminalStream : Object {
 	private const string CSI_SEQUENCE_END_CHARACTERS = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	// "[...] in many cases BEL is an acceptable alternative to ST." (Wikipedia)
-	// TODO: Handle alternative ST notation (ESC + "\")
 	private const string OSC_SEQUENCE_END_CHARACTERS = "\x07\x9C";
 
 	public void parse_character(unichar character) {
@@ -158,7 +157,9 @@ public class TerminalStream : Object {
 			}
 			break;
 		case ParseState.OSC_SEQUENCE:
-			if (OSC_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
+			if (OSC_SEQUENCE_END_CHARACTERS.contains(character.to_string()) ||
+					// Handle alternative ST notation (ESC + "\")
+					sequence_builder.str.has_suffix("\x1B\\")) {
 				emit_sequence();
 				parse_state = ParseState.TEXT;
 			}
@@ -368,7 +369,7 @@ public class TerminalStream : Object {
 		private const string DCS_PATTERN_END   = "\\x9C";
 		private const string CSI_PATTERN_START = "(?:(?:\\x1B\\[)|\\x9B)";
 		private const string OSC_PATTERN_START = "(?:(?:\\x1B\\])|\\x9D)";
-		private const string OSC_PATTERN_END   = "(?:\\x07|\\x9C)";
+		private const string OSC_PATTERN_END   = "(?:\\x07|\\x9C|(?:\\x1B\\\\))";
 
 		// Used to differentiate Final Term control sequences from ordinary OSC sequences
 		private const string FINAL_TERM_PATTERN_DESIGNATOR = "133;";
@@ -377,7 +378,9 @@ public class TerminalStream : Object {
 		private const string PARAMETER_LIST_PATTERN   = "(.*)";
 		private const string PARAMETER_LIST_DELIMITER = ";";
 
-		private const string[] OSC_FINAL_CHARACTERS = { "\x07", "\x9C" };
+		// Backslash is a final character for OSC sequences
+		// if ESC + "\" is used as an alternative ST notation
+		private const string[] OSC_FINAL_CHARACTERS = { "\x07", "\x9C", "\\" };
 
 		private const string[] CHARACTER_SET_DESIGNATOR_FINAL_CHARACTERS =
 				{ "0", "A", "B", "4", "C", "5", "R", "Q", "K", "Y", "E", "6", "Z", "H", "7", "=" };
