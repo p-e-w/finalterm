@@ -37,7 +37,7 @@ Additionally, it requires [intltool](http://freedesktop.org/wiki/Software/intlto
 
 To install Final Term, execute these shell commands:
 
-```
+```sh
 git clone https://github.com/p-e-w/finalterm.git
 cd finalterm/
 mkdir build
@@ -53,7 +53,7 @@ If you want to install to a custom directory your `XDG_DATA_DIRS` environment va
 
 Thanks to the work of Bob Mottram (packaging) and GitHub user versable (PPA setup), Ubuntu is currently the easiest platform to install Final Term on:
 
-```
+```sh
 sudo add-apt-repository ppa:finalterm/daily
 sudo apt-get update
 sudo apt-get install finalterm
@@ -69,13 +69,13 @@ The following concrete steps have been tested and work to get Final Term install
 
 ### Install prerequisites
 
-```
+```sh
 sudo yum install git cmake vala intltool libgee-devel gnome-common gtk-doc gtk3-devel keybinder3-devel libmx-devel clutter-gtk-devel libnotify-devel
 ```
 
 ### Install Final Term
 
-```
+```sh
 git clone https://github.com/p-e-w/finalterm.git
 cd finalterm/
 mkdir build
