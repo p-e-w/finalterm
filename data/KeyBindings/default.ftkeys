@@ -33,3 +33,6 @@ Up    = SEND_TO_SHELL "\\033[A"
 Down  = SEND_TO_SHELL "\\033[B"
 Left  = SEND_TO_SHELL "\\033[D"
 Right = SEND_TO_SHELL "\\033[C"
+
+Home  = SEND_TO_SHELL "\\033[1~"
+End   = SEND_TO_SHELL "\\033[4~"
