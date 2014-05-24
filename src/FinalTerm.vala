@@ -416,8 +416,8 @@ public class FinalTerm : Gtk.Application {
 		var data_dir = File.new_for_path(Environment.get_user_data_dir() + "/finalterm");
 		if (!data_dir.query_exists()) {
 			try {
-				data_dir.make_directory();
-			} catch (Error e) { error(_("Cannot access data directory: %s"), e.message); }
+				data_dir.make_directory_with_parents();
+			} catch (Error e) { error(_("Cannot access data directory %s: %s"), data_dir.get_parse_name(), e.message); }
 		}
 
 		application = new FinalTerm();
