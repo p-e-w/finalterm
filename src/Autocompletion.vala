@@ -185,8 +185,10 @@ public class Autocompletion : Object {
 		}
 
 		// TODO: Move values into constants / settings
-		int width  = 50 + (maximum_length * Settings.get_default().character_width);
-		int height = int.min(5, matches) * Settings.get_default().character_height;
+		int width  = 50 + (int.min(40, maximum_length) * Settings.get_default().character_width);
+		// TODO: If line breaking is required, the height determined here may be too low
+		//       to show even a single match completely
+		int height = int.min(8, matches) * Settings.get_default().character_height;
 		popup_window.resize(width, height);
 		scrollable_list_view.width  = width;
 		scrollable_list_view.height = height;
@@ -235,6 +237,8 @@ public class Autocompletion : Object {
 
 		public void construct() {
 			use_markup = true;
+			clutter_text.line_wrap = true;
+			clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
 
 			on_settings_changed(null);
 			Settings.get_default().changed.connect(on_settings_changed);
