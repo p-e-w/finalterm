@@ -111,38 +111,35 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 	// Transfers the primary child to a new container
 	// and tabs the view into that container and another one
-	private void do_tab() {
-		assert(container_state == ContainerState.CHILD);
-
-		var current_child = children.get(0);
-		children.clear();
-
-		notebook = new Gtk.Notebook();
-		// Identifier for drag and drop compatibility
-		notebook.group_name = "NestingContainer";
-
-		pack_start(notebook);
-
-		container_state = ContainerState.TABBED;
-
-		do_add_tab(current_child);
-		do_add_tab(child_factory_function());
-
-		show_all();
-	}
-
-	private void do_add_tab(NestingContainerChild child) {
+	// OR adds a new tab if the container is already tabbed
+	private void do_add_tab() {
 		if (container_state == ContainerState.CHILD) {
 			if (parent is Gtk.Notebook && parent.parent is NestingContainer) {
 				// Already inside a tabbed container
-				(parent.parent as NestingContainer).do_add_tab(child);
+				(parent.parent as NestingContainer).do_add_tab();
 				return;
 			}
 
-			do_tab();
-			return;
+			var current_child = children.get(0);
+			children.clear();
+
+			notebook = new Gtk.Notebook();
+			// Identifier for drag and drop compatibility
+			notebook.group_name = "NestingContainer";
+
+			pack_start(notebook);
+
+			container_state = ContainerState.TABBED;
+
+			show_all();
+
+			add_tab_with_child(current_child);
 		}
 
+		add_tab_with_child(child_factory_function());
+	}
+
+	private void add_tab_with_child(NestingContainerChild child) {
 		assert(container_state == ContainerState.TABBED);
 
 		var child_container = new NestingContainer.with_child(child_factory_function, child);
@@ -254,7 +251,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 			}));
 
 			child_signal_handlers.add(child.add_tab.connect(() => {
-				do_add_tab(child_factory_function());
+				do_add_tab();
 			}));
 
 			child_signal_handlers.add(child.close.connect(() => {
