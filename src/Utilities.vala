@@ -108,15 +108,23 @@ public class Utilities : Object {
 	}
 
 	public static T get_enum_value_from_name<T>(Type type, string name) {
-		EnumClass enum_class = (EnumClass)type.class_ref();
-		unowned EnumValue? enum_value = enum_class.get_value_by_name(name);
-
-		if (enum_value == null) {
-			warning(_("Invalid enum value name: '%s'"), name);
-			return 0;
+		if (type.is_enum()) {
+			unowned EnumValue? enum_value = ((EnumClass)type.class_ref()).get_value_by_name(name);
+			if (enum_value == null) {
+				warning(_("Invalid enum value name: '%s'"), name);
+				return 0;
+			}
+			return (T)enum_value.value;
+		} else if (type.is_flags()) {
+			unowned FlagsValue? flags_value = ((FlagsClass)type.class_ref()).get_value_by_name(name);
+			if (flags_value == null) {
+				warning(_("Invalid flags value name: '%s'"), name);
+				return 0;
+			}
+			return (T)flags_value.value;
+		} else {
+			error(_("Type is not an enum class: '%s'"), type.name);
 		}
-
-		return (T)enum_value.value;
 	}
 
 	// TODO: These methods should of course use Json.Builder and Json.Reader;

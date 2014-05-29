@@ -33,6 +33,16 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 	public string terminal_title { get; set; default = "Final Term"; }
 
+	public TerminalMode terminal_modes { get; set; }
+
+	[Flags]
+	public enum TerminalMode {
+		KEYPAD,
+		NUMLOCK, // Currently unsupported
+		CURSOR,
+		CRLF
+	}
+
 	private CharacterAttributes current_attributes;
 
 	// Number of lines the virtual "screen" is shifted down
@@ -126,6 +136,71 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.BELL:
 				// TODO: Beep on the terminal window rather than the default display
 				Gdk.beep();
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.APPLICATION_KEYPAD:
+				terminal_modes |= TerminalMode.KEYPAD;
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.NORMAL_KEYPAD:
+				terminal_modes &= ~TerminalMode.KEYPAD;
+				break;
+
+			// TODO: Implement unified system for setting and resetting flags
+			case TerminalStream.StreamElement.ControlSequenceType.SET_MODE:
+				for (int i = 0; i < stream_element.control_sequence_parameters.size; i++) {
+					switch (stream_element.get_numeric_parameter(i, -1)) {
+					case 20:
+						// Automatic Newline
+						terminal_modes |= TerminalMode.CRLF;
+						break;
+					default:
+						print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
+						break;
+					}
+				}
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.RESET_MODE:
+				for (int i = 0; i < stream_element.control_sequence_parameters.size; i++) {
+					switch (stream_element.get_numeric_parameter(i, -1)) {
+					case 20:
+						// Normal Linefeed
+						terminal_modes &= ~TerminalMode.CRLF;
+						break;
+					default:
+						print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
+						break;
+					}
+				}
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.DEC_PRIVATE_MODE_SET:
+				for (int i = 0; i < stream_element.control_sequence_parameters.size; i++) {
+					switch (stream_element.get_numeric_parameter(i, -1)) {
+					case 1:
+						// Application Cursor Keys
+						terminal_modes |= TerminalMode.CURSOR;
+						break;
+					default:
+						print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
+						break;
+					}
+				}
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.DEC_PRIVATE_MODE_RESET:
+				for (int i = 0; i < stream_element.control_sequence_parameters.size; i++) {
+					switch (stream_element.get_numeric_parameter(i, -1)) {
+					case 1:
+						// Normal Cursor Keys
+						terminal_modes &= ~TerminalMode.CURSOR;
+						break;
+					default:
+						print_interpretation_status(stream_element, InterpretationStatus.UNSUPPORTED);
+						break;
+					}
+				}
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.BACKSPACE:

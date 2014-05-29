@@ -203,7 +203,8 @@ public class FinalTerm : Gtk.Application {
 		}
 
 		// Handle user-configured keys
-		var key_commands = KeyBindings.get_key_commands(event.state, event.keyval);
+		var key_commands = KeyBindings.get_key_commands(event.keyval, event.state,
+				active_terminal_widget.get_terminal_modes());
 		if (key_commands != null) {
 			foreach (var command in key_commands) {
 				command.execute();

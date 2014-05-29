@@ -101,6 +101,10 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		terminal.send_text(text);
 	}
 
+	public TerminalOutput.TerminalMode get_terminal_modes() {
+		return terminal.terminal_output.terminal_modes;
+	}
+
 	private bool on_configure_event(Gdk.EventConfigure event) {
 		// TODO: Use "expand" properties to achieve this?
 		terminal_view.width  = event.width;

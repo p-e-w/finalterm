@@ -22,12 +22,27 @@
 
 public class KeyBindings : Object {
 
-	// A MultiMap is not sufficient here because
-	// the order of the commands has to be preserved
-	private static Gee.Map<string, Gee.List<Command>> key_bindings;
+	private static Gee.List<KeyBinding> key_bindings;
+
+	// TODO: Make this a struct
+	private class KeyBinding : Object {
+		public string key_specification;
+
+		public uint key;
+		public Gdk.ModifierType modifiers;
+		public TerminalOutput.TerminalMode set_terminal_modes;
+		public TerminalOutput.TerminalMode unset_terminal_modes;
+
+		public Gee.List<Command> commands = new Gee.ArrayList<Command>();
+	}
+
+	private static Regex key_specification_pattern;
 
 	public static void initialize() {
-		key_bindings = new Gee.HashMap<string, Gee.List<Command>>();
+		key_bindings = new Gee.ArrayList<KeyBinding>();
+		try {
+			key_specification_pattern = new Regex("(.+)\\{(.+)\\}", RegexCompileFlags.OPTIMIZE);
+		} catch (Error e) { error(e.message); }
 	}
 
 	public static void load_from_file(string filename) {
@@ -40,12 +55,46 @@ public class KeyBindings : Object {
 			string[] group_names = { "Global", "Application" };
 			foreach (var group_name in group_names) {
 				foreach (var key_specification in key_bindings_file.get_keys(group_name)) {
-					var commands = new Gee.ArrayList<Command>();
-					foreach (var command_specification in key_bindings_file.get_string_list(group_name, key_specification)) {
-						commands.add(new Command.from_command_specification(command_specification));
+					var key_binding = new KeyBinding();
+					key_binding.key_specification = key_specification;
+
+					var accelerator = key_specification;
+
+					MatchInfo match_info;
+					if (key_specification_pattern.match(key_specification, 0, out match_info)) {
+						// Specification includes terminal modes
+						accelerator = match_info.fetch(1).strip();
+
+						foreach (var mode_specification in match_info.fetch(2).split(";")) {
+							mode_specification = mode_specification.strip();
+							if (mode_specification.length == 0) {
+								warning(_("Invalid key specification (empty mode): '%s'"), key_specification);
+								continue;
+							}
+
+							bool negated_mode = (mode_specification.substring(0, 1) == "~");
+							if (negated_mode)
+								mode_specification = mode_specification.substring(1).strip();
+
+							TerminalOutput.TerminalMode terminal_mode = Utilities.get_enum_value_from_name(
+									typeof(TerminalOutput.TerminalMode),
+									"TERMINAL_OUTPUT_TERMINAL_MODE_" + mode_specification.up());
+
+							if (negated_mode) {
+								key_binding.unset_terminal_modes |= terminal_mode;
+							} else {
+								key_binding.set_terminal_modes |= terminal_mode;
+							}
+						}
 					}
 
-					key_bindings.set(key_specification, commands);
+					Gtk.accelerator_parse(accelerator, out key_binding.key, out key_binding.modifiers);
+
+					foreach (var command_specification in key_bindings_file.get_string_list(group_name, key_specification)) {
+						key_binding.commands.add(new Command.from_command_specification(command_specification));
+					}
+
+					key_bindings.add(key_binding);
 
 					if (group_name == "Global") {
 						// Keybinder.bind is declared in the VAPI file with
@@ -54,10 +103,15 @@ public class KeyBindings : Object {
 						// As a workaround, the key specification is passed as
 						// user data and the commands are retrieved when the
 						// callback is invoked.
-						Keybinder.bind(key_specification, (keystring, user_data) => {
+						Keybinder.bind(accelerator, (keystring, user_data) => {
 							//message(_("Global key: %s"), (string)user_data);
-							foreach (var command in key_bindings.get((string)user_data)) {
-								command.execute();
+							foreach (var key_binding_inner in key_bindings) {
+								if (key_binding_inner.key_specification == (string)user_data) {
+									foreach (var command in key_binding_inner.commands) {
+										command.execute();
+									}
+									break;
+								}
 							}
 						},
 						// Trick to create a new string in-place to avoid
@@ -69,16 +123,19 @@ public class KeyBindings : Object {
 		} catch (Error e) { warning(_("Error in key bindings file %s: %s"), filename, e.message); }
 	}
 
-	public static Gee.List<Command>? get_key_commands(Gdk.ModifierType modifiers, uint key) {
-		foreach (var key_specification in key_bindings.keys) {
-			uint key_buffer;
-			Gdk.ModifierType modifiers_buffer;
-			Gtk.accelerator_parse(key_specification, out key_buffer, out modifiers_buffer);
+	public static Gee.List<Command>? get_key_commands(uint key, Gdk.ModifierType modifiers,
+				TerminalOutput.TerminalMode terminal_modes) {
+		foreach (var key_binding in key_bindings) {
+			if (key_binding.key != key)
+				continue;
+			if ((key_binding.modifiers & modifiers) != key_binding.modifiers)
+				continue;
+			if ((key_binding.set_terminal_modes & terminal_modes) != key_binding.set_terminal_modes)
+				continue;
+			if ((key_binding.unset_terminal_modes & terminal_modes) != 0)
+				continue;
 
-			if (key_buffer == key &&
-				(modifiers_buffer & modifiers) == modifiers_buffer) {
-				return key_bindings.get(key_specification);
-			}
+			return key_binding.commands;
 		}
 
 		return null;
