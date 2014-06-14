@@ -281,7 +281,10 @@ public class FinalTerm : Gtk.Application {
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
 				// TODO: Account for vertical padding
-				main_window.resize(main_window.screen.get_width(),
+				Gdk.Rectangle geometry;
+				window.screen.get_monitor_geometry(window.screen.get_primary_monitor(), out geometry);
+				
+				main_window.resize(geometry.width,
 						15 * Settings.get_default().character_height);
 				// Set Always on top
 				main_window.set_keep_above(true);
