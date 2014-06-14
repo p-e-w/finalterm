@@ -282,7 +282,7 @@ public class FinalTerm : Gtk.Application {
 				// TODO: Make height a user setting
 				// TODO: Account for vertical padding
 				Gdk.Rectangle geometry;
-				window.screen.get_monitor_geometry(window.screen.get_primary_monitor(), out geometry);
+				main_window.screen.get_monitor_geometry(main_window.screen.get_primary_monitor(), out geometry);
 				
 				main_window.resize(geometry.width,
 						15 * Settings.get_default().character_height);
