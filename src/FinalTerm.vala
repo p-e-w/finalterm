@@ -283,10 +283,12 @@ public class FinalTerm : Gtk.Application {
 				// TODO: Account for vertical padding
 				main_window.resize(main_window.screen.get_width(),
 						15 * Settings.get_default().character_height);
-				// TODO: Always on top(?)
+				// Set Always on top
+				main_window.set_keep_above(true);
 				main_window.show();
 			} else {
 				main_window.hide();
+				main_window.set_keep_above(false);
 				main_window.decorated = true;
 			}
 			return;
