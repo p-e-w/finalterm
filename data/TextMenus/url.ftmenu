@@ -2,8 +2,8 @@
 
 marker-type = pattern
 
-# Web URL regular expression taken from http://regexlib.com/REDetails.aspx?regexp_id=1051 (modified)
-pattern = \b((http\://|https\://|ftp\://)|(www.))+([a-zA-Z0-9\.-]+\.[a-zA-Z]{2,4})(/[a-zA-Z0-9%&:/-_\?\.'~]*)?\b
+# Web URL regular expression taken from https://github.com/muennich/urxvt-perls/blob/master/url-select (collapsed into one line)
+pattern = \b(?:https?://|ftp://|news://|mailto:|file://|\bwww\.)[\w\-\@;\/?:&=%\$.+!*\x27,~#]*(\([\w\-\@;\/?:&=%\$.+!*\x27,~#]*\)|[\w\-\@;\/?:&=%\$+*~])+\b
 
 label = URL
 color = 6
