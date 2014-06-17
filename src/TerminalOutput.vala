@@ -327,6 +327,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 						cursor_position.column + stream_element.get_numeric_parameter(0, 1));
 				break;
 
+			case TerminalStream.StreamElement.ControlSequenceType.HORIZONTAL_AND_VERTICAL_POSITION:
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_POSITION:
 				int line   = stream_element.get_numeric_parameter(0, 1);
 				int column = stream_element.get_numeric_parameter(1, 1);
