@@ -63,26 +63,30 @@ The PPA is synchronized with the GitHub repository and should always deliver the
 
 ## Instructions for Fedora
 
-_**Note:** Jóhann B. Guðmundsson has provided an SRPM for Final Term [here](https://docs.google.com/file/d/0B48uS582CBl8eFJScTlzOE4xbVU/edit)._
+You can use packages from [Copr by Matthew Miller](http://copr.fedoraproject.org/coprs/mattdm/finalterm/).
 
-The following concrete steps have been tested and work to get Final Term installed and running on a vanilla Fedora 18 system:
+### Fedora 19
 
-### Install prerequisites
-
-```sh
-sudo yum install git cmake vala intltool libgee-devel gnome-common gtk-doc gtk3-devel keybinder3-devel libmx-devel clutter-gtk-devel libnotify-devel
+```
+sudo wget http://copr.fedoraproject.org/coprs/mattdm/finalterm/repo/fedora-19-i386/mattdm-finalterm-fedora-19-i386.repo -O /etc/yum.repos.d/finalterm.repo
+sudo yum update
+sudo yum install finalterm
 ```
 
-### Install Final Term
+### Fedora 20
 
-```sh
-git clone https://github.com/p-e-w/finalterm.git
-cd finalterm/
-mkdir build
-cd build/
-cmake ..
-make
-sudo make install
+```
+sudo wget http://copr.fedoraproject.org/coprs/mattdm/finalterm/repo/fedora-20-i386/mattdm-finalterm-fedora-20-i386.repo -O /etc/yum.repos.d/finalterm.repo
+sudo yum update
+sudo yum install finalterm
+```
+
+### Fedora Rawhide
+
+```
+sudo wget http://copr.fedoraproject.org/coprs/mattdm/finalterm/repo/fedora-rawhide-i386/mattdm-finalterm-fedora-rawhide-i386.repo -O /etc/yum.repos.d/finalterm.repo
+sudo yum update
+sudo yum install finalterm
 ```
 
 ## Instructions for Arch Linux
