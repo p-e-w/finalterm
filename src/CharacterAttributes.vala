@@ -370,11 +370,9 @@ public class TextAttributes : Object {
 			attribute_builder.append(" font_weight='bold'");
 
 		if (text_menu != null) {
+			attribute_builder.append(" foreground='" +
+					Utilities.get_parsable_color_string(color_scheme.get_indexed_color(text_menu.color, dark)) + "'");
 			attribute_builder.append(" underline='single'");
-			attribute_builder.append(
-					" underline_color='" +
-					Utilities.get_parsable_color_string(color_scheme.get_indexed_color(text_menu.color, dark)) +
-					"'");
 		} else {
 			// Only set underline attribute if no text menu is present
 			// to avoid error when two underline attributes are given
