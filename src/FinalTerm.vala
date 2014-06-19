@@ -148,6 +148,7 @@ public class FinalTerm : Gtk.Application {
 				"Guilhem Lettron <guilhem.lettron@optiflows.com>",
 				"Carl George <carl@carlgeorge.us>",
 				"Martin Middel <martin.middel@liones.nl>",
+				"Mola Pahnadayan <mola.mp@gmail.com>",
 				null };
 		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
@@ -257,7 +258,7 @@ public class FinalTerm : Gtk.Application {
 			if (main_window.get_window().is_visible()) {
 				main_window.hide();
 			} else {
-				main_window.show();
+				main_window.present();
 			}
 			return;
 
@@ -282,17 +283,14 @@ public class FinalTerm : Gtk.Application {
 				main_window.move(0, 0);
 				// TODO: Make height a user setting
 				// TODO: Account for vertical padding
-				Gdk.Rectangle geometry;
-				main_window.screen.get_monitor_geometry(main_window.screen.get_primary_monitor(), out geometry);
-				
-				main_window.resize(geometry.width,
-						15 * Settings.get_default().character_height);
-				// Set Always on top
+				Gdk.Rectangle monitor_geometry;
+				main_window.screen.get_monitor_geometry(main_window.screen.get_primary_monitor(), out monitor_geometry);
+				main_window.resize(monitor_geometry.width, 15 * Settings.get_default().character_height);
+				main_window.present();
 				main_window.set_keep_above(true);
-				main_window.show();
 			} else {
-				main_window.hide();
 				main_window.set_keep_above(false);
+				main_window.hide();
 				main_window.decorated = true;
 			}
 			return;
