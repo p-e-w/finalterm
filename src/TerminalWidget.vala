@@ -57,13 +57,12 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 		var inactive_effect = new Clutter.BrightnessContrastEffect();
 		inactive_effect.set_brightness(-0.2f);
+		inactive_effect.set_contrast(-0.4f);
 
 		notify["is-active"].connect(() => {
-			if (is_active) {
-				stage.remove_effect(inactive_effect);
-			} else {
-				stage.add_effect(inactive_effect);
-			}
+			terminal_view.clear_effects();
+			if (!is_active)
+				terminal_view.add_effect(inactive_effect);
 
 			terminal_view.terminal_output_view.is_active = is_active;
 		});
