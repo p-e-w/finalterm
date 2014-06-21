@@ -192,13 +192,11 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button_label.use_markup = true;
 		menu_button.add(menu_button_label);
 
-		// Cursor and menu button need to float above all other actors
-		// so they are added directly to the stage. However, get_stage()
-		// returns null before the TerminalOutputView is added to a stage
-		// (i.e. "realized").
-		realize.connect(() => {
-			get_stage().add(cursor);
-			get_stage().add(menu_button);
+		// Cursor and menu button need to float above all other children of the TerminalOutputView
+		// so they are added to the parent (TerminalView)
+		parent_set.connect((old_parent) => {
+			get_parent().add(cursor);
+			get_parent().add(menu_button);
 		});
 
 		allocation_changed.connect(on_allocation_changed);
