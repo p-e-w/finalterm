@@ -62,9 +62,11 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 		children = new Gee.ArrayList<NestingContainerChild>();
 		children.add(child);
 
-		// This is necessary for the "split" and "tab" methods to work
-		child.reparent(this);
-		pack_start(child);
+		if (child.parent == null) {
+			add(child);
+		} else {
+			child.reparent(this);
+		}
 
 		container_state = ContainerState.CHILD;
 
