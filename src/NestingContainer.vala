@@ -70,6 +70,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 		container_state = ContainerState.CHILD;
 
+		update_is_active();
 		update_title();
 		connect_signal_handlers();
 
@@ -105,6 +106,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 		container_state = ContainerState.SPLIT;
 
+		update_is_active();
 		update_title();
 		connect_signal_handlers();
 
@@ -151,36 +153,70 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 		notebook.set_tab_detachable(child_container, true);
 		notebook.set_tab_reorderable(child_container, true);
 
+		update_is_active();
 		update_title();
 		connect_signal_handlers();
 	}
 
-	// Returns the container to single-child state
-	private void revert(NestingContainerChild child) {
+	// Merges this container and another one into a single container
+	// with the properties of the latter
+	private void merge(NestingContainer container) {
 		assert(container_state != ContainerState.CHILD);
 
-		children.clear();
-		children.add(child);
-
-		child.reparent(this);
+		switch (container.container_state) {
+		case ContainerState.CHILD:
+			container.children.get(0).reparent(this);
+			break;
+		case ContainerState.SPLIT:
+			container.paned.reparent(this);
+			break;
+		case ContainerState.TABBED:
+			container.notebook.reparent(this);
+			break;
+		}
 
 		switch (container_state) {
 		case ContainerState.SPLIT:
 			remove(paned);
-			paned = null;
 			break;
 		case ContainerState.TABBED:
 			remove(notebook);
-			notebook = null;
 			break;
 		}
 
-		pack_start(child);
+		children = container.children;
+		paned = container.paned;
+		notebook = container.notebook;
+		container_state = container.container_state;
 
-		container_state = ContainerState.CHILD;
-
+		update_is_active();
 		update_title();
 		connect_signal_handlers();
+	}
+
+	private void activate_child() {
+		switch (container_state) {
+		case ContainerState.CHILD:
+			(children.get(0) as NestingContainerChild).is_active = true;
+			return;
+		case ContainerState.SPLIT:
+			(paned.get_child1() as NestingContainer).activate_child();
+			return;
+		case ContainerState.TABBED:
+			(notebook.get_nth_page(notebook.get_current_page()) as NestingContainer).activate_child();
+			return;
+		}
+	}
+
+	private void update_is_active() {
+		foreach (var child in children) {
+			if (child.is_active) {
+				is_active = true;
+				return;
+			}
+		}
+
+		is_active = false;
 	}
 
 	private void update_title() {
@@ -257,6 +293,8 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 			}));
 
 			child_signal_handlers.add(child.close.connect(() => {
+				bool was_active = is_active;
+
 				switch (container_state) {
 				case ContainerState.CHILD:
 					// No pane/tab to close => close the entire container
@@ -266,19 +304,21 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 				case ContainerState.SPLIT:
 					// Revert to single-child mode with other child
 					if (child == paned.get_child1()) {
-						revert(paned.get_child2() as NestingContainerChild);
+						merge(paned.get_child2() as NestingContainer);
 					} else if (child == paned.get_child2()) {
-						revert(paned.get_child1() as NestingContainerChild);
+						merge(paned.get_child1() as NestingContainer);
 					} else {
 						assert_not_reached();
 					}
+					if (was_active && !is_active)
+						activate_child();
 					return;
 
 				case ContainerState.TABBED:
 					if (notebook.get_n_pages() == 2) {
 						// Revert to single-child mode with other child
 						int page_index = 1 - notebook.page_num(child);
-						revert(notebook.get_nth_page(page_index) as NestingContainerChild);
+						merge(notebook.get_nth_page(page_index) as NestingContainer);
 					} else if (notebook.get_n_pages() > 2) {
 						// Close tab associated with child
 						children.remove(child);
@@ -288,6 +328,8 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 					} else {
 						assert_not_reached();
 					}
+					if (was_active && !is_active)
+						activate_child();
 					return;
 				}
 			}));
@@ -310,10 +352,8 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 			var notebook_signal_handlers = new Gee.HashSet<ulong>();
 
 			notebook_signal_handlers.add(notebook.switch_page.connect((page, page_num) => {
-				var child_container = page as NestingContainer;
-				if (child_container.container_state == ContainerState.CHILD)
-					child_container.children.get(0).is_active = true;
-				title = child_container.title;
+				(page as NestingContainer).activate_child();
+				update_title();
 			}));
 
 			signal_handlers.set(notebook, notebook_signal_handlers);
