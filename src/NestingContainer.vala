@@ -242,19 +242,6 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 		signal_handlers.clear();
 
-		var container_signal_handlers = new Gee.HashSet<ulong>();
-
-		container_signal_handlers.add(notify["is-active"].connect(() => {
-			if (!is_active) {
-				// Container has (possibly through an ancestor) been deactivated
-				// => deactivate all children
-				foreach (var child in children)
-					child.is_active = false;
-			}
-		}));
-
-		signal_handlers.set(this, container_signal_handlers);
-
 		foreach (var child in children) {
 			var child_signal_handlers = new Gee.HashSet<ulong>();
 
@@ -272,6 +259,13 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 					}
 
 					title = child.title;
+
+				} else {
+					if (child is NestingContainer) {
+						// Deactivate children recursively
+						foreach (var child_child in (child as NestingContainer).children)
+							child_child.is_active = false;
+					}
 				}
 			}));
 
@@ -293,11 +287,21 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 			}));
 
 			child_signal_handlers.add(child.close.connect(() => {
+				children.remove(child);
+				connect_signal_handlers();
+
+				if (child is NestingContainer) {
+					// Close children recursively
+					foreach (var child_child in (child as NestingContainer).children)
+						child_child.close();
+				}
+
 				bool was_active = is_active;
 
 				switch (container_state) {
 				case ContainerState.CHILD:
 					// No pane/tab to close => close the entire container
+					remove(child);
 					close();
 					return;
 
@@ -321,15 +325,13 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 						merge(notebook.get_nth_page(page_index) as NestingContainer);
 					} else if (notebook.get_n_pages() > 2) {
 						// Close tab associated with child
-						children.remove(child);
 						notebook.remove_page(notebook.page_num(child));
-						update_title();
-						connect_signal_handlers();
 					} else {
 						assert_not_reached();
 					}
 					if (was_active && !is_active)
 						activate_child();
+					update_title();
 					return;
 				}
 			}));

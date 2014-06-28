@@ -30,6 +30,7 @@ public class Terminal : Object {
 	public TerminalOutput terminal_output { get; set; }
 	public TerminalView terminal_view { get; set; }
 
+	private Posix.pid_t fork_pid;
 	private int command_file;
 	private IOChannel command_channel;
 
@@ -197,7 +198,7 @@ public class Terminal : Object {
 		char[] slave_name = null;
 		Linux.winsize terminal_size = { (ushort)lines, (ushort)columns, 0, 0 };
 
-		var fork_pid = Linux.forkpty(out pty_master, slave_name, null, terminal_size);
+		fork_pid = Linux.forkpty(out pty_master, slave_name, null, terminal_size);
 
 		switch (fork_pid) {
 		case -1: // Error
@@ -255,6 +256,11 @@ public class Terminal : Object {
 		// If this line is reached, execvp() must have failed
 		critical(_("execvp failed"));
 		Posix.exit(Posix.EXIT_FAILURE);
+	}
+
+	public void terminate_shell() {
+		// SIGTERM does not reliably terminate the process
+		Posix.kill(fork_pid, Posix.SIGKILL);
 	}
 
 	private void initialize_read() {
