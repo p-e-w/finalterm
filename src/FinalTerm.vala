@@ -66,6 +66,7 @@ public class FinalTerm : Gtk.Application {
 		main_window.resizable = true;
 		main_window.has_resize_grip = true;
 		// Enable background transparency
+		main_window.app_paintable = true;
 		main_window.set_visual(main_window.screen.get_rgba_visual());
 
 		var nesting_container = new NestingContainer(() => {
