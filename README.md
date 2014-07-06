@@ -95,7 +95,7 @@ There is an AUR for Final Term maintained by Arch Linux user kens: [https://aur.
 
 ## Instructions for Gentoo
 
-A [live ebuild for Final Term](http://overlays.gentoo.org/proj/sunrise/browser/x11-terms/finalterm) is in Gentoo's Sunrise overlay courtesy of Ferenc Erki. You can find [usage instructions here](http://overlays.gentoo.org/proj/sunrise).
+A [live ebuild for Final Term](http://git.overlays.gentoo.org/gitweb/?p=proj/sunrise-reviewed.git;a=tree;f=x11-terms/finalterm;hb=HEAD) is in Gentoo's Sunrise overlay courtesy of Ferenc Erki. You can find [usage instructions here](https://wiki.gentoo.org/wiki/Project:Sunrise).
 
 # Acknowledgments
 
