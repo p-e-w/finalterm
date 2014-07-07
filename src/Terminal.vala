@@ -261,6 +261,7 @@ public class Terminal : Object {
 	public void terminate_shell() {
 		// SIGTERM does not reliably terminate the process
 		Posix.kill(fork_pid, Posix.SIGKILL);
+        Thread.usleep(2000);
 	}
 
 	private void initialize_read() {
