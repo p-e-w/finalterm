@@ -30,10 +30,12 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 	private Terminal terminal;
 	private TerminalView terminal_view;
-
 	// This has to be a field rather than a local variable
 	// because it gets destroyed immediately otherwise
 	private Gtk.Menu context_menu;
+
+
+    private static Gee.Map<int, Terminal> terminals_by_pid = new Gee.HashMap<int, Terminal>();
 
 	public TerminalWidget() {
 		stage = (Clutter.Stage)get_stage();
@@ -41,24 +43,20 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 		terminal = new Terminal();
 
+        // Store instance reference to be retrieved from inside the closure
+        terminals_by_pid.set((int)terminal.fork_pid, terminal);
+        
+
 		title = terminal.terminal_output.terminal_title;
 		terminal.terminal_output.notify["terminal-title"].connect(() => {
 			title = terminal.terminal_output.terminal_title;
 		});
 
-		bool shell_terminated_called = false;
-		bool close_called = false;
-
-		terminal.shell_terminated.connect(() => {
-			shell_terminated_called = true;
-			if (!close_called)
-				close();
-		});
-
+            
 		close.connect(() => {
-			close_called = true;
-			if (!shell_terminated_called)
-				terminal.terminate_shell();
+            FinalTerm.closingProcessRunning = true;
+            terminal.terminate_shell();
+            FinalTerm.closingProcessRunning = false;
 		});
 
 		terminal_view = new TerminalView(terminal, this);
@@ -84,6 +82,7 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
 	}
+
 
 	protected override void get_preferred_width(out int minimum_width, out int natural_width) {
 		natural_width = terminal_view.terminal_output_view.get_horizontal_padding() +

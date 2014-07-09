@@ -28,9 +28,9 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 	// This property is maintained under the contract
 	// "title = title_of_active_descendant"
-	public string title { get; set; }
+	public unowned string title { get; set; }
 
-	private Gee.List<NestingContainerChild> children;
+	public Gee.List<NestingContainerChild> children;
 
 	private Gtk.Paned paned;
 	private Gtk.Notebook notebook;
@@ -143,7 +143,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 		add_tab_with_child(child_factory_function());
 	}
 
-	private void add_tab_with_child(NestingContainerChild child) {
+	private void add_tab_with_child(NestingContainerChild child, bool signals = true) {
 		assert(container_state == ContainerState.TABBED);
 
 		var child_container = new NestingContainer.with_child(child_factory_function, child);
@@ -152,10 +152,10 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 
 		notebook.set_tab_detachable(child_container, true);
 		notebook.set_tab_reorderable(child_container, true);
-
-		update_is_active();
-		update_title();
-		connect_signal_handlers();
+        
+        update_is_active();
+        update_title();
+        connect_signal_handlers();
 	}
 
 	// Merges this container and another one into a single container
@@ -233,7 +233,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 	private Gee.Map<Object, Gee.Set<ulong>> signal_handlers = new Gee.HashMap<Object, Gee.Set<ulong>>();
 
 	private void connect_signal_handlers() {
-		// Disconnect existing handlers
+        // Disconnect existing handlers
 		foreach (var object in signal_handlers.keys) {
 			foreach (var signal_handler in signal_handlers.get(object)) {
 				object.disconnect(signal_handler);
@@ -241,7 +241,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 		}
 
 		signal_handlers.clear();
-
+        
 		foreach (var child in children) {
 			var child_signal_handlers = new Gee.HashSet<ulong>();
 
@@ -287,13 +287,14 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 			}));
 
 			child_signal_handlers.add(child.close.connect(() => {
-				children.remove(child);
+                children.remove(child);
 				connect_signal_handlers();
 
 				if (child is NestingContainer) {
 					// Close children recursively
-					foreach (var child_child in (child as NestingContainer).children)
+					foreach (var child_child in (child as NestingContainer).children) {
 						child_child.close();
+                    }
 				}
 
 				bool was_active = is_active;
@@ -314,8 +315,9 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 					} else {
 						assert_not_reached();
 					}
-					if (was_active && !is_active)
+					if (was_active && !is_active) {
 						activate_child();
+                    }
 					return;
 
 				case ContainerState.TABBED:
@@ -325,12 +327,13 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 						merge(notebook.get_nth_page(page_index) as NestingContainer);
 					} else if (notebook.get_n_pages() > 2) {
 						// Close tab associated with child
-						notebook.remove_page(notebook.page_num(child));
+                        notebook.remove_page(notebook.page_num(child));
 					} else {
 						assert_not_reached();
 					}
-					if (was_active && !is_active)
+					if (was_active && !is_active) {
 						activate_child();
+                    }
 					update_title();
 					return;
 				}
