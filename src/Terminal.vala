@@ -213,27 +213,6 @@ public class Terminal : Object {
 			command_file = pty_master;
 			initialize_read();
 
-			// Store instance reference to be retrieved from inside the closure
-			terminals_by_pid.set((int)fork_pid, this);
-
-			Posix.@signal(Posix.SIGCHLD, (@signal) => {
-				// Some child process terminated
-				Posix.pid_t child_pid;
-
-				// Do not let the shell process turn defunct
-				// Note that multiple child processes might have terminated simultaneously
-				// as noted in http://stackoverflow.com/questions/2595503/determine-pid-of-terminated-process
-				while ((child_pid = Posix.waitpid(-1, null, Posix.WNOHANG)) != -1) {
-					var this_terminal = terminals_by_pid.get((int)child_pid);
-					// Close channel to keep pending shell IO from triggering UI updates (and crashes)
-					// after the corresponding TerminalWidget has been removed
-					this_terminal.command_channel.shutdown(false);
-					this_terminal.shell_terminated();
-					// TODO: If allowed to run, this loop turns into an infinite loop
-					//       when multiple terminals are used. INVESTIGATE FURTHER!
-					break;
-				}
-			});
 
 			break;
 		}
@@ -261,6 +240,7 @@ public class Terminal : Object {
 	public void terminate_shell() {
 		// SIGTERM does not reliably terminate the process
 		Posix.kill(fork_pid, Posix.SIGKILL);
+        Thread.usleep(2000);
 	}
 
 	private void initialize_read() {

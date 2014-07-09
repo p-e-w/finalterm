@@ -53,9 +53,14 @@ public class FinalTerm : Gtk.Application {
 		{ "quit", quit_action }
 	};
 
+    public static bool posixCloseEvent = false;
+    public static bool closingProcessRunning = false;
+
 	protected override void startup() {
 		base.startup();
-
+        Posix.@signal(Posix.SIGCHLD, (@signal) => {
+            message(_("got ctrl+d in main"));
+        });
 		app_menu = create_application_menu();
 
 #if HAS_UNITY
@@ -99,6 +104,29 @@ public class FinalTerm : Gtk.Application {
 		main_window.add(nesting_container);
 
 		main_window.key_press_event.connect(on_key_press_event);
+
+        Posix.@signal(Posix.SIGCHLD, (@signal) => {
+            if (! closingProcessRunning) {
+                posixCloseEvent = true;
+            }
+        });
+
+        Timeout.add (1000, () => {
+            if (posixCloseEvent) {
+                posixCloseEvent = false;
+                if (! closingProcessRunning) {
+                    closingProcessRunning = true;
+                    foreach (var child in nesting_container.children) {
+                        if (child.is_active) {
+                            child.close();
+                            break;
+                        }
+                    }
+                    closingProcessRunning = false;
+                }
+            }
+            return true;
+        });
 	}
 
 	protected override void activate() {
