@@ -30,7 +30,7 @@ public class Terminal : Object {
 	public TerminalOutput terminal_output { get; set; }
 	public TerminalView terminal_view { get; set; }
 
-	public Posix.pid_t fork_pid;
+	private Posix.pid_t fork_pid;
 	private int command_file;
 	private IOChannel command_channel;
 

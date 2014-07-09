@@ -143,7 +143,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 		add_tab_with_child(child_factory_function());
 	}
 
-	private void add_tab_with_child(NestingContainerChild child, bool signals = true) {
+	private void add_tab_with_child(NestingContainerChild child) {
 		assert(container_state == ContainerState.TABBED);
 
 		var child_container = new NestingContainer.with_child(child_factory_function, child);

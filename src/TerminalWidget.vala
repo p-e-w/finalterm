@@ -34,18 +34,11 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 	// because it gets destroyed immediately otherwise
 	private Gtk.Menu context_menu;
 
-
-    private static Gee.Map<int, Terminal> terminals_by_pid = new Gee.HashMap<int, Terminal>();
-
 	public TerminalWidget() {
 		stage = (Clutter.Stage)get_stage();
 		stage.use_alpha = true;
 
 		terminal = new Terminal();
-
-        // Store instance reference to be retrieved from inside the closure
-        terminals_by_pid.set((int)terminal.fork_pid, terminal);
-        
 
 		title = terminal.terminal_output.terminal_title;
 		terminal.terminal_output.notify["terminal-title"].connect(() => {
