@@ -156,13 +156,13 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 		context_menu.append(new Gtk.SeparatorMenuItem());
 
-		menu_item = new Gtk.MenuItem.with_label(_("Split Horizontally"));
+		menu_item = new Gtk.MenuItem.with_label(_("Split Vertically"));
 		menu_item.activate.connect(() => {
 			split(Gtk.Orientation.HORIZONTAL);
 		});
 		context_menu.append(menu_item);
 
-		menu_item = new Gtk.MenuItem.with_label(_("Split Vertically"));
+		menu_item = new Gtk.MenuItem.with_label(_("Split Horizontally"));
 		menu_item.activate.connect(() => {
 			split(Gtk.Orientation.VERTICAL);
 		});
