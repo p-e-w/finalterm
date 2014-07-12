@@ -36,6 +36,9 @@ public class FinalTerm : Gtk.Application {
 
 	private TerminalWidget active_terminal_widget = null;
 
+	public static bool posixCloseEvent = false;
+	public static bool closingProcessRunning = false;
+
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
 #endif
@@ -99,6 +102,32 @@ public class FinalTerm : Gtk.Application {
 		main_window.add(nesting_container);
 
 		main_window.key_press_event.connect(on_key_press_event);
+
+		Posix.@signal(Posix.SIGCHLD, (@signal) => {
+			if (!closingProcessRunning) {
+				posixCloseEvent = true;
+			}
+			while (Posix.waitpid(-1, null, Posix.WNOHANG) != -1) {
+				break;
+			}
+		});
+
+		Timeout.add (1000, () => {
+			if (posixCloseEvent) {
+				posixCloseEvent = false;
+				if (!closingProcessRunning) {
+					closingProcessRunning = true;
+					foreach (var child in nesting_container.children) {
+						if (child.is_active) {
+							child.close();
+							break;
+						}
+					}
+					closingProcessRunning = false;
+				}
+			}
+			return true;
+		});
 	}
 
 	protected override void activate() {

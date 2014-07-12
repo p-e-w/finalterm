@@ -30,7 +30,7 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 	// "title = title_of_active_descendant"
 	public string title { get; set; }
 
-	private Gee.List<NestingContainerChild> children;
+	public Gee.List<NestingContainerChild> children;
 
 	private Gtk.Paned paned;
 	private Gtk.Notebook notebook;
