@@ -46,19 +46,10 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 			title = terminal.terminal_output.terminal_title;
 		});
 
-		bool shell_terminated_called = false;
-		bool close_called = false;
-
-		terminal.shell_terminated.connect(() => {
-			shell_terminated_called = true;
-			if (!close_called)
-				close();
-		});
-
 		close.connect(() => {
-			close_called = true;
-			if (!shell_terminated_called)
-				terminal.terminate_shell();
+			FinalTerm.close_in_pogress = true;
+			terminal.terminate_shell();
+			FinalTerm.close_in_pogress = false;
 		});
 
 		terminal_view = new TerminalView(terminal, this);

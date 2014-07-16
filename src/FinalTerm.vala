@@ -34,7 +34,10 @@ public class FinalTerm : Gtk.Application {
 
 	private Gtk.Window main_window;
 
-	private TerminalWidget active_terminal_widget = null;
+	private static TerminalWidget active_terminal_widget = null;
+
+	private static IOChannel sync_channel;
+	public static bool close_in_pogress = false;
 
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
@@ -99,6 +102,36 @@ public class FinalTerm : Gtk.Application {
 		main_window.add(nesting_container);
 
 		main_window.key_press_event.connect(on_key_press_event);
+
+		string fifo_path = "/tmp/finalterm_XXXXXX";
+		int sync_file = GLib.FileUtils.mkstemp(fifo_path);
+		GLib.FileUtils.close(sync_file);
+		GLib.FileUtils.remove(fifo_path);	// the temp file needs to be replaced with a fifo
+		
+		Posix.mkfifo(fifo_path, 0666);
+		sync_file = Posix.open(fifo_path, Posix.O_NONBLOCK | Posix.O_RDWR);
+		sync_channel = new IOChannel.unix_new(sync_file);
+
+		Posix.@signal(Posix.SIGCHLD, (@signal) => {
+			if (!close_in_pogress) {
+				sync_channel.write_unichar('a');
+				sync_channel.flush();
+				Posix.waitpid(-1, null, Posix.WNOHANG);		// needs to be here te prevent zombies
+			}
+		});
+		
+		sync_channel.add_watch(IOCondition.IN, (source, condition) => {
+			if (condition == IOCondition.HUP) {
+				message(_("Connection broken"));
+				return false;
+			}
+			unichar character;
+			sync_channel.read_unichar(out character);
+
+			active_terminal_widget.close();
+
+			return true;
+		});
 	}
 
 	protected override void activate() {
