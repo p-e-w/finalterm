@@ -37,6 +37,7 @@ public class FinalTerm : Gtk.Application {
 	private static TerminalWidget active_terminal_widget = null;
 
 	private static IOChannel sync_channel;
+	public static bool close_in_pogress = false;
 
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
@@ -112,9 +113,11 @@ public class FinalTerm : Gtk.Application {
 		sync_channel = new IOChannel.unix_new(sync_file);
 
 		Posix.@signal(Posix.SIGCHLD, (@signal) => {
-			sync_channel.write_unichar('a');
-			sync_channel.flush();
-			Posix.waitpid(-1, null, Posix.WNOHANG);		// needs to be here te prevent zombies
+			if (!close_in_pogress) {
+				sync_channel.write_unichar('a');
+				sync_channel.flush();
+				Posix.waitpid(-1, null, Posix.WNOHANG);		// needs to be here te prevent zombies
+			}
 		});
 		
 		sync_channel.add_watch(IOCondition.IN, (source, condition) => {

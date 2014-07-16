@@ -47,7 +47,9 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		});
 
 		close.connect(() => {
+			FinalTerm.close_in_pogress = true;
 			terminal.terminate_shell();
+			FinalTerm.close_in_pogress = false;
 		});
 
 		terminal_view = new TerminalView(terminal, this);
