@@ -51,8 +51,15 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 		terminal.shell_terminated.connect(() => {
 			shell_terminated_called = true;
-			if (!close_called)
-				close();
+			if (!close_called) {
+				// Triggered by the Posix SIGCHLD signal, the shell_terminated signal
+				// is called from a separate thread. To safely call GTK+ functions,
+				// the close signal needs to be emitted on the GTK+ main thread.
+				Gdk.threads_add_idle(() => {
+					close();
+					return false;
+				});
+			}
 		});
 
 		close.connect(() => {

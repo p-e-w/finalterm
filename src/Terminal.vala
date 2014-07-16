@@ -271,6 +271,10 @@ public class Terminal : Object {
 				message(_("Connection broken"));
 				return false;
 			}
+			if (!(IOFlags.IS_READABLE in command_channel.get_flags())) {
+				message(_("Channel not readable"));
+				return false;
+			}
 
 			// TODO: Read all available characters rather than one
 			unichar character;
