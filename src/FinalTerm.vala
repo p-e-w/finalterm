@@ -34,10 +34,9 @@ public class FinalTerm : Gtk.Application {
 
 	private Gtk.Window main_window;
 
-	private TerminalWidget active_terminal_widget = null;
+	private static TerminalWidget active_terminal_widget = null;
 
-	public static bool posixCloseEvent = false;
-	public static bool closingProcessRunning = false;
+	private static IOChannel sync_channel;
 
 #if HAS_UNITY
 	public static Unity.LauncherEntry launcher;
@@ -103,29 +102,31 @@ public class FinalTerm : Gtk.Application {
 
 		main_window.key_press_event.connect(on_key_press_event);
 
-		Posix.@signal(Posix.SIGCHLD, (@signal) => {
-			if (!closingProcessRunning) {
-				posixCloseEvent = true;
-			}
-			while (Posix.waitpid(-1, null, Posix.WNOHANG) != -1) {
-				break;
-			}
-		});
+		string fifo_path = "/tmp/finalterm_XXXXXX";
+		int sync_file = GLib.FileUtils.mkstemp(fifo_path);
+		GLib.FileUtils.close(sync_file);
+		GLib.FileUtils.remove(fifo_path);	// the temp file needs to be replaced with a fifo
+		
+		Posix.mkfifo(fifo_path, 0666);
+		sync_file = Posix.open(fifo_path, Posix.O_NONBLOCK | Posix.O_RDWR);
+		sync_channel = new IOChannel.unix_new(sync_file);
 
-		Timeout.add (1000, () => {
-			if (posixCloseEvent) {
-				posixCloseEvent = false;
-				if (!closingProcessRunning) {
-					closingProcessRunning = true;
-					foreach (var child in nesting_container.children) {
-						if (child.is_active) {
-							child.close();
-							break;
-						}
-					}
-					closingProcessRunning = false;
-				}
+		Posix.@signal(Posix.SIGCHLD, (@signal) => {
+			sync_channel.write_unichar('a');
+			sync_channel.flush();
+			Posix.waitpid(-1, null, Posix.WNOHANG);		// needs to be here te prevent zombies
+		});
+		
+		sync_channel.add_watch(IOCondition.IN, (source, condition) => {
+			if (condition == IOCondition.HUP) {
+				message(_("Connection broken"));
+				return false;
 			}
+			unichar character;
+			sync_channel.read_unichar(out character);
+
+			active_terminal_widget.close();
+
 			return true;
 		});
 	}

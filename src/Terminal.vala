@@ -34,10 +34,6 @@ public class Terminal : Object {
 	private int command_file;
 	private IOChannel command_channel;
 
-	// Store class instances indexed by the shell process' PID
-	// – an ugly necessity because of Vala's closure limitations
-	private static Gee.Map<int, Terminal> terminals_by_pid = new Gee.HashMap<int, Terminal>();
-
 	public Terminal() {
 		lines = Settings.get_default().terminal_lines;
 		columns = Settings.get_default().terminal_columns;
