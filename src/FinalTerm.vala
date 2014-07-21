@@ -281,11 +281,11 @@ public class FinalTerm : Gtk.Application {
 				//       on and off and then showing window
 				main_window.hide();
 				main_window.decorated = false;
-				main_window.move(0, 0);
 				// TODO: Make height a user setting
 				// TODO: Account for vertical padding
 				Gdk.Rectangle monitor_geometry;
 				main_window.screen.get_monitor_geometry(main_window.screen.get_primary_monitor(), out monitor_geometry);
+				main_window.move(monitor_geometry.x, monitor_geometry.y);
 				main_window.resize(monitor_geometry.width, 15 * Settings.get_default().character_height);
 				main_window.present();
 				main_window.set_keep_above(true);
