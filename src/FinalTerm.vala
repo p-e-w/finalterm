@@ -33,6 +33,7 @@ public class FinalTerm : Gtk.Application {
 	public static Autocompletion autocompletion { get; set; }
 
 	private Gtk.Window main_window;
+	private Gtk.IMContext im_context;
 
 	private TerminalWidget active_terminal_widget = null;
 
@@ -98,7 +99,10 @@ public class FinalTerm : Gtk.Application {
 
 		main_window.add(nesting_container);
 
+		im_context = new Gtk.IMMulticontext();
+		im_context.commit.connect(on_commit);
 		main_window.key_press_event.connect(on_key_press_event);
+		main_window.key_release_event.connect(on_key_release_event);
 	}
 
 	protected override void activate() {
@@ -207,6 +211,12 @@ public class FinalTerm : Gtk.Application {
 			}
 		}
 
+		if (im_context.filter_keypress(event)) {
+			// maybe not return here as it overrides the user configuration?
+			// input keys might be more important than user configuration though
+			return true;
+		}
+
 		// Handle user-configured keys
 		var key_commands = KeyBindings.get_key_commands(event.keyval, event.state,
 				active_terminal_widget.get_terminal_modes());
@@ -222,6 +232,15 @@ public class FinalTerm : Gtk.Application {
 
 		active_terminal_widget.send_text_to_shell(event.str);
 		return true;
+	}
+
+	private bool on_key_release_event(Gdk.EventKey event) {
+		im_context.filter_keypress(event);
+		return true;
+	}
+
+	private void on_commit(string str) {
+		active_terminal_widget.send_text_to_shell(str);
 	}
 
 	private void execute_command(Command command) {
