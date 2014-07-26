@@ -34,6 +34,7 @@ public class FinalTerm : Gtk.Application {
 
 	private Gtk.Window main_window;
 	private Gtk.IMContext im_context;
+	private bool preedit_active = false;
 
 	private TerminalWidget active_terminal_widget = null;
 
@@ -101,6 +102,8 @@ public class FinalTerm : Gtk.Application {
 
 		im_context = new Gtk.IMMulticontext();
 		im_context.commit.connect(on_commit);
+		im_context.preedit_start.connect(on_preedit_start);
+		im_context.preedit_end.connect(on_preedit_end);
 		main_window.key_press_event.connect(on_key_press_event);
 		main_window.key_release_event.connect(on_key_release_event);
 	}
@@ -211,21 +214,20 @@ public class FinalTerm : Gtk.Application {
 			}
 		}
 
-		if (im_context.filter_keypress(event)) {
-			// maybe not return here as it overrides the user configuration?
-			// input keys might be more important than user configuration though
-			return true;
+		// Handle user-configured keys only outside of preedit
+		if (!preedit_active) {
+			var key_commands = KeyBindings.get_key_commands(event.keyval, event.state,
+					active_terminal_widget.get_terminal_modes());
+			if (key_commands != null) {
+				foreach (var command in key_commands) {
+					command.execute();
+				}
+				return true;
+			}
 		}
 
-		// Handle user-configured keys
-		var key_commands = KeyBindings.get_key_commands(event.keyval, event.state,
-				active_terminal_widget.get_terminal_modes());
-		if (key_commands != null) {
-			foreach (var command in key_commands) {
-				command.execute();
-			}
+		if (im_context.filter_keypress(event))
 			return true;
-		}
 
 		if (event.length == 0)
 			return false;
@@ -235,12 +237,19 @@ public class FinalTerm : Gtk.Application {
 	}
 
 	private bool on_key_release_event(Gdk.EventKey event) {
-		im_context.filter_keypress(event);
-		return true;
+		return im_context.filter_keypress(event);
 	}
 
 	private void on_commit(string str) {
 		active_terminal_widget.send_text_to_shell(str);
+	}
+
+	private void on_preedit_start() {
+		preedit_active = true;
+	}
+
+	private void on_preedit_end() {
+		preedit_active = false;
 	}
 
 	private void execute_command(Command command) {
