@@ -40,7 +40,7 @@ public class TextMenu : Object {
 	public string text { get; set; }
 
 	public string escape_parameters(string s){
-		var escape_characters = new string[] {" ", "&", "'", ";", "#", "\"", "`", "|", "*", "?", "$", "<", ">", "~"};
+		var escape_characters = new string[] {" ", "&", "'", ";", "#", "\"", "`", "|", "*", "?", "$", "<", ">", "(", ")", "~"};
 		var backslash = "\\";
 		string temp = s;
 		foreach(var character in escape_characters){
