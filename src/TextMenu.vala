@@ -39,6 +39,17 @@ public class TextMenu : Object {
 
 	public string text { get; set; }
 
+	public string escape_parameters(string s){
+		var escape_characters = new string[] {" ", "&", "'", ";", "#", "\"", "`", "|", "*", "?", "$", "<", ">", "~"};
+		var backslash = "\\";
+		string temp = s;
+		foreach(var character in escape_characters){
+			temp = temp.replace(character, backslash.concat(character) );
+		}
+		return temp;
+	}
+
+
 	public TextMenu.load_from_file(string filename) {
 		var menu_file = new KeyFile();
 		try {
@@ -76,7 +87,7 @@ public class TextMenu : Object {
 
 					menu_item.activate.connect(() => {
 						var placeholder_substitutes = new Gee.ArrayList<string>();
-						placeholder_substitutes.add(text);
+						placeholder_substitutes.add(escape_parameters(text));
 						foreach (var command in commands) {
 							command.execute(placeholder_substitutes);
 						}

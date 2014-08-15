@@ -87,7 +87,7 @@ public class Terminal : Object {
 	}
 
 	public void run_command(string command) {
-		set_command(command);
+		set_command(/(?<!\\)\'/.replace(command, -1, 0, ""));
 		send_text("\n");
 	}
 
