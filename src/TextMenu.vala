@@ -39,13 +39,14 @@ public class TextMenu : Object {
 
 	public string text { get; set; }
 
-	public string escape_parameters(string s){
+	public string escape_parameters(string s) {
 		var escape_characters = new string[] {" ", "&", "'", ";", "#", "\"", "`", "|", "*", "?", "$", "<", ">", "(", ")", "~"};
 		var backslash = "\\";
 		string temp = s;
-		foreach(var character in escape_characters){
+		
+		foreach(var character in escape_characters) 
 			temp = temp.replace(character, backslash.concat(character) );
-		}
+
 		return temp;
 	}
 
