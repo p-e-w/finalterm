@@ -271,13 +271,16 @@ public class FinalTerm : Gtk.Application {
 		case Command.CommandType.SET_SHELL_COMMAND:
 			if (command.parameters.is_empty)
 				return;
-			active_terminal_widget.set_shell_command(command.parameters.get(0));
+			active_terminal_widget.set_shell_command(Utilities.escape_shell_command(
+												     command.parameters.get(0)));
 			return;
 
 		case Command.CommandType.RUN_SHELL_COMMAND:
 			if (command.parameters.is_empty)
 				return;
-			active_terminal_widget.run_shell_command(command.parameters.get(0));
+
+			active_terminal_widget.run_shell_command(Utilities.escape_shell_command(
+													 command.parameters.get(0)));
 			return;
 
 		case Command.CommandType.TOGGLE_VISIBLE:
