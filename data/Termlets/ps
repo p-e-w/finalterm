@@ -1,10 +1,15 @@
 #!/bin/bash
 
+lnnb=0
 ps "$@" |
 
 while IFS= read -r line; do
-	# Position of string "PID" in line
-	pid_index=$(awk -v a="$line" -v b='PID' 'BEGIN{print index(a,b)}')
+	if [ $lnnb == 0 ]
+	then
+		# Position of string "PID" in line
+		pid_index=$(awk -v a="$line" -v b='PID' 'BEGIN{print index(a,b)}')
+		lnnb=1
+	fi
 
 	if [[ "$pid_index" -gt 0 ]]; then
 		# Header line
@@ -21,4 +26,5 @@ while IFS= read -r line; do
 	fi
 
 	echo -e "$modified_line"
+	pid_index=0
 done
