@@ -17,8 +17,8 @@ function final_term_control_sequence() {
 	for argument in "$@"; do
 		control_sequence="$control_sequence$argument;"
 	done
-	# TODO: Remove last semicolon
-	control_sequence="$control_sequence\a"
+	# Remove last semicolon
+	control_sequence="${control_sequence%;}\a"
 
 	# TODO: Should "-ne" be added here?
 	echo "$control_sequence"
