@@ -69,60 +69,60 @@ public class TerminalStream : Object {
 
 		// Sequence start recognition
 		switch (parse_state) {
-		case ParseState.TEXT:
-			if (CONTROL_CHARACTERS.contains(character.to_string())) {
-				// Emit current text sequence so that character
-				// can be emitted separately
-				emit_sequence();
-				// Emit control character
-				parse_state = ParseState.CONTROL_CHARACTER;
-				sequence_builder.append_unichar(character);
-				emit_sequence();
-				parse_state = ParseState.TEXT;
-				return;
-			}
-			switch (character.to_string()) {
-			case ESCAPE_SEQUENCE_START_CHARACTER:
-				emit_sequence();
-				parse_state = ParseState.ESCAPE_SEQUENCE;
-				break;
-			case DCS_SEQUENCE_START_CHARACTER:
-				emit_sequence();
-				parse_state = ParseState.DCS_SEQUENCE;
-				break;
-			case CSI_SEQUENCE_START_CHARACTER:
-				emit_sequence();
-				parse_state = ParseState.CSI_SEQUENCE;
-				break;
-			case OSC_SEQUENCE_START_CHARACTER:
-				emit_sequence();
-				parse_state = ParseState.OSC_SEQUENCE;
-				break;
-			}
-			break;
-		case ParseState.CONTROL_CHARACTER:
-			break;
-		case ParseState.ESCAPE_SEQUENCE:
-			if (sequence_builder.len == 1) {
-				// First character after escape sequence inducer
-				switch (character.to_string()) {
-				case ESCAPE_SEQUENCE_DCS:
-					// Do not emit the sequence here (simple state change)
-					parse_state = ParseState.DCS_SEQUENCE;
-					break;
-				case ESCAPE_SEQUENCE_CSI:
-					parse_state = ParseState.CSI_SEQUENCE;
-					break;
-				case ESCAPE_SEQUENCE_OSC:
-					parse_state = ParseState.OSC_SEQUENCE;
-					break;
+			case ParseState.TEXT:
+				if (CONTROL_CHARACTERS.contains(character.to_string())) {
+					// Emit current text sequence so that character
+					// can be emitted separately
+					emit_sequence();
+					// Emit control character
+					parse_state = ParseState.CONTROL_CHARACTER;
+					sequence_builder.append_unichar(character);
+					emit_sequence();
+					parse_state = ParseState.TEXT;
+					return;
 				}
-			}
-			break;
-		case ParseState.DCS_SEQUENCE:
-		case ParseState.CSI_SEQUENCE:
-		case ParseState.OSC_SEQUENCE:
-			break;
+				switch (character.to_string()) {
+					case ESCAPE_SEQUENCE_START_CHARACTER:
+						emit_sequence();
+						parse_state = ParseState.ESCAPE_SEQUENCE;
+						break;
+					case DCS_SEQUENCE_START_CHARACTER:
+						emit_sequence();
+						parse_state = ParseState.DCS_SEQUENCE;
+						break;
+					case CSI_SEQUENCE_START_CHARACTER:
+						emit_sequence();
+						parse_state = ParseState.CSI_SEQUENCE;
+						break;
+					case OSC_SEQUENCE_START_CHARACTER:
+						emit_sequence();
+						parse_state = ParseState.OSC_SEQUENCE;
+						break;
+				}
+				break;
+			case ParseState.CONTROL_CHARACTER:
+				break;
+			case ParseState.ESCAPE_SEQUENCE:
+				if (sequence_builder.len == 1) {
+					// First character after escape sequence inducer
+					switch (character.to_string()) {
+						case ESCAPE_SEQUENCE_DCS:
+							// Do not emit the sequence here (simple state change)
+							parse_state = ParseState.DCS_SEQUENCE;
+							break;
+						case ESCAPE_SEQUENCE_CSI:
+							parse_state = ParseState.CSI_SEQUENCE;
+							break;
+						case ESCAPE_SEQUENCE_OSC:
+							parse_state = ParseState.OSC_SEQUENCE;
+							break;
+					}
+				}
+				break;
+			case ParseState.DCS_SEQUENCE:
+			case ParseState.CSI_SEQUENCE:
+			case ParseState.OSC_SEQUENCE:
+				break;
 		}
 
 		sequence_builder.append_unichar(character);
@@ -132,38 +132,38 @@ public class TerminalStream : Object {
 			return;
 
 		switch (parse_state) {
-		case ParseState.TEXT:
-			transient_text_updated(sequence_builder.str);
-			break;
-		case ParseState.CONTROL_CHARACTER:
-			break;
-		// Sequence end recognition
-		case ParseState.ESCAPE_SEQUENCE:
-			if (ESCAPE_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
-				emit_sequence();
-				parse_state = ParseState.TEXT;
-			}
-			break;
-		case ParseState.DCS_SEQUENCE:
-			if (DCS_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
-				emit_sequence();
-				parse_state = ParseState.TEXT;
-			}
-			break;
-		case ParseState.CSI_SEQUENCE:
-			if (CSI_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
-				emit_sequence();
-				parse_state = ParseState.TEXT;
-			}
-			break;
-		case ParseState.OSC_SEQUENCE:
-			if (OSC_SEQUENCE_END_CHARACTERS.contains(character.to_string()) ||
+			case ParseState.TEXT:
+				transient_text_updated(sequence_builder.str);
+				break;
+			case ParseState.CONTROL_CHARACTER:
+				break;
+			// Sequence end recognition
+			case ParseState.ESCAPE_SEQUENCE:
+				if (ESCAPE_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
+					emit_sequence();
+					parse_state = ParseState.TEXT;
+				}
+				break;
+			case ParseState.DCS_SEQUENCE:
+				if (DCS_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
+					emit_sequence();
+					parse_state = ParseState.TEXT;
+				}
+				break;
+			case ParseState.CSI_SEQUENCE:
+				if (CSI_SEQUENCE_END_CHARACTERS.contains(character.to_string())) {
+					emit_sequence();
+					parse_state = ParseState.TEXT;
+				}
+				break;
+			case ParseState.OSC_SEQUENCE:
+				if (OSC_SEQUENCE_END_CHARACTERS.contains(character.to_string()) ||
 					// Handle alternative ST notation (ESC + "\")
 					sequence_builder.str.has_suffix("\x1B\\")) {
-				emit_sequence();
-				parse_state = ParseState.TEXT;
-			}
-			break;
+					emit_sequence();
+					parse_state = ParseState.TEXT;
+				}
+				break;
 		}
 	}
 
@@ -172,16 +172,16 @@ public class TerminalStream : Object {
 			return;
 
 		switch (parse_state) {
-		case ParseState.TEXT:
-			element_completed(new StreamElement.from_text(sequence_builder.str));
-			break;
-		case ParseState.CONTROL_CHARACTER:
-		case ParseState.ESCAPE_SEQUENCE:
-		case ParseState.DCS_SEQUENCE:
-		case ParseState.CSI_SEQUENCE:
-		case ParseState.OSC_SEQUENCE:
-			element_completed(new StreamElement.from_control_sequence(sequence_builder.str));
-			break;
+			case ParseState.TEXT:
+				element_completed(new StreamElement.from_text(sequence_builder.str));
+				break;
+			case ParseState.CONTROL_CHARACTER:
+			case ParseState.ESCAPE_SEQUENCE:
+			case ParseState.DCS_SEQUENCE:
+			case ParseState.CSI_SEQUENCE:
+			case ParseState.OSC_SEQUENCE:
+				element_completed(new StreamElement.from_control_sequence(sequence_builder.str));
+				break;
 		}
 
 		sequence_builder.erase();
@@ -209,6 +209,23 @@ public class TerminalStream : Object {
 		// http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 		public enum ControlSequenceType {
 			UNKNOWN,
+
+			INDEX,
+			NEXT_LINE,
+			TAB_SET,
+			REVERSE_INDEX,
+			SINGLE_SHIFT_SELECT_OF_G2,
+			SINGLE_SHIFT_SELECT_OF_G3,
+			DEVICE_CONTROL_STRING,
+			START_OF_GUARDED_AREA,
+			END_OF_GUARDED_AREA,
+			START_OF_STRING,
+			RETURN_TERMINAL_ID,
+			CONTROL_SEQUENCE_INTRODUCER,
+			STRING_TERMINATOR,
+			OPERATING_SYSTEM_COMMAND,
+			PRIVACY_MESSAGE,
+			APPLICATION_PROGRAM_COMMAND,
 
 			BELL,
 			BACKSPACE,
@@ -401,7 +418,6 @@ public class TerminalStream : Object {
 
 			// All xterm ESC control sequences (VT100 mode)
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-			// TODO: Add C1 (8-bit) ESC control sequences as well
 			add_esc_sequence_pattern(ControlSequenceType.SEVEN_BIT_CONTROLS, " F");
 			add_esc_sequence_pattern(ControlSequenceType.EIGHT_BIT_CONTROLS, " G");
 			add_esc_sequence_pattern(ControlSequenceType.SET_ANSI_CONFORMANCE_LEVEL_1, " L");
@@ -436,6 +452,23 @@ public class TerminalStream : Object {
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G3_CHARACTER_SET_AS_GR, "|");
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G2_CHARACTER_SET_AS_GR, "}");
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G1_CHARACTER_SET_AS_GR, "~");
+			// C1 ESC control sequences
+			add_esc_sequence_pattern(ControlSequenceType.INDEX, "D");
+			add_esc_sequence_pattern(ControlSequenceType.NEXT_LINE, "E");
+			add_esc_sequence_pattern(ControlSequenceType.TAB_SET, "H");
+			add_esc_sequence_pattern(ControlSequenceType.REVERSE_INDEX, "M");
+			add_esc_sequence_pattern(ControlSequenceType.SINGLE_SHIFT_SELECT_OF_G2, "N");
+			add_esc_sequence_pattern(ControlSequenceType.SINGLE_SHIFT_SELECT_OF_G3, "O");
+			add_esc_sequence_pattern(ControlSequenceType.DEVICE_CONTROL_STRING, "P");
+			add_esc_sequence_pattern(ControlSequenceType.START_OF_GUARDED_AREA, "V");
+			add_esc_sequence_pattern(ControlSequenceType.END_OF_GUARDED_AREA, "W");
+			add_esc_sequence_pattern(ControlSequenceType.START_OF_STRING, "X");
+			add_esc_sequence_pattern(ControlSequenceType.RETURN_TERMINAL_ID, "Z");
+			add_esc_sequence_pattern(ControlSequenceType.CONTROL_SEQUENCE_INTRODUCER, "[");
+			add_esc_sequence_pattern(ControlSequenceType.STRING_TERMINATOR, "\\");
+			add_esc_sequence_pattern(ControlSequenceType.OPERATING_SYSTEM_COMMAND, "]");
+			add_esc_sequence_pattern(ControlSequenceType.PRIVACY_MESSAGE, "^");
+			add_esc_sequence_pattern(ControlSequenceType.APPLICATION_PROGRAM_COMMAND, "_");
 
 			// xterm implements no APC functions
 			// See http://invisible-island.net/xterm/ctlseqs/ctlseqs.html

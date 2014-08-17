@@ -227,7 +227,12 @@ public class Terminal : Object {
 					var this_terminal = terminals_by_pid.get((int)child_pid);
 					// Close channel to keep pending shell IO from triggering UI updates (and crashes)
 					// after the corresponding TerminalWidget has been removed
-					this_terminal.command_channel.shutdown(false);
+					// TODO: handle error properly
+					try {
+						this_terminal.command_channel.shutdown(false);
+					} catch (IOChannelError e) {
+						stderr.printf("Error in command_channel.shutdown");
+					}
 					this_terminal.shell_terminated();
 					// TODO: If allowed to run, this loop turns into an infinite loop
 					//       when multiple terminals are used. INVESTIGATE FURTHER!
