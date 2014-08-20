@@ -387,6 +387,8 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 						Gtk.IconSize.MENU));
 
 			var css_provider = new Gtk.CssProvider();
+			// TODO: handle error properly
+			try {
 			css_provider.load_from_data(
 					".button {\n" +
 					"-GtkButton-default-border: 0px;\n" +
@@ -396,6 +398,9 @@ public class NestingContainer : Gtk.Box, NestingContainerChild {
 					"-GtkWidget-focus-padding: 0px;\n" +
 					"padding: 0px;\n" +
 					"}", -1);
+			} catch (Error e) {
+				stderr.printf("Error in css_provider.load_from_data");
+			}
 			close_button.get_style_context().add_provider(css_provider,
 					Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 

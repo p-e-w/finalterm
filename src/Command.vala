@@ -105,7 +105,12 @@ public class Command : Object {
 				}
 
 				// Remove remaining placeholders
-				substitute_parameter = placeholder_pattern.replace(substitute_parameter, -1, 0, "");
+				// TODO: handle error properly
+				try {
+					substitute_parameter = placeholder_pattern.replace(substitute_parameter, -1, 0, "");
+				} catch (RegexError e) {
+					stderr.printf("Error in removing remaining placeholders");
+				}
 
 				substitute_command.parameters.add(substitute_parameter);
 			}
