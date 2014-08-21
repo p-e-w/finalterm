@@ -23,4 +23,5 @@ for line in ${psoutput[@]}; do
 	right_part=${line:pid_end-1}
 	modified_line="$left_part$begin_mark$pid_part$end_mark$right_part"
 	echo -e "$modified_line"
+	pid_index=0
 done
