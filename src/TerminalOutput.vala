@@ -91,7 +91,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public void parse_stream_element(TerminalStream.StreamElement stream_element) {
 		switch (stream_element.stream_element_type) {
 		case TerminalStream.StreamElement.StreamElementType.TEXT:
-			//message(_("Text sequence received: '%s'"), stream_element.text);
+			message(_("Text sequence received: '%s'"), stream_element.text);
 
 			// Print only text that has not been printed yet
 			string text_left = stream_element.text.substring(
@@ -223,6 +223,12 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_FORWARD:
+			case TerminalStream.StreamElement.ControlSequenceType.REVERSE_INDEX:
+				screen_offset -= 1;
+				move_cursor(cursor_position.line - stream_element.get_numeric_parameter(0,1), cursor_position.column);
+				terminal.terminal_view.terminal_output_view.add_line_views();
+				break;
+
 			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_POSITION_RELATIVE:
 				// The CUF sequence moves the active position to the right.
 				// The distance moved is determined by the parameter (default: 1)

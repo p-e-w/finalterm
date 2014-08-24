@@ -187,6 +187,7 @@ macro(vala_precompile output)
         ${ARGS_OPTIONS} 
         ${in_files} 
         ${custom_vapi_arguments}
+        "-g"
     COMMAND
       ${CMAKE_COMMAND} -E touch "vala.stamp"
     DEPENDS 
