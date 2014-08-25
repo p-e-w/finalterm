@@ -1,0 +1,3 @@
+# bzr-builder format 0.3 deb-version {debupstream}-0~126
+lp:finalterm revid:git-v1:6ec39f8215b0732f52f74b0d96ed48abbffc1d9f
+nest-part packaging lp:~versable/finalterm/deb-packaging debian debian revid:versable@gmail.com-20130920172445-xgm6tyh07s8nidep
