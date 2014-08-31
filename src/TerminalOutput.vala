@@ -124,6 +124,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				// This code causes a line feed or a new line operation
 				// TODO: Does LF always imply CR?
 				move_cursor(cursor_position.line + 1, 0);
+				terminal.terminal_view.terminal_output_view.add_line_views();
+				terminal.terminal_view.terminal_output_view.scroll_to_position();
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.HORIZONTAL_TAB:
