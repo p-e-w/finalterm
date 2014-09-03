@@ -91,7 +91,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public void parse_stream_element(TerminalStream.StreamElement stream_element) {
 		switch (stream_element.stream_element_type) {
 		case TerminalStream.StreamElement.StreamElementType.TEXT:
-			message(_("Text sequence received: '%s'"), stream_element.text);
+			//message(_("Text sequence received: '%s'"), stream_element.text);
 
 			// Print only text that has not been printed yet
 			string text_left = stream_element.text.substring(
