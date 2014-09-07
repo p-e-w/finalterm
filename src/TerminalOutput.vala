@@ -228,7 +228,6 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.REVERSE_INDEX:
 				screen_offset -= 1;
 				move_cursor(cursor_position.line - stream_element.get_numeric_parameter(0,1), cursor_position.column);
-				terminal.terminal_view.terminal_output_view.add_line_views();
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.NEXT_LINE:
