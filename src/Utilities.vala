@@ -82,7 +82,7 @@ public class Utilities : Object {
 	public static Clutter.Color get_rgb_color(int red, int green, int blue) {
 		// TODO: A Vala bug prevents using this (linker error):
 		//return Clutter.Color().init((uint8)red, (uint8)green, (uint8)blue, 255);
-		
+
 		var color = Clutter.Color();
 		color.red   = (uint8)red;
 		color.green = (uint8)green;
@@ -209,8 +209,16 @@ public class Utilities : Object {
 		scheduled_functions.add(function_name);
 
 		Timeout.add(interval, () => {
-			scheduled_functions.remove(function_name);
 			function();
+			// CAVEAT: Removing the function from the list of scheduled functions AFTER
+			//         it has finished executing improves performance in many cases,
+			//         but can also bring problems:
+			//         1. If the function, as part of its logic, *schedules another execution
+			//            of itself*, that execution will not happen
+			//         2. Since timeout functions are executed on the main loop thread,
+			//            calling schedule_execution from another thread can lead to a race condition
+			//            (TODO: Move entire function body to main loop thread to avoid this)
+			scheduled_functions.remove(function_name);
 			return false;
 		}, priority);
 	}
