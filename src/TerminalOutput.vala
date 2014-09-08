@@ -740,7 +740,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			assemble(result_elements);
 		}
-		
+
 		// TODO: Convert position variables to long (cf. GLib.string)?
 		// TODO: Use contract programming (requires/ensures) to ensure positions are acceptable
 		public void erase_range(int start_position = 0, int end_position = -1) {
@@ -765,9 +765,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 		public Gee.List<TextElement> explode() {
 			var character_elements = new Gee.ArrayList<TextElement>();
 			foreach (var text_element in this) {
-				character_elements.add_all(text_element.explode());
+				character_elements.add_all_array(text_element.explode());
 			}
-
 			return character_elements;
 		}
 
@@ -919,15 +918,16 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			return text.char_count();
 		}
 
-		// Returns a list of TextElement objects, each of them
+		// Returns an array of TextElement objects, each of them
 		// containing a single character from this element
 		// and sharing this element's character attributes
-		public Gee.List<TextElement> explode() {
-			var character_elements = new Gee.ArrayList<TextElement>();
-			for (int i = 0; i < text.char_count(); i++) {
-				// TODO: This is highly inefficient
+		// NOTE: This method returns an array rather than a list
+		//       because it is highly performance critical
+		public TextElement[] explode() {
+			var character_elements = new TextElement[text.char_count()];
+			for (int i = 0; i < character_elements.length; i++) {
 				// TODO: Potential problem as attributes is passed by reference
-				character_elements.add(new TextElement(text.get_char(text.index_of_nth_char(i)).to_string(), attributes));
+				character_elements[i] = new TextElement(text.get_char(text.index_of_nth_char(i)).to_string(), attributes);
 			}
 			return character_elements;
 		}
