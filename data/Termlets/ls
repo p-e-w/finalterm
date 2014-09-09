@@ -10,6 +10,7 @@ file_end_mark=$(text_menu_end '1')
 ls_output=$'\n'$ls_output$'\n'
 
 # TODO: Search for files in directory passed to ls rather than the current directory
+shopt -s nullglob dotglob
 for filename in *; do
 	if [[ -d $filename ]]; then
 		file_substitution="$dir_begin_mark$filename$dir_end_mark"
