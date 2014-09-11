@@ -16,6 +16,7 @@ if (NOT MINIMAL_FLAGS)
 endif (NOT MINIMAL_FLAGS)
 
 configure_file(${CMAKE_SOURCE_DIR}/data/Startup/bash_startup.in ${CMAKE_BINARY_DIR}/Startup/bash_startup @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/Startup/zsh_startup.in ${CMAKE_BINARY_DIR}/Startup/zsh_startup @ONLY)
 
 set(PKGS clutter-gtk-1.0 mx-1.0 keybinder-3.0 gee-0.8)
 
@@ -104,6 +105,9 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/ColorSchemes DESTINATION shar
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/KeyBindings DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/Startup DESTINATION share/finalterm)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/Startup/preexec.bash DESTINATION share/finalterm/Startup)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Startup/zsh_functions DESTINATION share/finalterm/Startup)
+file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/zsh_functions/*")
+install(FILES ${files} DESTINATION share/finalterm/Stertup/zsh_functions)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/TerminalCommands DESTINATION share/finalterm)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/Termlets DESTINATION share/finalterm FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/TextMenus DESTINATION share/finalterm)

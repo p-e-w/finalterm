@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -n "$ZSH_VERSION" ]; then
+	autoload text_menu_start
+	autoload text_menu_end
+        autoload final_term_control_sequence
+        autoload send_control_sequence
+fi
+
 # IFS is '\n'
 IFS=$'\012'
 psoutput=($(ps "$@"))

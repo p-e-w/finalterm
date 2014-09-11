@@ -46,7 +46,7 @@
 		</key>
 		<key type="s" name="shell-path">
 			<default>'/bin/bash'</default>
-			<summary>Path to the shell executable which is to be run (NOTE: Only bash is currently supported)</summary>
+			<summary>Path to the shell executable which is to be run (NOTE: Only bash and zsh are currently supported)</summary>
 			<description></description>
 		</key>
 		<key type="as" name="shell-arguments">

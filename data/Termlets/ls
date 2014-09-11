@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -n "$ZSH_VERSION" ]; then
+	autoload text_menu_start
+	autoload text_menu_end
+        autoload final_term_control_sequence
+        autoload send_control_sequence
+fi
+
 ls_output=$(ls "$@")
 dir_begin_mark=$(text_menu_start '2')
 dir_end_mark=$(text_menu_end '2')

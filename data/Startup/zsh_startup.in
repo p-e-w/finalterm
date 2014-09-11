@@ -1,0 +1,83 @@
+#!/usr/bin/zsh
+
+# Final Term's customizations start here
+finalterm_fpath="@PKGDATADIR@/Startup/zsh_functions"
+if [ -d $finalterm_fpath ]; then
+	fpath=($finalterm_fpath $fpath)
+fi
+FPATH="${finalterm_fpath}:${FPATH}"
+export FPATH
+
+autoload send_control_sequence
+autoload final_term_control_sequence
+
+# Logic for prompt and command detection
+function send_return_code() {
+	# Send sequence containing the return code of the last command
+	send_control_sequence "$(final_term_control_sequence 'D' "$?")"
+}
+
+precmd() {
+       # Send sequence marking a command prompt
+       send_control_sequence "$(final_term_control_sequence 'A')"
+}
+
+preexec() {
+       # Send sequence containing the command to be executed
+       send_control_sequence "$(final_term_control_sequence 'C' "$1")"
+}
+
+PROMPT_COMMAND=send_return_code;$PROMPT_COMMAND
+
+# Send sequence marking the start of a command
+PS1=$PS1$(final_term_control_sequence 'B')
+
+
+# Logic for terminal commands
+function trim() {
+	local var=$1
+	var="${var#"${var%%[![:space:]]*}"}" # remove leading whitespace characters
+	var="${var%"${var##*[![:space:]]}"}" # remove trailing whitespace characters
+	echo -n "$var"
+}
+
+function send_commands() {
+	send_control_sequence "$(final_term_control_sequence 'H' "$1" '#' "${@:2}")"
+}
+
+pushd "@PKGDATADIR@/TerminalCommands" > /dev/null
+while IFS= read -r line; do
+	stripped_line=$(trim "$line")
+
+	if [ -n "$stripped_line" ]; then
+		# Non-empty line
+		if [ "${stripped_line:0:1}" != "#" ]; then
+			# Non-comment line
+			# Split on "=" character and escape double quotes used for command arguments
+			name=$(trim "${stripped_line%%\=*}")
+			cmds=$(trim "${${stripped_line#*\=}//\"/\\\"}")
+
+			alias ",$name"="send_commands \"$cmds\""
+		fi
+	fi
+done <*.ftcommands
+popd > /dev/null
+
+
+# Termlet-related logic
+function run_termlet() {
+	if [ -t 1 ]; then
+		/usr/bin/zsh "@PKGDATADIR@/Termlets/$@"
+	else
+		/usr/bin/zsh "$@"
+	fi
+}
+
+# Set up termlet aliases
+pushd "@PKGDATADIR@/Termlets" > /dev/null
+for filename in *; do
+	alias $filename="run_termlet '$filename'"
+done
+popd > /dev/null
+
+cd ~

@@ -242,8 +242,27 @@ public class Terminal : Object {
 	private void run_shell() {
 		Environment.set_variable("TERM", Settings.get_default().emulated_terminal, true);
 
-		string[] arguments = { Settings.get_default().shell_path, "--rcfile",
-				Config.PKGDATADIR + "/Startup/bash_startup", "-i" };
+		string shell_basename = Filename.display_basename(Settings.get_default().shell_path);
+		string[] valid_shells = { "zsh", "bash" };
+
+		if (!(shell_basename in valid_shells)){
+			critical(_("shell_path not supported, only bash and zsh are currently supported"));
+			Posix.exit(Posix.EXIT_FAILURE);
+		}
+
+		string shell_include = Config.PKGDATADIR + "/Startup/" + shell_basename + "_startup";
+
+		string[] arguments = {};
+		switch(shell_basename){
+		case "bash":
+			arguments = { Settings.get_default().shell_path, "--rcfile", shell_include, "-i" };
+			break;
+		case "zsh":
+			//arguments = { Settings.get_default().shell_path, shell_include, "-i" };
+			Environment.set_variable("FINALTERMSCRIPT", shell_include, true);
+			arguments = { Settings.get_default().shell_path, "-i" };
+			break;
+		}
 
 		// Add custom shell arguments
 		foreach (var argument in Settings.get_default().shell_arguments) {

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -n "$ZSH_VERSION" ]; then
+	autoload send_progress
+	autoload send_control_sequence
+	autoload final_term_control_sequenc
+fi
+
 # TODO: Multiple file downloads?
 
 # Note that wget writes its output to STDERR instead of STDOUT
