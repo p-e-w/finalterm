@@ -58,7 +58,10 @@ PS1=$PS1$(final_term_control_sequence 'B')
 # Logic for terminal commands
 
 function trim() {
-	echo "$1" | sed -e 's/^ *//g' -e 's/ *$//g'
+	local text=$1
+	text="${text#"${text%%[![:space:]]*}"}"   # remove leading whitespace characters
+	text="${text%"${text##*[![:space:]]}"}"   # remove trailing whitespace characters
+	echo -n "$text"
 }
 
 function send_commands() {
@@ -73,18 +76,11 @@ while IFS= read -r line; do
 		# Non-empty line
 		if [ "${stripped_line:0:1}" != "#" ]; then
 			# Non-comment line
-			# Split on "=" character
-			old_IFS=$IFS
-			IFS='='
-			line_parts=($stripped_line)
-			IFS=$old_IFS
-
-			name=$(trim "${line_parts[0]}")
-			commands=$(trim "${line_parts[1]}")
-			# Escape double quotes used for command arguments
-			commands=$(echo "$commands" | sed 's/"/\\"/g')
-
-			alias ",$name"="send_commands \"$commands\""
+			# Split on "=" character and escape double quotes used for command arguments
+			name=$(trim "${stripped_line%%=*}")
+			cmds=$(trim "${stripped_line#*=}")
+			cmds=${cmds//\"/\\\"}
+			alias ",$name"="send_commands \"${cmds}\""
 		fi
 	fi
 done <*.ftcommands
