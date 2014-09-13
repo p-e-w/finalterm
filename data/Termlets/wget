@@ -3,7 +3,8 @@
 if [ -n "$ZSH_VERSION" ]; then
 	autoload send_progress
 	autoload send_control_sequence
-	autoload final_term_control_sequenc
+	autoload final_term_control_sequence
+	setopt BASH_REMATCH
 fi
 
 # TODO: Multiple file downloads?
