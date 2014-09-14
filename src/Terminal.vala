@@ -242,12 +242,15 @@ public class Terminal : Object {
 	private void run_shell() {
 		Environment.set_variable("TERM", Settings.get_default().emulated_terminal, true);
 
-		string shell_basename = Filename.display_basename(Settings.get_default().shell_path);
+		string shell = Environment.get_variable("SHELL") ?? Settings.get_default().shell_path;
+		string shell_basename = Filename.display_basename(shell);
+
 		string[] valid_shells = { "zsh", "bash" };
 
 		if (!(shell_basename in valid_shells)){
-			critical(_("shell_path not supported, only bash and zsh are currently supported"));
-			Posix.exit(Posix.EXIT_FAILURE);
+			message(_("shell defined in environment is not supported, falling back to bash"));
+			shell = Settings.get_default().shell_path;
+			shell_basename = Filename.display_basename(shell);
 		}
 
 		string shell_include = Config.PKGDATADIR + "/Startup/" + shell_basename + "_startup";
@@ -255,12 +258,11 @@ public class Terminal : Object {
 		string[] arguments = {};
 		switch(shell_basename){
 		case "bash":
-			arguments = { Settings.get_default().shell_path, "--rcfile", shell_include, "-i" };
+			arguments = { shell, "--rcfile", shell_include, "-i" };
 			break;
 		case "zsh":
-			//arguments = { Settings.get_default().shell_path, shell_include, "-i" };
 			Environment.set_variable("FINALTERMSCRIPT", shell_include, true);
-			arguments = { Settings.get_default().shell_path, "-i" };
+			arguments = { shell, "-i" };
 			break;
 		}
 
@@ -270,7 +272,7 @@ public class Terminal : Object {
 		}
 
 		// Replace child process with shell process
-		Posix.execvp(Settings.get_default().shell_path, arguments);
+		Posix.execvp(shell, arguments);
 
 		// If this line is reached, execvp() must have failed
 		critical(_("execvp failed"));
