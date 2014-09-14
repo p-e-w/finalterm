@@ -11,6 +11,7 @@ export FPATH
 autoload send_control_sequence
 autoload final_term_control_sequence
 
+
 # Logic for prompt and command detection
 function send_return_code() {
 	# Send sequence containing the return code of the last command
@@ -35,10 +36,10 @@ PS1=$PS1$(final_term_control_sequence 'B')
 
 # Logic for terminal commands
 function trim() {
-	local var=$1
-	var="${var#"${var%%[![:space:]]*}"}" # remove leading whitespace characters
-	var="${var%"${var##*[![:space:]]}"}" # remove trailing whitespace characters
-	echo -n "$var"
+	local text=$1
+	text="${text#"${text%%[![:space:]]*}"}" # remove leading whitespace characters
+	text="${text%"${text##*[![:space:]]}"}" # remove trailing whitespace characters
+	echo -n "$text"
 }
 
 function send_commands() {
