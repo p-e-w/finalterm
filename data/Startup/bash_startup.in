@@ -58,7 +58,12 @@ PS1=$PS1$(final_term_control_sequence 'B')
 # Logic for terminal commands
 
 function trim() {
-	echo "$1" | sed -e 's/^ *//g' -e 's/ *$//g'
+	shopt -s extglob
+	# strip leading whitespaces
+	tmp=${1##*( )}
+	# strip trailing whitespaces
+	echo "${tmp%%*( )}"
+	shopt -u extglob
 }
 
 function send_commands() {
