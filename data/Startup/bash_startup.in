@@ -17,8 +17,8 @@ function final_term_control_sequence() {
 	for argument in "$@"; do
 		control_sequence="$control_sequence$argument;"
 	done
-	# TODO: Remove last semicolon
-	control_sequence="$control_sequence\a"
+	# Remove last semicolon
+	control_sequence="${control_sequence%;}\a"
 
 	# TODO: Should "-ne" be added here?
 	echo "$control_sequence"
@@ -58,7 +58,12 @@ PS1=$PS1$(final_term_control_sequence 'B')
 # Logic for terminal commands
 
 function trim() {
-	echo "$1" | sed -e 's/^ *//g' -e 's/ *$//g'
+	shopt -s extglob
+	# strip leading whitespaces
+	tmp=${1##*( )}
+	# strip trailing whitespaces
+	echo "${tmp%%*( )}"
+	shopt -u extglob
 }
 
 function send_commands() {
