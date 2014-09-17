@@ -1,1 +1,2 @@
+setopt no_prompt_cr
 echo -ne "$1"
