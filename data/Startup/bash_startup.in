@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@BASHEXE@
 
 # Include default startup file so that user's settings are respected
 [[ -r ~/.bashrc ]] && source ~/.bashrc
@@ -112,14 +112,14 @@ export -f send_progress
 
 function run_termlet() {
 	if [ -t 1 ]; then
-		"@PKGDATADIR@/Termlets/$@"
+		"@PKGDATADIR@/Termlets/bash/$@"
 	else
 		"$@"
 	fi
 }
 
 # Set up termlet aliases
-pushd "@PKGDATADIR@/Termlets" > /dev/null
+pushd "@PKGDATADIR@/Termlets/bash" > /dev/null
 for filename in *; do
 	alias $filename="run_termlet '$filename'"
 done

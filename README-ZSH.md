@@ -1,5 +1,5 @@
 Requirements
-- gsettings set org.gnome.finalterm shell-path /usr/bin/zsh
+- $SHELL set to zsh
 - add the following to ~/.zshrc:
 ```
 if [ -n "$FINALTERMSCRIPT" ]; then

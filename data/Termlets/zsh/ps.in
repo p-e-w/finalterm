@@ -1,11 +1,9 @@
-#!/bin/bash
+#!@ZSHEXE@
 
-if [ -n "$ZSH_VERSION" ]; then
-	autoload text_menu_start
-	autoload text_menu_end
-        autoload final_term_control_sequence
-        autoload send_control_sequence
-fi
+autoload text_menu_start
+autoload text_menu_end
+autoload final_term_control_sequence
+autoload send_control_sequence
 
 # IFS is '\n'
 IFS=$'\012'
@@ -26,11 +24,7 @@ let pid_end=pid_index+4
 
 # display header line as is and destroy it
 echo -e ${psoutput[$headeridx]}
-if [ -n "$ZSH_VERSION" ]; then
-	psoutput[$headeridx]=()
-else
-	unset psoutput[$headeridx]
-fi
+psoutput[$headeridx]=()
 
 for line in ${psoutput[@]}; do
 	# Content line

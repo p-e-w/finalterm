@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@BASHEXE@
 
 # NOTE: This file is taken (with minor modifications) from
 #       Glyph Lefkowitz's blog post "This bash shell is now fully operational!"

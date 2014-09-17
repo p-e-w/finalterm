@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!@ZSHEXE@
 
 # Final Term's customizations start here
 finalterm_fpath="@PKGDATADIR@/Startup/zsh_functions"
@@ -68,14 +68,14 @@ popd > /dev/null
 # Termlet-related logic
 function run_termlet() {
 	if [ -t 1 ]; then
-		/usr/bin/zsh "@PKGDATADIR@/Termlets/$@"
+		"@PKGDATADIR@/Termlets/zsh/$@"
 	else
-		/usr/bin/zsh "$@"
+		"$@"
 	fi
 }
 
 # Set up termlet aliases
-pushd "@PKGDATADIR@/Termlets" > /dev/null
+pushd "@PKGDATADIR@/Termlets/zsh" > /dev/null
 for filename in *; do
 	alias $filename="run_termlet '$filename'"
 done

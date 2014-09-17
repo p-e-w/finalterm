@@ -1,11 +1,4 @@
-#!/bin/bash
-
-if [ -n "$ZSH_VERSION" ]; then
-	autoload send_progress
-	autoload send_control_sequence
-	autoload final_term_control_sequence
-	setopt BASH_REMATCH
-fi
+#!@BASHEXE@
 
 # TODO: Multiple file downloads?
 
