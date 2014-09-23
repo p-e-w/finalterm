@@ -223,7 +223,9 @@ public class Terminal : Object {
 				// Do not let the shell process turn defunct
 				// Note that multiple child processes might have terminated simultaneously
 				// as noted in http://stackoverflow.com/questions/2595503/determine-pid-of-terminated-process
-				while ((child_pid = Posix.waitpid(-1, null, Posix.WNOHANG)) != -1) {
+
+				// waitpid returns -1 on error, and 0 when status information is not available
+				while ((child_pid = Posix.waitpid(-1, null, Posix.WNOHANG)) > 0) {
 					var this_terminal = terminals_by_pid.get((int)child_pid);
 					// Close channel to keep pending shell IO from triggering UI updates (and crashes)
 					// after the corresponding TerminalWidget has been removed
