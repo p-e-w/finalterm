@@ -176,17 +176,17 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button = new Mx.Button();
 		menu_button.is_toggle = true;
 		menu_button.style_class = "menu-button";
-		menu_button.enter_event.connect((event) => {
-			menu_button.opacity = 255;
-			return false;
-		});
 		menu_button.leave_event.connect((event) => {
+			// Clicking on menu button triggers an unwanted leave_event, which is
+			// ignored if event coordinates are in the button
+			if (event.x > menu_button.x && event.x < menu_button.x + menu_button.get_width()
+					&& event.y > menu_button.y && event.y < menu_button.y + menu_button.get_height())
+				return false;
 			if (!menu_button.toggled)
-				menu_button.opacity = 0;
+				get_parent().remove(menu_button);
 			return false;
 		});
 		menu_button.clicked.connect(on_menu_button_clicked);
-		menu_button.visible = false;
 
 		menu_button_label = new Mx.Label();
 		menu_button_label.use_markup = true;
@@ -196,7 +196,6 @@ public class TerminalOutputView : Mx.ScrollView {
 		// so they are added to the parent (TerminalView)
 		parent_set.connect((old_parent) => {
 			get_parent().add(cursor);
-			get_parent().add(menu_button);
 		});
 
 		allocation_changed.connect(on_allocation_changed);
@@ -224,9 +223,7 @@ public class TerminalOutputView : Mx.ScrollView {
 				menu_button.toggled  = false;
 				menu_button.disabled = false;
 
-				// TODO: This does not work reliably
-				//if (!menu_button.has_pointer)
-					menu_button.visible = false;
+				get_parent().remove(menu_button);					
 			});
 
 			text_menu.menu.popup(null, null, (menu, out x, out y, out push_in) => {
@@ -318,7 +315,7 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button.x = (int)line_view_x + x - 3 - descriptor_width;
 		menu_button.y = (int)line_view_y + y - 3;
 
-		menu_button.visible = true;
+		get_parent().add(menu_button);
 	}
 
 	public void mark_line_as_updated(int line_index) {
