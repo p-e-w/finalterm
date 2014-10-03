@@ -26,13 +26,10 @@ precmd_functions=( send_return_code precmd_hook $preexec_functions )
 
 preexec_hook() {
 	# Send sequence containing the command to be executed
+	send_control_sequence "$(final_term_control_sequence 'B')"
 	send_control_sequence "$(final_term_control_sequence 'C' "$1")"
 }
 preexec_functions=( preexec_hook $preexec_functions )
-
-# Send sequence marking the start of a command
-PS1=$PS1$(final_term_control_sequence 'B')
-
 
 # Logic for terminal commands
 function trim() {
