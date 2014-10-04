@@ -1,0 +1,1 @@
+echo "$(final_term_control_sequence 'F' "$1")"

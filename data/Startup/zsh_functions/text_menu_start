@@ -1,0 +1,3 @@
+	# NOTE: Nested double quotes look strange, but are both valid and necessary;
+	#       see http://stackoverflow.com/questions/4031007
+	echo "$(final_term_control_sequence 'E' "$1")"

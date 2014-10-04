@@ -1,0 +1,1 @@
+send_control_sequence "$(final_term_control_sequence 'G' "$1" "$2")"

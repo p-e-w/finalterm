@@ -1,18 +1,30 @@
-#!/bin/bash
+#!@ZSHEXE@
+
+autoload text_menu_start
+autoload text_menu_end
+autoload final_term_control_sequence
+autoload send_control_sequence
 
 # IFS is '\n'
 IFS=$'\012'
 psoutput=($(ps "$@"))
+
+headeridx=0
+while [ -z ${psoutput[$headeridx]+x} ]; do
+	((headeridx+=1))
+done
+
 # Just in case PPID could be displayed before PID, search for ' PID'
-pid_index=$(awk -v a="${psoutput[0]}" -v b=' PID' 'BEGIN{print index(a,b)}')
+pid_index=$(awk -v a="${psoutput[$headeridx]}" -v b=' PID' 'BEGIN{print index(a,b)}')
 # don’t use $() in loops, as it spawns a sub-process, so get markings out of the loop.
 begin_mark=$(text_menu_start '3')
 end_mark=$(text_menu_end '3')
 # last character position of PID display.
 let pid_end=pid_index+4
-# display 1st line as is, then destroy it.
-echo -e ${psoutput[0]}
-unset psoutput[0]
+
+# display header line as is and destroy it
+echo -e ${psoutput[$headeridx]}
+psoutput[$headeridx]=()
 
 for line in ${psoutput[@]}; do
 	# Content line
@@ -20,7 +32,7 @@ for line in ${psoutput[@]}; do
 	pid_part=${left_part##* }
 	# Remove pid_part from left_part
 	left_part=${left_part:0:${#left_part}-${#pid_part}}
-	right_part=${line:pid_end-1}
+	right_part=${line:${pid_end}-1}
 	modified_line="$left_part$begin_mark$pid_part$end_mark$right_part"
 	echo -e "$modified_line"
 done

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!@BASHEXE@
 
 # TODO: Multiple file downloads?
 
