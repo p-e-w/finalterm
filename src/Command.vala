@@ -97,17 +97,22 @@ public class Command : Object {
 			foreach (var parameter in parameters) {
 				var substitute_parameter = parameter;
 
-				// Replace placeholder "%i" with placeholder_substitutes[i - 1]
-				for (int i = 0; i < placeholder_substitutes.size; i++) {
-					substitute_parameter = substitute_parameter.replace(
-							"%" + (i + 1).to_string(),
-							placeholder_substitutes.get(i));
+				try {
+					// Replace placeholder "%i" with placeholder_substitutes[i - 1]
+					for (int i = 0; i < placeholder_substitutes.size; i++) {
+						substitute_parameter = substitute_parameter.replace(
+								"%" + (i + 1).to_string(),
+								placeholder_substitutes.get(i));
+						message(_("placeholder_substitute: %s"), placeholder_substitutes.get(i));
+					}
+
+					// Remove remaining placeholders
+					substitute_parameter = placeholder_pattern.replace(substitute_parameter,
+							-1, 0, "");
+					substitute_command.parameters.add(substitute_parameter);
+				} catch (GLib.RegexError e) {
+					error(_("Error substituting parameter. placeholder_pattern: %s substitute_parameter: %s, exception: %s"), placeholder_pattern.get_pattern, substitute_parameter, e.message);
 				}
-
-				// Remove remaining placeholders
-				substitute_parameter = placeholder_pattern.replace(substitute_parameter, -1, 0, "");
-
-				substitute_command.parameters.add(substitute_parameter);
 			}
 
 			substitute_command.execute();

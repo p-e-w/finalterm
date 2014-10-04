@@ -383,7 +383,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					warning(_("Command start control sequence received while already in command mode"));
 				command_mode = true;
 				command_start_position = cursor_position;
-				message(_("Command mode entered"));
+				message(_("Command mode entered, cursor_position (line: %i column: %i)"), cursor_position.line, cursor_position.column);
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_EXECUTED:
@@ -550,8 +550,12 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	public string get_command() {
 		// TODO: Revisit this check (condition should never fail)
 		if (command_start_position.compare(cursor_position) < 0) {
+			warning(_("command_start_position: (%i,%i) cursor_postion: (%i,%i)"),
+				command_start_position.line, command_start_position.column,
+				cursor_position.line, cursor_position.column);
 			return get_range(command_start_position, cursor_position);
 		} else {
+			warning(_("cursor_position < command_start_position"));
 			return "";
 		}
 	}
