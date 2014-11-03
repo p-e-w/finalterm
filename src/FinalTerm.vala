@@ -163,6 +163,7 @@ public class FinalTerm : Gtk.Application {
 				"Jason DeTiberus <jdetiber@redhat.com>",
 				"Jason Mittertreiner <jason.mittertreiner@gmail.com>",
 				"Tong Wu <tonywu15@gmail.com>",
+				"Ali Rasim Kocal <arkocal@gmail.com>",
 				null };
 		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
