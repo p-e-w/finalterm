@@ -24,6 +24,8 @@ public class LineView : Clutter.Actor {
 
 	private TerminalOutput.OutputLine original_output_line;
 	private TerminalOutput.OutputLine output_line;
+	
+	public LineContainer line_container;
 
 	private Mx.Button collapse_button = null;
 	private Clutter.Text text_container;
@@ -124,7 +126,7 @@ public class LineView : Clutter.Actor {
 
 		if (is_collapsible_start && collapse_button == null) {
 			// Collapse button has not been created yet
-			collapse_button = new Mx.Button.with_label("▼");
+			collapse_button = new Mx.Button.with_label("●");
 			collapse_button.is_toggle = true;
 			collapse_button.toggled = false;
 
@@ -141,6 +143,13 @@ public class LineView : Clutter.Actor {
 
 		} else if (collapse_button != null) {
 			collapse_button.visible = is_collapsible_start;
+			if (is_collapsable()) {
+				if (collapse_button.toggled) {
+					collapse_button.set_label("▶");
+				} else {
+					collapse_button.set_label("▼");
+				}
+			}
 		}
 
 		if (output_line.is_prompt_line) {
@@ -212,7 +221,7 @@ public class LineView : Clutter.Actor {
 	}
 
 	private void on_collapse_button_clicked() {
-		if (is_collapsible_start) {
+		if (is_collapsible_start && is_collapsable()) {
 			if (collapse_button.toggled) {
 				collapse_button.set_label("▶");
 				collapsed(this);
@@ -220,6 +229,15 @@ public class LineView : Clutter.Actor {
 				collapse_button.set_label("▼");
 				expanded(this);
 			}
+		}
+	}
+
+	private bool is_collapsable() {
+		int index = line_container.get_line_view_index(this) + 1;
+		if (index >= line_container.get_line_count()) {
+			return false;
+		} else {
+			return (!line_container.get_line_view(index).output_line.is_prompt_line);
 		}
 	}
 

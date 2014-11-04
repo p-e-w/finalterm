@@ -590,6 +590,7 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 	}
 
 	public void add_line_view(LineView line_view) {
+		line_view.line_container = this;
 		line_views.add(line_view);
 
 		// PERFORMANCE: This appends line_view in constant time, while add_child
