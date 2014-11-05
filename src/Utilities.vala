@@ -172,6 +172,11 @@ public class Utilities : Object {
 		clipboard.set_text(text, -1);
 	}
 
+	public static void get_clipboard_text(Gtk.Widget widget, Gtk.ClipboardTextReceivedFunc callback) {
+		var clipboard = Gtk.Clipboard.get_for_display(widget.get_display(), Gdk.SELECTION_CLIPBOARD);
+		clipboard.request_text(callback);		
+	}
+
 	public static void get_actor_screen_position(GtkClutter.Embed clutter_embed, Clutter.Actor actor, out int x, out int y) {
 		// Position of parent window on screen
 		int window_x;
