@@ -247,7 +247,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	// Expands the list of line views until it contains as many elements as the model
 	public void add_line_views() {
 		for (int i = line_container.get_line_count(); i < terminal.terminal_output.size; i++) {
-			var line_view = new LineView(terminal.terminal_output[i]);
+			var line_view = new LineView(terminal.terminal_output[i], line_container);
 			line_view.collapsed.connect(on_line_view_collapsed);
 			line_view.expanded.connect(on_line_view_expanded);
 			line_view.text_menu_element_hovered.connect(on_line_view_text_menu_element_hovered);
@@ -263,7 +263,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void on_line_view_collapsed(LineView line_view) {
 		for (int i = line_container.get_line_view_index(line_view) + 1;
 				i < line_container.get_line_count(); i++) {
-			if (line_container.get_line_view(i).is_collapsible_end)
+			if (line_container.get_line_view(i).is_prompt_line)
 				break;
 
 			line_container.get_line_view(i).visible = false;
@@ -273,7 +273,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void on_line_view_expanded(LineView line_view) {
 		for (int i = line_container.get_line_view_index(line_view) + 1;
 				i < line_container.get_line_count(); i++) {
-			if (line_container.get_line_view(i).is_collapsible_end)
+			if (line_container.get_line_view(i).is_prompt_line)
 				break;
 
 			line_container.get_line_view(i).visible = true;
@@ -590,7 +590,6 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 	}
 
 	public void add_line_view(LineView line_view) {
-		line_view.line_container = this;
 		line_views.add(line_view);
 
 		// PERFORMANCE: This appends line_view in constant time, while add_child
