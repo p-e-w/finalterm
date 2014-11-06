@@ -30,7 +30,7 @@ public class LineView : Clutter.Actor {
 	private Mx.Button collapse_button = null;
 	private Clutter.Text text_container;
 
-	public bool is_prompt_line { get {return output_line.is_prompt_line;} default = false; }
+	public bool is_prompt_line { get {return original_output_line.is_prompt_line;}}
 
 	public LineView(TerminalOutput.OutputLine output_line, LineContainer line_container) {
 		layout_manager = new Clutter.BoxLayout();
@@ -121,8 +121,6 @@ public class LineView : Clutter.Actor {
 		if (is_prompt_line && collapse_button == null) {
 			// Collapse button has not been created yet
 			collapse_button = new Mx.Button.with_label("●");
-			collapse_button.is_toggle = false;
-			collapse_button.toggled = false;
 
 			collapse_button.style_class = "collapse-button";
 			collapse_button.clicked.connect(on_collapse_button_clicked);
