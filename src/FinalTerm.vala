@@ -106,6 +106,10 @@ public class FinalTerm : Gtk.Application {
 		im_context.preedit_end.connect(on_preedit_end);
 		main_window.key_press_event.connect(on_key_press_event);
 		main_window.key_release_event.connect(on_key_release_event);
+
+		
+		autocompletion.run_command.connect(on_autocomplete_run_command);
+
 	}
 
 	protected override void activate() {
@@ -241,6 +245,10 @@ public class FinalTerm : Gtk.Application {
 
 		active_terminal_widget.send_text_to_shell(event.str);
 		return true;
+	}
+
+	private void on_autocomplete_run_command(string command) {
+		active_terminal_widget.run_shell_command(command);
 	}
 
 	private bool on_key_release_event(Gdk.EventKey event) {
