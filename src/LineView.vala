@@ -146,7 +146,10 @@ public class LineView : Clutter.Actor {
 		}
 
 		if (is_prompt_line) {
-			if (output_line.return_code == 0) {
+			// Empty prompt lines need to be checked seperately,
+			// because return_code is not updated when no new command
+			// is executed
+			if (output_line.return_code == 0 || output_line.is_empty_prompt_line()) {
 				collapse_button.style_pseudo_class_remove("error");
 				collapse_button.tooltip_text = null;
 			} else {
