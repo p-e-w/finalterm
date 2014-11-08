@@ -70,7 +70,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private string transient_text = "";
 	private string printed_transient_text = "";
 
-	private string last_command = null;
+	public string last_command = null;
 
 	public bool command_mode = false;
 	public CursorPosition command_start_position;

@@ -49,6 +49,11 @@ F11 = TOGGLE_FULLSCREEN
 # of other terminals such as GNOME Terminal.
 KP_Delete = SEND_TO_SHELL "\\033[3~"
 Delete    = SEND_TO_SHELL "\\033[3~"
+# TODO: Copy *selection* to clipboard
+#<Ctrl>Insert   = COPY_TO_CLIPBOARD
+#<Ctrl><Shift>C = COPY_TO_CLIPBOARD
+<Shift>Insert  = PASTE_FROM_CLIPBOARD
+<Ctrl><Shift>V = PASTE_FROM_CLIPBOARD
 
 <Shift>KP_Home { ~cursor }      = SEND_TO_SHELL "\\033[2J"
 <Shift>KP_Home { cursor }       = SEND_TO_SHELL "\\033[1\;2H"

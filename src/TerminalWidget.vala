@@ -177,6 +177,20 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 
 		context_menu.append(new Gtk.SeparatorMenuItem());
 
+		menu_item = new Gtk.MenuItem.with_label(_("Copy Last Command"));
+		menu_item.activate.connect(() => {
+			Utilities.set_clipboard_text(terminal.terminal_output.last_command);
+		});
+		context_menu.append(menu_item);
+
+		menu_item = new Gtk.MenuItem.with_label(_("Paste"));
+		menu_item.activate.connect(() => {
+			send_text_to_shell(Utilities.get_clipboard_text());
+		});
+		context_menu.append(menu_item);
+
+		context_menu.append(new Gtk.SeparatorMenuItem());
+
 		menu_item = new Gtk.MenuItem.with_label(_("Close"));
 		menu_item.activate.connect(() => {
 			close();
