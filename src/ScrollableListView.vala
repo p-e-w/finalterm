@@ -54,7 +54,7 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 		list_view.add_attribute(item_property_name, 0);
 
 		scroll_view.add(list_view);
-		scroll_view.motion_event.connect(on_motion_event);;
+		scroll_view.motion_event.connect(on_motion_event);
 		scroll_view.button_press_event.connect(on_button_press_event);;
 
 		// Synchronize model with list
@@ -148,10 +148,10 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 	public int get_item_by_y(int y) {
 		var index = -1;
 		var height = 0;
-		for (var i = 0;i < get_number_of_items();i++) {
+		for (int i = 0; i < get_number_of_items(); i++) {
 			var allocation_box = get_item_view(i).get_allocation_box();
 			height +=  (int)allocation_box.get_height();
-			if((int)y < height) {
+			if ((int)y < height) {
 				index = i;
 				break;
 			}
@@ -166,16 +166,18 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 
 	private bool on_motion_event(Clutter.MotionEvent event) {
 		var index = get_item_by_y((int)event.y);
-		if(index >= 0)
+		if (index >= 0) {
 			item_hovered(index);
+		}
 
 		return true;
 	}
 
 	private bool on_button_press_event(Clutter.ButtonEvent event) {
 		var index = get_item_by_y((int)event.y);
-		if(index >= 0)
+		if (index >= 0) {
 			item_clicked(index);
+		}
 
 		return true;
 	}
