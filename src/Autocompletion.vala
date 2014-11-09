@@ -124,7 +124,7 @@ public class Autocompletion : Object {
 		return scrollable_list_view.is_valid_item_index(selected_index);
 	}
 
-	public string? get_selected_command() {
+	public string? scrollable_list_view.get_item(selected_index).text {
 		if (is_command_selected())
 			return scrollable_list_view.get_item(selected_index).text;
 
@@ -219,7 +219,7 @@ public class Autocompletion : Object {
 	}
 
 	private void on_item_clicked(int index) {
-		run_command(get_selected_command());
+		run_command(scrollable_list_view.get_item(index).text);
 	}
 
 	public signal void run_command(string command);
