@@ -388,12 +388,13 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_EXECUTED:
 				command_mode = false;
-				if(get_command().strip() != "")
+				if(get_command().strip() != "") {
 					last_command = stream_element.get_text_parameter(0, "");
-				else 
+					command_executed(last_command);
+				}
+				else {
 					last_command = null;
-					
-				command_executed(last_command);
+				}					
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_FINISHED:
