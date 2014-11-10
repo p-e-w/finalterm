@@ -24,20 +24,26 @@ public class LineView : Clutter.Actor {
 
 	private TerminalOutput.OutputLine original_output_line;
 	private TerminalOutput.OutputLine output_line;
+	
+	private LineContainer line_container;
 
 	private Mx.Button collapse_button = null;
 	private Clutter.Text text_container;
 
-	// If set to true, everything between this line
-	// and the next line with collapsible_end = true
-	// can be collapsed
-	public bool is_collapsible_start { get; set; default = false; }
-	public bool is_collapsible_end   { get; set; default = false; }
+	private struct Selection {
+		int start;
+		int end;
+	}
 
-	public LineView(TerminalOutput.OutputLine output_line) {
+	private Selection selection;
+
+	public bool is_prompt_line { get {return original_output_line.is_prompt_line;}}
+
+	public LineView(TerminalOutput.OutputLine output_line, LineContainer line_container) {
 		layout_manager = new Clutter.BoxLayout();
 
 		original_output_line = output_line;
+		this.line_container = line_container;
 
 		text_container = new Clutter.Text();
 
@@ -58,6 +64,8 @@ public class LineView : Clutter.Actor {
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
+
+		selection = Selection();
 	}
 
 	public void get_character_coordinates(int character_index, out int x, out int y) {
@@ -74,6 +82,16 @@ public class LineView : Clutter.Actor {
 		//       appears to behave identically for this case.
 		x = (int)(character_x + text_container.allocation.get_x());
 		y = (int)(character_y + text_container.allocation.get_y());
+	}
+
+	public int get_coordinates_character(float x, float y) {
+		// TODO: coords_to_position seems to be buggy when working with non-latin characters
+		return text_container.coords_to_position(x - text_container.get_x(), y - text_container.get_y());
+	}
+
+	public void set_selection(int start, int end) {
+		selection.start = start;
+		selection.end = end;
 	}
 
 	private bool on_text_container_motion_event(Clutter.MotionEvent event) {
@@ -119,14 +137,9 @@ public class LineView : Clutter.Actor {
 	public void render_line() {
 		output_line = original_output_line.generate_text_menu_elements();
 
-		is_collapsible_start = output_line.is_prompt_line;
-		is_collapsible_end   = output_line.is_prompt_line;
-
-		if (is_collapsible_start && collapse_button == null) {
+		if (is_prompt_line && collapse_button == null) {
 			// Collapse button has not been created yet
-			collapse_button = new Mx.Button.with_label("▼");
-			collapse_button.is_toggle = true;
-			collapse_button.toggled = false;
+			collapse_button = new Mx.Button.with_label("●");
 
 			collapse_button.style_class = "collapse-button";
 			collapse_button.clicked.connect(on_collapse_button_clicked);
@@ -140,10 +153,18 @@ public class LineView : Clutter.Actor {
 			insert_child_at_index(collapse_button, 0);
 
 		} else if (collapse_button != null) {
-			collapse_button.visible = is_collapsible_start;
+			collapse_button.visible = is_prompt_line;
+			if (is_collapsible()) {
+				collapse_button.is_toggle = true;
+				if (collapse_button.toggled) {
+					collapse_button.set_label("▶");
+				} else {
+					collapse_button.set_label("▼");
+				}
+			}
 		}
 
-		if (output_line.is_prompt_line) {
+		if (is_prompt_line) {
 			if (output_line.return_code == 0) {
 				collapse_button.style_pseudo_class_remove("error");
 				collapse_button.tooltip_text = null;
@@ -156,13 +177,49 @@ public class LineView : Clutter.Actor {
 		// If the collapse button is visible, the text container will
 		// already be pushed to the left, so we need to subtract that
 		text_container.margin_left = Settings.get_default().theme.margin_left +
-				(is_collapsible_start ?
+				(is_prompt_line ?
 				 Settings.get_default().theme.gutter_size -
 				 	Settings.get_default().theme.collapse_button_width -
 				 	Settings.get_default().theme.collapse_button_x :
 				 Settings.get_default().theme.gutter_size);
 
 		text_container.set_markup(get_markup(output_line));
+	}
+
+	public string get_selected_text() {
+		int element_offset = 0;
+		int len = 0;
+		int offset = 0;
+		string text = "";
+		foreach (var text_element in output_line) {
+			// TODO: make this block of code less ugly
+			offset = selection.start - element_offset;
+			if (offset < 0)
+				offset = 0;
+			if (offset > text_element.text.char_count())
+				offset = text_element.text.char_count();
+
+			len = selection.end - selection.start - element_offset;
+			if (selection.end < 0)
+				len = text_element.text.char_count() - offset;
+			else if (selection.end == 0)
+				len = 0;
+			
+			if (len > text_element.text.char_count())
+				len = text_element.text.char_count();
+			if (len < 0)
+				len = 0;
+
+			var offset_index = text_element.text.index_of_nth_char(offset);
+			var len_index = text_element.text.index_of_nth_char(offset + len);
+
+			var pre_selection_text = Markup.escape_text(text_element.text.substring(0, offset_index));
+			text += text_element.text.substring(offset_index, len_index - offset_index);
+
+			element_offset += text_element.text.char_count();
+		}
+
+		return text;
 	}
 
 	private void update_collapse_button() {
@@ -177,20 +234,65 @@ public class LineView : Clutter.Actor {
 	private string get_markup(TerminalOutput.OutputLine output_line) {
 		var markup_builder = new StringBuilder();
 
+		int element_offset = 0;
+		int len = 0;
+		int offset = 0;
+
 		foreach (var text_element in output_line) {
+			// TODO: make this block of code less ugly
+			offset = selection.start - element_offset;
+			if (offset < 0)
+				offset = 0;
+			if (offset > text_element.text.char_count())
+				offset = text_element.text.char_count();
+
+			len = selection.end - selection.start - element_offset;
+			if (selection.end < 0)
+				len = text_element.text.char_count() - offset;
+			else if (selection.end == 0)
+				len = 0;
+			
+			if (len > text_element.text.char_count())
+				len = text_element.text.char_count();
+			if (len < 0)
+				len = 0;
+
+			var offset_index = text_element.text.index_of_nth_char(offset);
+			var len_index = text_element.text.index_of_nth_char(offset + len);
+
 			var text_attributes = text_element.attributes.get_text_attributes(
 					Settings.get_default().color_scheme, Settings.get_default().dark);
 			var markup_attributes = text_attributes.get_markup_attributes(
 					Settings.get_default().color_scheme, Settings.get_default().dark);
 
+			var pre_selection_text = Markup.escape_text(text_element.text.substring(0, offset_index));
+			var selection_text = Markup.escape_text(text_element.text.substring(offset_index, len_index - offset_index));
+			var post_selection_text = Markup.escape_text(text_element.text.substring(len_index));
+			
+			// TODO: make selection stylable
 			if (markup_attributes.length > 0) {
 				markup_builder.append(
 						"<span" + markup_attributes + ">" +
-						Markup.escape_text(text_element.text) +
-						"</span>");
+						pre_selection_text +
+						"</span>" +
+						"<span background='#ffffff' foreground='#000000'>" +
+						selection_text +
+						"</span>" +
+						"<span" + markup_attributes + ">" +
+						post_selection_text +
+						"</span>"
+						);
 			} else {
-				markup_builder.append(Markup.escape_text(text_element.text));
+				markup_builder.append(
+						pre_selection_text +
+						"<span background='#ffffff' foreground='#000000'>" +
+						selection_text +
+						"</span>" +
+						post_selection_text
+						);
+
 			}
+			element_offset += text_element.text.char_count();
 		}
 
 		return markup_builder.str;
@@ -212,7 +314,7 @@ public class LineView : Clutter.Actor {
 	}
 
 	private void on_collapse_button_clicked() {
-		if (is_collapsible_start) {
+		if (is_collapsible()) {
 			if (collapse_button.toggled) {
 				collapse_button.set_label("▶");
 				collapsed(this);
@@ -220,6 +322,17 @@ public class LineView : Clutter.Actor {
 				collapse_button.set_label("▼");
 				expanded(this);
 			}
+		}
+	}
+
+	private bool is_collapsible() {
+		if (!is_prompt_line)
+			return false;
+		int index = line_container.get_line_view_index(this) + 1;
+		if (index >= line_container.get_line_count()) {
+			return false;
+		} else {
+			return (!line_container.get_line_view(index).is_prompt_line);
 		}
 	}
 

@@ -37,6 +37,7 @@ public class Command : Object {
 		LOG,
 		PRINT_METRICS,
 		COPY_TO_CLIPBOARD,
+		PASTE_FROM_CLIPBOARD,
 		OPEN_URL
 	}
 

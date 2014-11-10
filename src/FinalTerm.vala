@@ -163,6 +163,8 @@ public class FinalTerm : Gtk.Application {
 				"Jason DeTiberus <jdetiber@redhat.com>",
 				"Jason Mittertreiner <jason.mittertreiner@gmail.com>",
 				"Tong Wu <tonywu15@gmail.com>",
+				"Ali Rasim Kocal <arkocal@gmail.com>",
+				"Eugene Golendukhin <yeti.moscow@gmail.com>",
 				null };
 		string[] artists = { "Matthieu James" + _(" (Faenza icon, modified)"), null };
 
@@ -371,9 +373,16 @@ public class FinalTerm : Gtk.Application {
 			return;
 
 		case Command.CommandType.COPY_TO_CLIPBOARD:
-			if (command.parameters.is_empty)
-				return;
-			Utilities.set_clipboard_text(main_window, command.parameters.get(0));
+			string text = active_terminal_widget.get_selected_text();
+			if (text == "") {
+				text = command.parameters.get(0);
+			}
+
+			Utilities.set_clipboard_text(text);
+			return;
+
+		case Command.CommandType.PASTE_FROM_CLIPBOARD:
+			active_terminal_widget.send_text_to_shell(Utilities.get_clipboard_text());
 			return;
 
 		case Command.CommandType.OPEN_URL:

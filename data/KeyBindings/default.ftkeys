@@ -49,6 +49,11 @@ F11 = TOGGLE_FULLSCREEN
 # of other terminals such as GNOME Terminal.
 KP_Delete = SEND_TO_SHELL "\\033[3~"
 Delete    = SEND_TO_SHELL "\\033[3~"
+# TODO: Copy *selection* to clipboard
+<Ctrl>Insert   = COPY_TO_CLIPBOARD
+<Ctrl><Shift>C = COPY_TO_CLIPBOARD
+<Shift>Insert  = PASTE_FROM_CLIPBOARD
+<Ctrl><Shift>V = PASTE_FROM_CLIPBOARD
 
 <Shift>KP_Home { ~cursor }      = SEND_TO_SHELL "\\033[2J"
 <Shift>KP_Home { cursor }       = SEND_TO_SHELL "\\033[1\;2H"
@@ -131,10 +136,10 @@ Right { cursor }          = SEND_TO_SHELL "\\033OC"
 <Mod1>Return { crlf }     = SEND_TO_SHELL "\\033\\r\\n"
 Return { ~crlf }          = SEND_TO_SHELL "\\r"
 Return { crlf }           = SEND_TO_SHELL "\\r\\n"
-<Shift>Insert { ~keypad } = SEND_TO_SHELL "\\033[4l"
-<Shift>Insert { keypad }  = SEND_TO_SHELL "\\033[2\;2~"
-<Ctrl>Insert { ~keypad }  = SEND_TO_SHELL "\\033[L"
-<Ctrl>Insert { keypad }   = SEND_TO_SHELL "\\033[2\;5~"
+#<Shift>Insert { ~keypad } = SEND_TO_SHELL "\\033[4l"
+#<Shift>Insert { keypad }  = SEND_TO_SHELL "\\033[2\;2~"
+#<Ctrl>Insert { ~keypad }  = SEND_TO_SHELL "\\033[L"
+#<Ctrl>Insert { keypad }   = SEND_TO_SHELL "\\033[2\;5~"
 Insert { ~keypad }        = SEND_TO_SHELL "\\033[4h"
 Insert { keypad }         = SEND_TO_SHELL "\\033[2~"
 <Ctrl>Delete { ~keypad }  = SEND_TO_SHELL "\\033[M"

@@ -118,6 +118,10 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		terminal.send_text(text);
 	}
 
+	public string get_selected_text() {
+		return terminal_view.get_selected_text();
+	}
+
 	public TerminalOutput.TerminalMode get_terminal_modes() {
 		return terminal.terminal_output.terminal_modes;
 	}
@@ -172,6 +176,20 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		menu_item = new Gtk.MenuItem.with_label(_("Split Vertically"));
 		menu_item.activate.connect(() => {
 			split(Gtk.Orientation.VERTICAL);
+		});
+		context_menu.append(menu_item);
+
+		context_menu.append(new Gtk.SeparatorMenuItem());
+
+		menu_item = new Gtk.MenuItem.with_label(_("Copy Last Command"));
+		menu_item.activate.connect(() => {
+			Utilities.set_clipboard_text(terminal.terminal_output.last_command);
+		});
+		context_menu.append(menu_item);
+
+		menu_item = new Gtk.MenuItem.with_label(_("Paste"));
+		menu_item.activate.connect(() => {
+			send_text_to_shell(Utilities.get_clipboard_text());
 		});
 		context_menu.append(menu_item);
 

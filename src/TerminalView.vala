@@ -113,6 +113,10 @@ public class TerminalView : Mx.BoxLayout {
 		return (clutter_embed.get_toplevel() as Gtk.Window).has_toplevel_focus;
 	}
 
+	public string get_selected_text() {
+		return terminal_output_view.get_selected_text();
+	}
+
 	private void on_settings_changed(string? key) {
 		gutter.width = Settings.get_default().theme.gutter_size;
 		gutter.color = Settings.get_default().theme.gutter_color;
@@ -146,6 +150,8 @@ public class TerminalOutputView : Mx.ScrollView {
 
 	private Gee.Set<int> updated_lines = new Gee.HashSet<int>();
 
+	private bool is_selecting = false;
+
 	public TerminalOutputView(Terminal terminal, GtkClutter.Embed clutter_embed) {
 		this.terminal = terminal;
 		this.clutter_embed = clutter_embed;
@@ -176,17 +182,17 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button = new Mx.Button();
 		menu_button.is_toggle = true;
 		menu_button.style_class = "menu-button";
-		menu_button.enter_event.connect((event) => {
-			menu_button.opacity = 255;
-			return false;
-		});
 		menu_button.leave_event.connect((event) => {
+			// Clicking on menu button triggers an unwanted leave_event, which is
+			// ignored if event coordinates are in the button
+			if (event.x > menu_button.x && event.x < menu_button.x + menu_button.get_width()
+					&& event.y > menu_button.y && event.y < menu_button.y + menu_button.get_height())
+				return false;
 			if (!menu_button.toggled)
-				menu_button.opacity = 0;
+				get_parent().remove(menu_button);
 			return false;
 		});
 		menu_button.clicked.connect(on_menu_button_clicked);
-		menu_button.visible = false;
 
 		menu_button_label = new Mx.Label();
 		menu_button_label.use_markup = true;
@@ -196,7 +202,6 @@ public class TerminalOutputView : Mx.ScrollView {
 		// so they are added to the parent (TerminalView)
 		parent_set.connect((old_parent) => {
 			get_parent().add(cursor);
-			get_parent().add(menu_button);
 		});
 
 		allocation_changed.connect(on_allocation_changed);
@@ -211,7 +216,34 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
+
+		motion_event.connect(on_motion_event);
+		button_press_event.connect(on_button_press_event);
+		button_release_event.connect(on_button_release_event);
 	}
+
+	public string get_selected_text() {
+		return line_container.get_selected_text();
+	}
+
+	private bool on_motion_event(Clutter.MotionEvent event) {
+		if (is_selecting) {
+			line_container.selecting(event.x, event.y);
+		}
+		return true;
+	}
+
+	private bool on_button_press_event(Clutter.ButtonEvent event) {
+		is_selecting = true;
+		line_container.selection_start(event.x, event.y);
+		return true;
+	}
+
+	private bool on_button_release_event(Clutter.ButtonEvent event) {
+		is_selecting = false;
+		line_container.selection_end(event.x, event.y);
+		return true;
+	}	
 
 	private void on_menu_button_clicked() {
 		if (menu_button.toggled) {
@@ -224,9 +256,7 @@ public class TerminalOutputView : Mx.ScrollView {
 				menu_button.toggled  = false;
 				menu_button.disabled = false;
 
-				// TODO: This does not work reliably
-				//if (!menu_button.has_pointer)
-					menu_button.visible = false;
+				get_parent().remove(menu_button);					
 			});
 
 			text_menu.menu.popup(null, null, (menu, out x, out y, out push_in) => {
@@ -250,7 +280,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	// Expands the list of line views until it contains as many elements as the model
 	public void add_line_views() {
 		for (int i = line_container.get_line_count(); i < terminal.terminal_output.size; i++) {
-			var line_view = new LineView(terminal.terminal_output[i]);
+			var line_view = new LineView(terminal.terminal_output[i], line_container);
 			line_view.collapsed.connect(on_line_view_collapsed);
 			line_view.expanded.connect(on_line_view_expanded);
 			line_view.text_menu_element_hovered.connect(on_line_view_text_menu_element_hovered);
@@ -266,7 +296,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void on_line_view_collapsed(LineView line_view) {
 		for (int i = line_container.get_line_view_index(line_view) + 1;
 				i < line_container.get_line_count(); i++) {
-			if (line_container.get_line_view(i).is_collapsible_end)
+			if (line_container.get_line_view(i).is_prompt_line)
 				break;
 
 			line_container.get_line_view(i).visible = false;
@@ -276,7 +306,7 @@ public class TerminalOutputView : Mx.ScrollView {
 	private void on_line_view_expanded(LineView line_view) {
 		for (int i = line_container.get_line_view_index(line_view) + 1;
 				i < line_container.get_line_count(); i++) {
-			if (line_container.get_line_view(i).is_collapsible_end)
+			if (line_container.get_line_view(i).is_prompt_line)
 				break;
 
 			line_container.get_line_view(i).visible = true;
@@ -318,7 +348,7 @@ public class TerminalOutputView : Mx.ScrollView {
 		menu_button.x = (int)line_view_x + x - 3 - descriptor_width;
 		menu_button.y = (int)line_view_y + y - 3;
 
-		menu_button.visible = true;
+		get_parent().add(menu_button);
 	}
 
 	public void mark_line_as_updated(int line_index) {
@@ -564,6 +594,33 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 
 	private Gee.List<LineView> line_views = new Gee.ArrayList<LineView>();
 
+	private struct Selection {
+		private TerminalOutput.CursorPosition start;
+		private TerminalOutput.CursorPosition finish;
+		
+		public Selection(TerminalOutput.CursorPosition position) {
+			start = position;
+		}
+
+		public void update(TerminalOutput.CursorPosition position) {
+			finish = position;
+		}
+
+		// end position can be before or after start position
+		// this function returns them in correct order
+		public void get_range(out TerminalOutput.CursorPosition beginning, out TerminalOutput.CursorPosition end) {
+			if (start.compare(finish) > 0) {
+				beginning = finish;
+				end = start;
+			} else {
+				beginning = start;
+				end = finish;
+			} 
+		}
+	}
+
+	private Selection current_selection;
+
 	// PERFORMANCE: This data structure allows for efficient determination
 	//              of which children are inside the scrolled area, making it
 	//              possible to paint only those children that are visible to the user
@@ -612,6 +669,102 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 
 	public int get_line_count() {
 		return line_views.size;
+	}
+
+	public void selecting(float x, double y) {
+		current_selection.update(get_coordinates_position(x, y));
+		TerminalOutput.CursorPosition beginning = TerminalOutput.CursorPosition();
+		TerminalOutput.CursorPosition end = TerminalOutput.CursorPosition();
+
+		current_selection.get_range(out beginning, out end);
+
+		int from = 0;
+		int to = 0;
+		bool rectangle = false;
+
+		for (int i = 0; i < get_line_count(); i++) {
+			if (!line_views[i].visible) {
+				continue;
+			}
+
+			from = to = 0;
+
+			if (rectangle) {
+				if (i >= beginning.line) {
+					from = beginning.column;
+				} 
+				if (i >= beginning.line && i <= end.line) {
+					to = end.column;
+				} 
+				if(i >= beginning.line && i <= end.line && from > to) {
+					from = from + to;
+					to = from - to;
+					from = from - to;
+				}
+			} else  {
+				if (i == beginning.line) {
+					from = beginning.column;
+				} 
+				if (i >= beginning.line && i < end.line) {
+					to = -1;
+				} else if (i == end.line) {
+					to = end.column;
+				} 
+			}
+
+			line_views[i].set_selection(from, to);
+			line_views[i].render_line();
+		}
+
+	}
+
+	public void selection_start(float x, double y) {
+		current_selection = Selection(get_coordinates_position(x, y));
+		for (int i = 0; i < get_line_count(); i++) {
+			line_views[i].set_selection(0, 0);
+			line_views[i].render_line();
+		}
+	}
+
+	public void selection_end(float x, double y) {
+
+	}
+
+	public string get_selected_text() {
+		string text = "";
+		TerminalOutput.CursorPosition beginning = TerminalOutput.CursorPosition();
+		TerminalOutput.CursorPosition end = TerminalOutput.CursorPosition();
+		current_selection.get_range(out beginning, out end);
+
+		for (int i = beginning.line; i <= end.line; i++) {
+			var line_text = line_views[i].get_selected_text().strip();
+			if(line_text != "") {
+				text += line_text + "\n";
+			}
+		}
+		return text.strip();
+	}
+
+	private TerminalOutput.CursorPosition get_coordinates_position(float x, double y) {
+		Mx.Adjustment hadjustment = new Mx.Adjustment();
+		Mx.Adjustment vadjustment = new Mx.Adjustment();
+		get_adjustments(out hadjustment, out vadjustment);
+
+		TerminalOutput.CursorPosition position = TerminalOutput.CursorPosition();
+
+		for (int i = 0; i < get_line_count(); i++) {
+			if (!line_views[i].visible) {
+				continue;
+			}
+
+			if (line_views[i].get_height() + line_views[i].get_allocation_box().get_y() >= y + vadjustment.value) {
+				position.line = i;
+				position.column = line_views[i].get_coordinates_character(x, (float)y);
+				break;
+			}
+		}
+
+		return position;
 	}
 
 	protected override void allocate(Clutter.ActorBox box, Clutter.AllocationFlags flags) {

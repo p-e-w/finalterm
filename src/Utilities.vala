@@ -167,9 +167,16 @@ public class Utilities : Object {
 		return list;
 	}
 
-	public static void set_clipboard_text(Gtk.Widget widget, string text) {
-		var clipboard = Gtk.Clipboard.get_for_display(widget.get_display(), Gdk.SELECTION_CLIPBOARD);
-		clipboard.set_text(text, -1);
+	private static Gtk.Clipboard get_clipboard() {
+		return Gtk.Clipboard.get_for_display(Gdk.Display.get_default(), Gdk.SELECTION_CLIPBOARD);
+	}
+
+	public static string get_clipboard_text() {
+		return get_clipboard().wait_for_text();
+	}
+
+	public static void set_clipboard_text(string text) {
+		get_clipboard().set_text(text, -1);
 	}
 
 	public static void get_actor_screen_position(GtkClutter.Embed clutter_embed, Clutter.Actor actor, out int x, out int y) {
