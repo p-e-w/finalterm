@@ -124,7 +124,7 @@ public class Autocompletion : Object {
 		return scrollable_list_view.is_valid_item_index(selected_index);
 	}
 
-	public string? scrollable_list_view.get_item(selected_index).text {
+	public string? get_selected_command() {
 		if (is_command_selected())
 			return scrollable_list_view.get_item(selected_index).text;
 
