@@ -70,7 +70,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 	private string transient_text = "";
 	private string printed_transient_text = "";
 
-	public string last_command = null;
+	public string last_command = "";
 
 	public bool command_mode = false;
 	public CursorPosition command_start_position;
@@ -395,7 +395,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			case TerminalStream.StreamElement.ControlSequenceType.FTCS_COMMAND_FINISHED:
 				var return_code = stream_element.get_numeric_parameter(0, 0);
 
-				if (last_command != null) {
+				if (last_command != "") {
 					command_finished(last_command, return_code);
 					progress_finished();
 

@@ -101,6 +101,8 @@ function preexec_invoke_exec () {
         # Given their buggy interaction between BASH_COMMAND and debug traps,
         # versions of bash prior to 3.1 can't detect this at all.
         preexec_interactive_mode=""
+        # Let Final Term know that a no-op has been executed
+        preexec ""
         return
     fi
 
@@ -129,6 +131,8 @@ function preexec_install () {
     shopt -s extdebug > /dev/null 2>&1
 
     # Finally, install the actual traps.
-    PROMPT_COMMAND="${PROMPT_COMMAND};preexec_invoke_cmd"
+    # Override rather than append to PROMPT_COMMAND in order to avoid problems with
+    # oddities such as the "__vte_prompt_command" present on some systems
+    PROMPT_COMMAND="preexec_invoke_cmd"
     trap 'preexec_invoke_exec' DEBUG
 }
