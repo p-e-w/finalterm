@@ -120,7 +120,7 @@ public class Terminal : Object {
 	}
 
 	private void on_output_command_updated(string command) {
-		message(_("Command updated: '%s'"), command);
+		// message(_("Command updated: '%s'"), command);
 
 		var stripped_command = command.strip();
 		if (stripped_command == "") {
