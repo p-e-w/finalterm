@@ -373,9 +373,13 @@ public class FinalTerm : Gtk.Application {
 			return;
 
 		case Command.CommandType.COPY_TO_CLIPBOARD:
-			if (command.parameters.is_empty)
-				return;
-			Utilities.set_clipboard_text(command.parameters.get(0));
+			string text = active_terminal_widget.get_selected_text();
+			if (text == "") {
+				text = command.parameters.get(0);
+			}
+			if (text != "") {
+				Utilities.set_clipboard_text(text);
+			}
 			return;
 
 		case Command.CommandType.PASTE_FROM_CLIPBOARD:
