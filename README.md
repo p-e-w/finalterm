@@ -81,6 +81,14 @@ sudo yum update
 sudo yum install finalterm
 ```
 
+### Fedora 21
+
+```
+sudo wget http://copr.fedoraproject.org/coprs/mattdm/finalterm/repo/fedora-21-x86_64/mattdm-finalterm-fedora-21-x86_64.repo -O /etc/yum.repos.d/finalterm.repo
+sudo yum update
+sudo yum install finalterm
+```
+
 ### Fedora Rawhide
 
 ```
