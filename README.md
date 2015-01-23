@@ -89,6 +89,21 @@ sudo yum update
 sudo yum install finalterm
 ```
 
+### Fedora Build and Install
+
+Follow the below isntructions to build and isntall the finalterm from the source code in github:
+
+```
+sudo yum groups install "C Development Tools and Libraries"
+sudo yum install libnotify libnotify-devel clutter clutter-devel libmx libmx-devel keybinder  keybinder-devel libgee  libgee-devel  intltool vala vala-devel  keybinder3 keybinder3-devel clutter-gtk clutter-gtk-devel
+git clone https://github.com/p-e-w/finalterm.git
+cd finalterm/
+mkdir build
+cd build/
+cmake ..
+make
+sudo make install
+```
 ## Instructions for Arch Linux
 
 There is an AUR for Final Term maintained by Arch Linux user kens: [https://aur.archlinux.org/packages/finalterm-git/](https://aur.archlinux.org/packages/finalterm-git/).
