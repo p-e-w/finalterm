@@ -226,7 +226,7 @@ public class TerminalOutputView : Mx.ScrollView {
 				get_parent().remove(menu_button);					
 			});
 
-			text_menu.menu.popup(null, null, (menu, out x, out y, out push_in) => {
+			text_menu.menu.popup(null, null, (menu, ref x, ref y, out push_in) => {
 				Utilities.get_actor_screen_position(clutter_embed, menu_button, out x, out y);
 				y += (int)menu_button.height;
 				push_in = true;
