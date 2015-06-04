@@ -45,7 +45,7 @@ public class Autocompletion : Object {
 
 		scrollable_list_view = new ScrollableListView<AutocompletionEntry, AutocompletionEntryView>(
 				entries, typeof(AutocompletionEntry), typeof(AutocompletionEntryView), "entry");
-		stage.add(scrollable_list_view);
+		stage.add_child(scrollable_list_view);
 
 		scrollable_list_view.set_filter_function(filter_function);
 		scrollable_list_view.set_sort_function(sort_function);
