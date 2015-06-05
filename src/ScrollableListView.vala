@@ -27,6 +27,8 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 
 	private Clutter.Model list_model;
 
+	private bool process_click = false;
+
 	public ScrollableListView(NotifyingList<T> list, Type item_type, Type item_view_type, string item_property_name) {
 		scroll_view = new Mx.ScrollView();
 		add(scroll_view);
@@ -54,6 +56,8 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 		list_view.add_attribute(item_property_name, 0);
 
 		scroll_view.add(list_view);
+		scroll_view.motion_event.connect(on_motion_event);
+		scroll_view.button_press_event.connect(on_button_press_event);;
 
 		// Synchronize model with list
 		foreach (var item in list) {
@@ -143,11 +147,63 @@ public class ScrollableListView<T, E> : Clutter.Actor {
 		scroll_view.ensure_visible(geometry);
 	}
 
+	public int get_item_by_y(int y) {
+		var index = -1;
+		var height = 0;
+		for (int i = 0; i < get_number_of_items(); i++) {
+			var allocation_box = get_item_view(i).get_allocation_box();
+			height += (int)allocation_box.get_height();
+			if ((int)y < height) {
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
+
 	private void on_settings_changed(string? key) {
 		scroll_view.style = Settings.get_default().theme.style;
 		list_view.style = Settings.get_default().theme.style;
 	}
 
+	private bool on_motion_event(Clutter.MotionEvent event) {
+		var index = get_item_by_y((int)event.y);
+		if (index >= 0) {
+			item_hovered(index);
+		}
+
+		return true;
+	}
+
+	private bool on_button_press_event(Clutter.ButtonEvent event) {
+		int index = get_item_by_y((int)event.y);
+		process_click = false;
+
+		if (index >= 0) {
+			if (event.click_count == 1) {
+				process_click = true;
+				ScrollableListView instance = this;
+				// Button press event fires twice on double click
+				// because of this the processing of the first click should be delayed
+				// if the second click has happened in the meantime process_click would be false
+				// TODO: look for a better solution
+				Timeout.add(Clutter.Settings.get_default().double_click_time + 50, () => {
+						if (instance.process_click) {
+							instance.item_clicked(index);
+						}
+						return false;
+					}, Priority.DEFAULT);
+			} else if (event.click_count > 1) {
+				item_double_clicked(index);
+			}
+		}
+
+		return true;
+	}
+
+	public signal void item_hovered(int index);
+	public signal void item_clicked(int index);
+	public signal void item_double_clicked(int index);
 
 	private class ItemViewFactory<G> : Object, Mx.ItemFactory {
 

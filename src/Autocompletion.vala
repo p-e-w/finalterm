@@ -49,6 +49,9 @@ public class Autocompletion : Object {
 
 		scrollable_list_view.set_filter_function(filter_function);
 		scrollable_list_view.set_sort_function(sort_function);
+		scrollable_list_view.item_hovered.connect(on_item_hovered);
+		scrollable_list_view.item_clicked.connect(on_item_clicked);
+		scrollable_list_view.item_double_clicked.connect(on_item_double_clicked);
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
@@ -212,6 +215,20 @@ public class Autocompletion : Object {
 		stage.set_background_color(Settings.get_default().foreground_color);
 	}
 
+	private void on_item_hovered(int index) {
+		select_entry(index);
+	}
+
+	private void on_item_clicked(int index) {
+		select_command(scrollable_list_view.get_item(index).text);
+	}
+
+	private void on_item_double_clicked(int index) {
+		run_command(scrollable_list_view.get_item(index).text);
+	}
+
+	public signal void run_command(string command);
+	public signal void select_command(string command);
 
 	private class AutocompletionEntry : Object {
 
