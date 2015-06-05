@@ -113,6 +113,10 @@ public class TerminalView : Mx.BoxLayout {
 		return (clutter_embed.get_toplevel() as Gtk.Window).has_toplevel_focus;
 	}
 
+	public string get_selected_text() {
+		return terminal_output_view.get_selected_text();
+	}
+
 	private void on_settings_changed(string? key) {
 		gutter.width = Settings.get_default().theme.gutter_size;
 		gutter.color = Settings.get_default().theme.gutter_color;
@@ -145,6 +149,8 @@ public class TerminalOutputView : Mx.ScrollView {
 	private TextMenu text_menu;
 
 	private Gee.Set<int> updated_lines = new Gee.HashSet<int>();
+
+	private bool is_selecting = false;
 
 	public TerminalOutputView(Terminal terminal, GtkClutter.Embed clutter_embed) {
 		this.terminal = terminal;
@@ -210,7 +216,41 @@ public class TerminalOutputView : Mx.ScrollView {
 
 		on_settings_changed(null);
 		Settings.get_default().changed.connect(on_settings_changed);
+
+		motion_event.connect(on_motion_event);
+		button_press_event.connect(on_button_press_event);
+		button_release_event.connect(on_button_release_event);
 	}
+
+	public string get_selected_text() {
+		return line_container.get_selected_text();
+	}
+
+	private bool on_motion_event(Clutter.MotionEvent event) {
+		if (is_selecting) {
+			line_container.selecting(event.x, event.y);
+		}
+		return true;
+	}
+
+	private bool on_button_press_event(Clutter.ButtonEvent event) {
+		is_selecting = true;
+		
+		Selection.SelectionMode mode = Selection.SelectionMode.NORMAL;
+		if(event.click_count == 2)
+			mode = Selection.SelectionMode.WORD;
+		if(event.click_count == 3)
+			mode = Selection.SelectionMode.LINE;
+
+		line_container.selection_start(event.x, event.y, mode);
+		return true;
+	}
+
+	private bool on_button_release_event(Clutter.ButtonEvent event) {
+		is_selecting = false;
+		line_container.selection_end(event.x, event.y);
+		return true;
+	}	
 
 	private void on_menu_button_clicked() {
 		if (menu_button.toggled) {
@@ -561,6 +601,8 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 
 	private Gee.List<LineView> line_views = new Gee.ArrayList<LineView>();
 
+	private Selection current_selection;
+
 	// PERFORMANCE: This data structure allows for efficient determination
 	//              of which children are inside the scrolled area, making it
 	//              possible to paint only those children that are visible to the user
@@ -609,6 +651,71 @@ public class LineContainer : Clutter.Actor, Mx.Scrollable {
 
 	public int get_line_count() {
 		return line_views.size;
+	}
+
+	public void selecting(float x, double y) {
+		current_selection.update(get_coordinates_position(x, y));
+
+		int from = 0;
+		int to = 0;
+
+		for (int i = 0; i < get_line_count(); i++) {
+			if (!line_views[i].visible) {
+				continue;
+			}
+
+			current_selection.get_line_range(i, out from, out to);
+
+			line_views[i].set_selection(from, to, current_selection.mode);
+			line_views[i].render_line();
+		}
+
+	}
+
+	public void selection_start(float x, double y, Selection.SelectionMode mode) {
+		current_selection = new Selection(get_coordinates_position(x, y), mode);
+		selecting(x,y);
+	}
+
+	public void selection_end(float x, double y) {
+
+	}
+
+	public string get_selected_text() {
+		string text = "";
+		TerminalOutput.CursorPosition beginning = TerminalOutput.CursorPosition();
+		TerminalOutput.CursorPosition end = TerminalOutput.CursorPosition();
+		current_selection.get_range(out beginning, out end);
+
+		for (int i = beginning.line; i <= end.line; i++) {
+			var line_text = line_views[i].get_selected_text().strip();
+			if (line_text != "") {
+				text += line_text + "\n";
+			}
+		}
+		return text.strip();
+	}
+
+	private TerminalOutput.CursorPosition get_coordinates_position(float x, double y) {
+		Mx.Adjustment hadjustment = new Mx.Adjustment();
+		Mx.Adjustment vadjustment = new Mx.Adjustment();
+		get_adjustments(out hadjustment, out vadjustment);
+
+		TerminalOutput.CursorPosition position = TerminalOutput.CursorPosition();
+
+		for (int i = 0; i < get_line_count(); i++) {
+			if (!line_views[i].visible) {
+				continue;
+			}
+
+			if (line_views[i].get_height() + line_views[i].get_allocation_box().get_y() >= y + vadjustment.value) {
+				position.line = i;
+				position.column = line_views[i].get_coordinates_character(x, (float)y);
+				break;
+			}
+		}
+
+		return position;
 	}
 
 	protected override void allocate(Clutter.ActorBox box, Clutter.AllocationFlags flags) {

@@ -118,6 +118,10 @@ public class TerminalWidget : GtkClutter.Embed, NestingContainerChild {
 		terminal.send_text(text);
 	}
 
+	public string get_selected_text() {
+		return terminal_view.get_selected_text();
+	}
+
 	public TerminalOutput.TerminalMode get_terminal_modes() {
 		return terminal.terminal_output.terminal_modes;
 	}
