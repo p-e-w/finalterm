@@ -124,6 +124,8 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				// This code causes a line feed or a new line operation
 				// TODO: Does LF always imply CR?
 				move_cursor(cursor_position.line + 1, 0);
+				terminal.terminal_view.terminal_output_view.add_line_views();
+				terminal.terminal_view.terminal_output_view.scroll_to_position();
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.HORIZONTAL_TAB:
@@ -223,6 +225,23 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 				break;
 
 			case TerminalStream.StreamElement.ControlSequenceType.CURSOR_FORWARD:
+			case TerminalStream.StreamElement.ControlSequenceType.REVERSE_INDEX:
+				screen_offset -= 1;
+				move_cursor(cursor_position.line - stream_element.get_numeric_parameter(0,1), cursor_position.column);
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.NEXT_LINE:
+				screen_offset += 1;
+				move_cursor(cursor_position.line + stream_element.get_numeric_parameter(0,1), 0);
+				terminal.terminal_view.terminal_output_view.add_line_views();
+				break;
+
+			case TerminalStream.StreamElement.ControlSequenceType.INDEX:
+				screen_offset += 1;
+				move_cursor(cursor_position.line + stream_element.get_numeric_parameter(0,1), cursor_position.column);
+				terminal.terminal_view.terminal_output_view.add_line_views();
+				break;
+
 			case TerminalStream.StreamElement.ControlSequenceType.CHARACTER_POSITION_RELATIVE:
 				// The CUF sequence moves the active position to the right.
 				// The distance moved is determined by the parameter (default: 1)

@@ -208,18 +208,18 @@ public class TerminalStream : Object {
 		// Naming convention follows xterm specification found at
 		// http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 		public enum ControlSequenceType {
-			UNKNOWN,
+			UNKNOWN, //implemented
 
-			BELL,
-			BACKSPACE,
-			CARRIAGE_RETURN,
+			BELL, //implemented
+			BACKSPACE, //implemented
+			CARRIAGE_RETURN, //implemented
 			RETURN_TERMINAL_STATUS,
-			FORM_FEED,
-			LINE_FEED,
+			FORM_FEED, //implemented
+			LINE_FEED, //implemented
 			SHIFT_IN,
 			SHIFT_OUT,
-			HORIZONTAL_TAB,
-			VERTICAL_TAB,
+			HORIZONTAL_TAB, //implemented
+			VERTICAL_TAB, //implemented
 
 			SEVEN_BIT_CONTROLS,
 			EIGHT_BIT_CONTROLS,
@@ -233,7 +233,7 @@ public class TerminalStream : Object {
 			DEC_SCREEN_ALIGNMENT_TEST,
 			SELECT_DEFAULT_CHARACTER_SET,
 			SELECT_UTF8_CHARACTER_SET,
-			DESIGNATE_G0_CHARACTER_SET_VT100,
+			DESIGNATE_G0_CHARACTER_SET_VT100, //implemented
 			DESIGNATE_G1_CHARACTER_SET_VT100,
 			DESIGNATE_G2_CHARACTER_SET_VT220,
 			DESIGNATE_G3_CHARACTER_SET_VT220,
@@ -244,8 +244,8 @@ public class TerminalStream : Object {
 			SAVE_CURSOR,
 			RESTORE_CURSOR,
 			FORWARD_INDEX,
-			APPLICATION_KEYPAD,
-			NORMAL_KEYPAD,
+			APPLICATION_KEYPAD, //implemented
+			NORMAL_KEYPAD, //implemented
 			CURSOR_TO_LOWER_LEFT_CORNER_OF_SCREEN,
 			FULL_RESET,
 			MEMORY_LOCK,
@@ -256,50 +256,55 @@ public class TerminalStream : Object {
 			INVOKE_G2_CHARACTER_SET_AS_GR,
 			INVOKE_G1_CHARACTER_SET_AS_GR,
 
+			INDEX,
+			NEXT_LINE,
+			TAB_SET,
+			REVERSE_INDEX,
+
 			USER_DEFINED_KEYS,
 			REQUEST_STATUS_STRING,
 			SET_TERMCAP_DATA,
 			REQUEST_TERMCAP_STRING,
 
 			INSERT_CHARACTERS,
-			CURSOR_UP,
-			CURSOR_DOWN,
-			CURSOR_FORWARD,
-			CURSOR_BACKWARD,
+			CURSOR_UP, //implemented
+			CURSOR_DOWN, //implemented
+			CURSOR_FORWARD, //implemented
+			CURSOR_BACKWARD, //implemented
 			CURSOR_NEXT_LINE,
 			CURSOR_PRECEDING_LINE,
-			CURSOR_CHARACTER_ABSOLUTE,
-			CURSOR_POSITION,
+			CURSOR_CHARACTER_ABSOLUTE, //implemented
+			CURSOR_POSITION, //implemented
 			CURSOR_FORWARD_TABULATION,
-			ERASE_IN_DISPLAY_ED,
+			ERASE_IN_DISPLAY_ED, //implemented
 			ERASE_IN_DISPLAY_DECSED,
-			ERASE_IN_LINE_EL,
+			ERASE_IN_LINE_EL, //implemented
 			ERASE_IN_LINE_DECSEL,
 			INSERT_LINES,
 			DELETE_LINES,
-			DELETE_CHARACTERS,
+			DELETE_CHARACTERS, //implemented
 			SCROLL_UP_LINES,
 			SCROLL_DOWN_LINES,
 			INITIATE_HIGHLIGHT_MOUSE_TRACKING,
 			RESET_TITLE_MODES_FEATURES,
-			ERASE_CHARACTERS,
+			ERASE_CHARACTERS, //implemented
 			CURSOR_BACKWARD_TABULATION,
-			CHARACTER_POSITION_ABSOLUTE,
+			CHARACTER_POSITION_ABSOLUTE, //implemented
 			CHARACTER_POSITION_RELATIVE,
 			REPEAT_PRECEDING_GRAPHIC_CHARACTER,
 			SEND_DEVICE_ATTRIBUTES_PRIMARY,
 			SEND_DEVICE_ATTRIBUTES_SECONDARY,
-			LINE_POSITION_ABSOLUTE,
-			LINE_POSITION_RELATIVE,
-			HORIZONTAL_AND_VERTICAL_POSITION,
+			LINE_POSITION_ABSOLUTE, //implemented
+			LINE_POSITION_RELATIVE, //implemented
+			HORIZONTAL_AND_VERTICAL_POSITION, //implemented
 			TAB_CLEAR,
-			SET_MODE,
+			SET_MODE, //implemented
 			DEC_PRIVATE_MODE_SET,
 			MEDIA_COPY,
 			MEDIA_COPY_DEC,
-			RESET_MODE,
-			DEC_PRIVATE_MODE_RESET,
-			CHARACTER_ATTRIBUTES,
+			RESET_MODE, //implemented
+			DEC_PRIVATE_MODE_RESET, //implemented
+			CHARACTER_ATTRIBUTES, //implemented
 			SET_OR_RESET_RESOURCE_VALUES,
 			DEVICE_STATUS_REPORT,
 			DISABLE_MODIFIERS,
@@ -307,7 +312,7 @@ public class TerminalStream : Object {
 			SET_RESOURCE_VALUE_POINTER_MODE,
 			SOFT_TERMINAL_RESET,
 			REQUEST_ANSI_MODE,
-			REQUEST_DEC_PRIVATE_MODE,
+			REQUEST_DEC_PRIVATE_MODE, //implemented
 			SET_CONFORMANCE_LEVEL,
 			LOAD_LEDS,
 			SET_CURSOR_STYLE,
@@ -338,16 +343,16 @@ public class TerminalStream : Object {
 			INSERT_COLUMNS,
 			DELETE_COLUMNS,
 
-			SET_TEXT_PARAMETERS,
+			SET_TEXT_PARAMETERS, //implemented
 
-			FTCS_PROMPT,
-			FTCS_COMMAND_START,
-			FTCS_COMMAND_EXECUTED,
-			FTCS_COMMAND_FINISHED,
-			FTCS_TEXT_MENU_START,
-			FTCS_TEXT_MENU_END,
-			FTCS_PROGRESS,
-			FTCS_EXECUTE_COMMANDS
+			FTCS_PROMPT, //implemented
+			FTCS_COMMAND_START, //implemented
+			FTCS_COMMAND_EXECUTED, //implemented
+			FTCS_COMMAND_FINISHED, //implemented
+			FTCS_TEXT_MENU_START, //implemented
+			FTCS_TEXT_MENU_END, //implemented
+			FTCS_PROGRESS, //implemented
+			FTCS_EXECUTE_COMMANDS //implemented
 		}
 
 		// TODO: Use accessor methods ("add_parameter()") instead of public(?)
@@ -427,10 +432,13 @@ public class TerminalStream : Object {
 			add_esc_sequence_pattern(ControlSequenceType.FORWARD_INDEX, "9");
 			add_esc_sequence_pattern(ControlSequenceType.APPLICATION_KEYPAD, "=");
 			add_esc_sequence_pattern(ControlSequenceType.NORMAL_KEYPAD, ">");
+			add_esc_sequence_pattern(ControlSequenceType.INDEX, "D");
+			add_esc_sequence_pattern(ControlSequenceType.NEXT_LINE, "E");
 			add_esc_sequence_pattern(ControlSequenceType.CURSOR_TO_LOWER_LEFT_CORNER_OF_SCREEN, "F");
 			add_esc_sequence_pattern(ControlSequenceType.FULL_RESET, "c");
 			add_esc_sequence_pattern(ControlSequenceType.MEMORY_LOCK, "l");
 			add_esc_sequence_pattern(ControlSequenceType.MEMORY_UNLOCK, "m");
+			add_esc_sequence_pattern(ControlSequenceType.REVERSE_INDEX, "M");
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G2_CHARACTER_SET_AS_GL, "n");
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G3_CHARACTER_SET_AS_GL, "o");
 			add_esc_sequence_pattern(ControlSequenceType.INVOKE_G3_CHARACTER_SET_AS_GR, "|");
