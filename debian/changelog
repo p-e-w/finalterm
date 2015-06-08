@@ -1,0 +1,17 @@
+finalterm (0.2) trusty; urgency=low
+
+  * Reclaiming the Debian packaging.
+
+ -- Bob Mottram (4096 bits) <bob@robotics.uk.to>  Mon, 25 Aug 2014 14:21:00 +0000
+
+finalterm (0.1-0~126~ubuntu13.10.1) saucy; urgency=low
+
+  * Auto build.
+
+ -- Launchpad Package Builder <noreply@launchpad.net>  Wed, 16 Jul 2014 22:25:59 +0000
+
+finalterm (0.1) precise; urgency=low
+
+  * Initial Release.
+
+ -- Versable <versable@gmail.com>  Sat, 08 Jun 2013 09:51:57 +0200
