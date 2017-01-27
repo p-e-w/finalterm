@@ -383,6 +383,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 					warning(_("Command start control sequence received while already in command mode"));
 				command_mode = true;
 				command_start_position = cursor_position;
+				get(cursor_position.line).empty_prompt_length = cursor_position.column;
 				message(_("Command mode entered"));
 				break;
 
@@ -694,6 +695,7 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 
 		public bool is_prompt_line { get; set; default = false; }
 		public int return_code { get; set; default = 0; }
+		public int empty_prompt_length;
 
 		// Returns a new OutputLine object reflecting
 		// matching text menu patterns if there are any
@@ -829,6 +831,15 @@ public class TerminalOutput : Gee.ArrayList<OutputLine> {
 			position = null;
 		}
 
+		public bool is_empty_prompt_line()
+		{
+			if (!is_prompt_line)
+				return false;
+
+			var text = get_text()[empty_prompt_length:get_text().length];
+			// Text is whitespace
+			return (text.chug() == "");
+		}
 	}
 
 
