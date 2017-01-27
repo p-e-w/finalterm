@@ -230,4 +230,23 @@ public class Utilities : Object {
 		}, priority);
 	}
 
+	// Escapes single quotes in a shell command, used for the tools in the semantic
+	// menus (cat/less/cp/mv/stat)
+	public static string escape_shell_command(string rawCommand) {
+		StringBuilder escapedString = new StringBuilder();
+
+		for (int i = 0; i < rawCommand.length - 1; i++) {
+				if (rawCommand[i] == '\'' && rawCommand.index_of("\'") != i) {
+					escapedString.append("\'\\'\'");
+				}
+
+				else {
+					escapedString.append_unichar(rawCommand[i]);
+				}
+			}
+
+			escapedString.append_unichar('\'');
+
+			return escapedString.str;
+	}
 }
