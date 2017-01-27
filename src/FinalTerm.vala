@@ -382,6 +382,12 @@ public class FinalTerm : Gtk.Application {
 			active_terminal_widget.send_text_to_shell(Utilities.get_clipboard_text());
 			return;
 
+		case Command.CommandType.PASTE_FROM_CLIPBOARD:
+			Utilities.get_clipboard_text(main_window, (clipboard, text) => {
+					active_terminal_widget.send_text_to_shell(text);	
+				});
+			return;
+
 		case Command.CommandType.OPEN_URL:
 			if (command.parameters.is_empty)
 				return;
