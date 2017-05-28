@@ -57,6 +57,16 @@ sudo apt-get install finalterm
 
 The PPA is synchronized with the GitHub repository and should always deliver the latest version with a few hours delay at most.
 
+### Prerequisites to build from source (Ubuntu/Debian)
+To install build environment, vala compiler:
+```
+sudo apt-get install build-essential cmake valac intltool
+```
+To install all required libraries:
+```
+sudo apt-get install libgee-0.8-dev libkeybinder-3.0-dev libmx-1.0-2 libclutter-gtk-1.0-dev libnotify-dev libunity-dev
+```
+
 ## Instructions for Fedora
 
 You can use packages from [Copr by Matthew Miller](http://copr.fedoraproject.org/coprs/mattdm/finalterm/).
